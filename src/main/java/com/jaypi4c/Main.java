@@ -8,6 +8,8 @@ import javax.imageio.ImageIO;
 import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.File;
+import java.util.HashMap;
+import java.util.Map;
 
 @Slf4j
 public class Main {
@@ -17,8 +19,8 @@ public class Main {
         String pdfPath = "/home/jonas/Studium/cloud/BA/BA Daten/";
         String file1 = "SF_20220104_50335_HA1_LETTER.pdf";
         String file2 = "SF_20220412_50061_HA1_LETTER.pdf";
-        String file3= "SF_20220511_50091_HA1_LETTER.pdf";
-        String file4 ="SF_20220620_50193_HA1_LETTER.pdf";
+        String file3 = "SF_20220511_50091_HA1_LETTER.pdf";
+        String file4 = "SF_20220620_50193_HA1_LETTER.pdf";
 
         pdfPath += file4;
 
@@ -87,19 +89,142 @@ public class Main {
 
                         }
                         beginY = -1;
-
                     }
                 }
             }
 
             // connected components labeling to remove black areas
             // https://aishack.in/tutorials/labelling-connected-components-example/
-
+            output = connectedComponentsLabeling(output);
 
             ImageIO.write(output, "JPEG", new File(out));
         }
 
     }
+
+    public static BufferedImage connectedComponentsLabeling(BufferedImage input) {
+        int[][] labels = new int[input.getWidth()][input.getHeight()];
+        int label = 1;
+        int backgroundLabel = 0;
+
+        Map<Integer, Integer> mergeList = new HashMap<>();
+
+        int backgroundThreshold = 200;
+
+        // first pass
+        for (int y = 0; y < input.getHeight(); y++) {
+            for (int x = 0; x < input.getWidth(); x++) {
+                if (getGray(input.getRGB(x, y)) > backgroundThreshold) {
+                    // it's a background pixel -> skip
+                    // setting to background label is not needed as default value is 0
+                    continue;
+                }
+                int labelAbove = y > 0 ? labels[x][y - 1] : backgroundLabel; // 0 (background) if out of bounds
+                int labelLeft = x > 0 ? labels[x - 1][y] : backgroundLabel; // 0 (background) if out of bounds
+                if (labelAbove == backgroundLabel && labelLeft == backgroundLabel) {
+                    // new label
+                    labels[x][y] = label;
+                    label++;
+                } else if (labelAbove != backgroundLabel && labelLeft == backgroundLabel) {
+                    // label above
+                    labels[x][y] = labelAbove;
+                } else if (labelAbove == backgroundLabel && labelLeft != backgroundLabel) {
+                    // label left
+                    labels[x][y] = labelLeft;
+                } else if (labelAbove != backgroundLabel && labelLeft != backgroundLabel) {
+                    // merge labels
+                    labels[x][y] = labelLeft;
+                    if (labelLeft != labelAbove && !mergeList.containsKey(labelLeft)) {
+                        // add to merge list
+                        mergeList.put(labelLeft, labelAbove);
+                    }
+                }
+
+            }
+        }
+
+        log.debug("merge list: {}", mergeList);
+
+        // second pass
+        for (int y = 0; y < input.getHeight(); y++) {
+            for (int x = 0; x < input.getWidth(); x++) {
+                int l = labels[x][y];
+                if (l == backgroundLabel) {
+                    // it's a background pixel -> skip
+                    continue;
+                }
+                while (mergeList.containsKey(l)) {
+                    l = mergeList.get(l);
+                }
+                labels[x][y] = l;
+            }
+        }
+/*
+        // debug colorize
+        Map<Byte, Color> colors = new HashMap<>();
+        for (int x = 0; x < input.getWidth(); x++) {
+            for (int y = 0; y < input.getHeight(); y++) {
+                byte l = labels[x][y];
+                if (l == backgroundLabel) {
+                    continue;
+                }
+                if (!colors.containsKey(l)) {
+                    colors.put(l, randomColor());
+                }
+                input.setRGB(x, y, colors.get(l).getRGB());
+            }
+        }
+*/
+
+        //
+        Map<Integer, Chunk> chunks = new HashMap<>();
+
+        for (int x = 0; x < input.getWidth(); x++) {
+            for (int y = 0; y < input.getHeight(); y++) {
+                int l = labels[x][y];
+                if (l == backgroundLabel) {
+                    continue;
+                }
+                if (chunks.containsKey(l)) {
+                    Chunk chunk = chunks.get(l);
+                    chunk = new Chunk(Math.min(chunk.minX(), x), Math.min(chunk.minY(), y), Math.max(chunk.maxX(), x), Math.max(chunk.maxY(), y));
+                    chunks.put(l, chunk);
+                } else {
+                    chunks.put(l, new Chunk(x, y, x, y));
+                }
+            }
+        }
+        for (Chunk c : chunks.values()) {
+            long avg = 0;
+            for (int x = c.minX(); x <= c.maxX(); x++) {
+                for (int y = c.minY(); y <= c.maxY(); y++) {
+                    avg += getGray(input.getRGB(x, y));
+
+                }
+            }
+            // if average color is dark the chunk is probably a blackened area -> remove
+            // also if the chunk is too small -> remove
+            avg /= (long) (c.maxX() - c.minX() + 1) * (c.maxY() - c.minY() + 1);
+            if(avg < 150 || c.maxX() - c.minX() < 20 || c.maxY() - c.minY() < 20) {
+                for (int x = c.minX(); x <= c.maxX(); x++) {
+                    for (int y = c.minY(); y <= c.maxY(); y++) {
+                        input.setRGB(x, y, Color.WHITE.getRGB());
+                    }
+                }
+            }
+        }
+
+
+        return input;
+    }
+
+
+
+
+    static Color randomColor() {
+        return new Color((int) (Math.random() * 0x1000000));
+    }
+
 
     public static BufferedImage createWhiteBackgroundImage(int width, int height) {
         BufferedImage image = new BufferedImage(width, height, BufferedImage.TYPE_INT_RGB);
