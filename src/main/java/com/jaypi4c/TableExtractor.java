@@ -15,6 +15,13 @@ import java.util.Map;
 @Slf4j
 public class TableExtractor {
 
+    /*
+       for (int y = 0; y < image.getHeight(); y++) {
+            for (int x = 0; x < image.getWidth(); x++) {
+        If possible use always this order as it's faster:
+        https://stackoverflow.com/a/7750416
+     */
+
     public void execute(String in, String out) {
 
         log.info("Extracting table from {} and store result image in {}", in, out);
@@ -180,8 +187,8 @@ public class TableExtractor {
 
         Map<Integer, Chunk> chunks = new HashMap<>();
 
-        for (int x = 0; x < input.getWidth(); x++) {
-            for (int y = 0; y < input.getHeight(); y++) {
+        for (int y = 0; y < input.getHeight(); y++) {
+            for (int x = 0; x < input.getWidth(); x++) {
                 int l = labels[x][y];
                 if (l == backgroundLabel) {
                     continue;
