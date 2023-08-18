@@ -5,7 +5,7 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 public class Main {
 
-    public static void main(String[] args) {
+    public static void main(String[] args) throws Exception {
         log.info("Starting application");
 
         String pdfPath = "/home/jonas/Studium/cloud/BA/BA Daten/";
@@ -18,6 +18,9 @@ public class Main {
 
         String imageResult = "/home/jonas/Studium/cloud/BA/BA Daten/out.jpg";
         TableExtractor tableExtractor = new TableExtractor();
+
+        // tableExtractor.readArea(pdfPath);
+
         tableExtractor.execute(pdfPath, imageResult);
 
         log.info("Finished application");

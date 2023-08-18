@@ -2,10 +2,13 @@ package com.jaypi4c;
 
 import lombok.extern.slf4j.Slf4j;
 import org.apache.pdfbox.pdmodel.PDDocument;
+import org.apache.pdfbox.pdmodel.PDPage;
 import org.apache.pdfbox.rendering.PDFRenderer;
+import org.apache.pdfbox.text.PDFTextStripperByArea;
 
 import javax.imageio.ImageIO;
 import java.awt.*;
+import java.awt.geom.Rectangle2D;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
@@ -22,6 +25,40 @@ public class TableExtractor {
         https://stackoverflow.com/a/7750416
      */
 
+
+    /**
+     * 72 points per inch
+     * points = pixels * 72 / DPI
+     */
+    private int pixelsToPoints(int pixelVal, int dpi) {
+        return pixelVal * 72 / dpi;
+    }
+
+    public void readArea(String in) throws Exception {
+        final int DPI = 300;
+
+        int page = 0;
+        int x = pixelsToPoints(100, DPI);
+        int y = pixelsToPoints(647, DPI);
+        int width = pixelsToPoints(470, DPI);
+        int height = pixelsToPoints(125, DPI);
+
+        PDDocument document = PDDocument.load(new File(in));
+
+        PDFTextStripperByArea textStripper = new PDFTextStripperByArea();
+        Rectangle2D rect = new java.awt.geom.Rectangle2D.Float(x, y, width, height);
+        textStripper.addRegion("region", rect);
+
+
+        PDPage docPage = document.getPage(page);
+
+        textStripper.extractRegions(docPage);
+
+        String textForRegion = textStripper.getTextForRegion("region");
+
+        System.out.println(textForRegion);
+    }
+
     public void execute(String in, String out) {
 
         log.info("Extracting table from {} and store result image in {}", in, out);
@@ -34,6 +71,21 @@ public class TableExtractor {
             BufferedImage bi = pr.renderImageWithDPI(0, 300);
 
             BufferedImage output = filterLines(bi);
+
+            // debug
+            int x = 100;
+            int y = 847;
+            int width = 470;
+            int height = 125;
+            for (int i = x; i < x + width; i++) {
+                output.setRGB(i, y, Color.RED.getRGB());
+                output.setRGB(i, y + height, Color.RED.getRGB());
+            }
+            for (int i = y; i < y + height; i++) {
+                output.setRGB(x, i, Color.RED.getRGB());
+                output.setRGB(x + width, i, Color.RED.getRGB());
+            }
+
             ImageIO.write(output, "JPEG", new File(out));
         } catch (IOException e) {
             log.error("Error while reading pdf", e);
