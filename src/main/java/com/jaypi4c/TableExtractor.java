@@ -8,11 +8,15 @@ import org.apache.pdfbox.text.PDFTextStripperByArea;
 
 import javax.imageio.ImageIO;
 import java.awt.*;
+import java.awt.geom.Line2D;
+import java.awt.geom.Point2D;
 import java.awt.geom.Rectangle2D;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 @Slf4j
@@ -72,19 +76,6 @@ public class TableExtractor {
 
             BufferedImage output = filterLines(bi);
 
-            // debug
-            int x = 100;
-            int y = 847;
-            int width = 470;
-            int height = 125;
-            for (int i = x; i < x + width; i++) {
-                output.setRGB(i, y, Color.RED.getRGB());
-                output.setRGB(i, y + height, Color.RED.getRGB());
-            }
-            for (int i = y; i < y + height; i++) {
-                output.setRGB(x, i, Color.RED.getRGB());
-                output.setRGB(x + width, i, Color.RED.getRGB());
-            }
 
             ImageIO.write(output, "JPEG", new File(out));
         } catch (IOException e) {
@@ -112,6 +103,9 @@ public class TableExtractor {
         // create empty result image
         BufferedImage output = createWhiteBackgroundImage(input.getWidth(), input.getHeight());
 
+
+        List<Line2D.Float> lines = new ArrayList<>();
+
         // perform line detection on image
         final int n = 50; // taken from literature
         final int blackThreshold = 180;
@@ -128,15 +122,13 @@ public class TableExtractor {
                     }
                 } else {
                     if (beginX >= 0 && (x - beginX) > n) {
-                        for (int i = beginX; i < x; i++) {
-                            output.setRGB(i, y, 0x00000000);
-                        }
-
+                        lines.add(new Line2D.Float(beginX, y, x, y));
                     }
                     beginX = -1;
                 }
             }
         }
+
 
         // vertical lines
         for (int x = 0; x < input.getWidth(); x++) {
@@ -150,16 +142,75 @@ public class TableExtractor {
                     }
                 } else {
                     if (beginY >= 0 && (y - beginY) > n) {
-                        for (int i = beginY; i < y; i++) {
-                            output.setRGB(x, i, 0x00000000);
-                        }
-
+                        lines.add(new Line2D.Float(x, beginY, x, y));
                     }
                     beginY = -1;
                 }
             }
         }
+
+        // draw lines
+        for (Line2D line : lines) {
+            for (int x = (int) line.getX1(); x <= line.getX2(); x++) {
+                for (int y = (int) line.getY1(); y <= line.getY2(); y++) {
+                    output.setRGB(x, y, 0x00000000);
+                }
+            }
+        }
+        List<Point2D.Float> intersections = new ArrayList<>();
+        // check for intersections
+        for (int i = 0; i < lines.size(); i++) {
+            for (int j = i + 1; j < lines.size(); j++) {
+                Line2D.Float line1 = lines.get(i);
+                Line2D.Float line2 = lines.get(j);
+                if (line1.intersectsLine(line2)) {
+                    // they intersect -> find the intersection point:
+                    Point2D.Float interceptionPoint = calculateInterceptionPoint(line1, line2);
+
+                    // check if point +- 2 pixels in x or y is already in the list
+                    boolean found = false;
+
+                    for (Point2D.Float p : intersections) {
+                        if (Math.abs(p.x - interceptionPoint.x) < 2 && Math.abs(p.y - interceptionPoint.y) < 2) {
+                            found = true;
+                            break;
+                        }
+                    }
+                    if (!found)
+                        intersections.add(interceptionPoint);
+
+                }
+            }
+        }
+
+
         return output;
+    }
+
+    /**
+     * @param line1
+     * @param line2
+     * @return
+     * @see <a href=https://stackoverflow.com/a/61574355>Stackoverflow</a>
+     */
+    public static Point2D.Float calculateInterceptionPoint(Line2D.Float line1, Line2D.Float line2) {
+
+        Point2D.Float s1 = (Point2D.Float) line1.getP1();
+        Point2D.Float s2 = (Point2D.Float) line1.getP2();
+        Point2D.Float d1 = (Point2D.Float) line2.getP1();
+        Point2D.Float d2 = (Point2D.Float) line2.getP2();
+
+        double a1 = s2.y - s1.y;
+        double b1 = s1.x - s2.x;
+        double c1 = a1 * s1.x + b1 * s1.y;
+
+        double a2 = d2.y - d1.y;
+        double b2 = d1.x - d2.x;
+        double c2 = a2 * d1.x + b2 * d1.y;
+
+        double delta = a1 * b2 - a2 * b1;
+        return new Point2D.Float((float) ((b2 * c1 - b1 * c2) / delta), (float) ((a1 * c2 - a2 * c1) / delta));
+
     }
 
 
