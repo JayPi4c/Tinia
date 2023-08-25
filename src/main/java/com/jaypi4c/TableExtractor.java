@@ -30,6 +30,11 @@ public class TableExtractor {
      */
 
 
+    private List<Line2D.Float> lines;
+    private List<Point2D.Float> intersections;
+    private int imageWidth;
+    private int imageHeight;
+
     /**
      * 72 points per inch
      * points = pixels * 72 / DPI
@@ -73,8 +78,12 @@ public class TableExtractor {
             PDFRenderer pr = new PDFRenderer(pd);
             // get page as image
             BufferedImage bi = pr.renderImageWithDPI(0, 300);
+            imageWidth = bi.getWidth();
+            imageHeight = bi.getHeight();
 
             BufferedImage output = filterLines(bi);
+            output = findIntersections(output);
+            labelIntersections();
 
 
             ImageIO.write(output, "JPEG", new File(out));
@@ -83,29 +92,101 @@ public class TableExtractor {
         }
     }
 
-    private BufferedImage filterLines(BufferedImage bi) {
 
+    private void labelIntersections() {
+        byte[][] nodeMatrix = new byte[imageWidth][imageHeight];
+        for (Point2D intersection : intersections) {
+            // check if above, below, left and / or is a line
+            int i = 0;
+
+             byte b = 0b0000;
+            for (Line2D line : lines) {
+
+                // maybe bitmasking is better
+                if (line.intersectsLine(intersection.getX(), intersection.getY(), intersection.getX(), intersection.getY() - 1)) {
+                    b =(byte)( b | 0b0001);
+                }
+                if (line.intersectsLine(intersection.getX(), intersection.getY(), intersection.getX(), intersection.getY() + 1)) {
+                    b = (byte)(b | 0b0010);
+                }
+                if (line.intersectsLine(intersection.getX(), intersection.getY(), intersection.getX() - 1, intersection.getY())) {
+                    b = (byte)(b | 0b0100);
+                }
+                if (line.intersectsLine(intersection.getX(), intersection.getY(), intersection.getX() + 1, intersection.getY())) {
+                    b = (byte)(b | 0b1000);
+                }
+            }
+            log.info("b: {}", b);
+            // b is now a number between 0 and 15
+            // 0 = no line
+            // 1 = above
+            // 2 = below
+            // 3 = above and below
+            // 4 = left
+            // 5 = above and left
+            // 6 = below and left
+            // 7 = above, below and left
+            // 8 = right
+            // 9 = above and right
+            // 10 = below and right
+            // 11 = above, below and right
+            // 12 = left and right
+            // 13 = above, left and right
+            // 14 = below, left and right
+            // 15 = above, below, left and right
+
+            switch(b){
+                case 15 ->
+                    nodeMatrix[(int)intersection.getX()][(int)intersection.getY()] = 5;
+                case 14 ->
+                    nodeMatrix[(int)intersection.getX()][(int)intersection.getY()] = 2;
+                case 13 ->
+                    nodeMatrix[(int)intersection.getX()][(int)intersection.getY()] = 8;
+                case 11 ->
+                    nodeMatrix[(int)intersection.getX()][(int)intersection.getY()] = 4;
+                case 10 ->
+                    nodeMatrix[(int)intersection.getX()][(int)intersection.getY()] = 1;
+                case 9 ->
+                    nodeMatrix[(int)intersection.getX()][(int)intersection.getY()] = 7;
+                case 7 ->
+                    nodeMatrix[(int)intersection.getX()][(int)intersection.getY()] = 6;
+                case 6 ->
+                    nodeMatrix[(int)intersection.getX()][(int)intersection.getY()] = 3;
+                case 5 ->
+                    nodeMatrix[(int)intersection.getX()][(int)intersection.getY()] = 9;
+                default ->
+                    nodeMatrix[(int)intersection.getX()][(int)intersection.getY()] = 0;
+            }
+        }
+    }
+
+    private BufferedImage filterLines(BufferedImage bi) {
 
         // increase contrast
         // bi = increaseContrast(bi, 1.7);
 
+        log.info("removing the text from the image");
         BufferedImage imgInEdit = removeText(bi);
-
 
         // connected components labeling to remove black areas
         // https://aishack.in/tutorials/labelling-connected-components-example/
+        log.info("removing black areas from the image");
         BufferedImage output = connectedComponentsLabeling(imgInEdit);
+
 
         return output;
     }
+
 
     private BufferedImage removeText(BufferedImage input) {
         // create empty result image
         BufferedImage output = createWhiteBackgroundImage(input.getWidth(), input.getHeight());
 
 
-        List<Line2D.Float> lines = new ArrayList<>();
+        lines = new ArrayList<>();
 
+
+        log.info("Processing horizontal lines...");
         // perform line detection on image
         final int n = 50; // taken from literature
         final int blackThreshold = 180;
@@ -130,6 +211,7 @@ public class TableExtractor {
         }
 
 
+        log.info("Processing vertical lines...");
         // vertical lines
         for (int x = 0; x < input.getWidth(); x++) {
             int beginY = -1;
@@ -157,8 +239,14 @@ public class TableExtractor {
                 }
             }
         }
-        List<Point2D.Float> intersections = new ArrayList<>();
+
+        return output;
+    }
+
+    private BufferedImage findIntersections(BufferedImage input) {
+        intersections = new ArrayList<>();
         // check for intersections
+        log.info("Checking for intersections...");
         for (int i = 0; i < lines.size(); i++) {
             for (int j = i + 1; j < lines.size(); j++) {
                 Line2D.Float line1 = lines.get(i);
@@ -183,8 +271,17 @@ public class TableExtractor {
             }
         }
 
+        // draw blue intersections
+        int len = 3;
+        for (Point2D.Float p : intersections) {
+            for (int x = (int) p.x - len; x <= p.x + len; x++) {
+                for (int y = (int) p.y - len; y <= p.y + len; y++) {
+                    input.setRGB(x, y, Color.BLUE.getRGB());
+                }
+            }
+        }
+        return input;
 
-        return output;
     }
 
     /**
@@ -223,6 +320,7 @@ public class TableExtractor {
 
         int backgroundThreshold = 200;
 
+        log.info("starting first pass");
         // first pass
         for (int y = 0; y < input.getHeight(); y++) {
             for (int x = 0; x < input.getWidth(); x++) {
@@ -256,7 +354,7 @@ public class TableExtractor {
         }
 
         log.debug("merge list: {}", mergeList);
-
+        log.info("starting second pass");
         // second pass
         for (int y = 0; y < input.getHeight(); y++) {
             for (int x = 0; x < input.getWidth(); x++) {
@@ -305,6 +403,7 @@ public class TableExtractor {
                 }
             }
         }
+        log.info("remove black chunks");
         for (Chunk c : chunks.values()) {
             long avg = 0;
             for (int x = c.minX(); x <= c.maxX(); x++) {
@@ -322,6 +421,16 @@ public class TableExtractor {
                         input.setRGB(x, y, Color.WHITE.getRGB());
                     }
                 }
+
+                // remove line from lines list if it is in the chunk
+                for (int i = 0; i < lines.size(); i++) {
+                    Line2D.Float line = lines.get(i);
+                    if (c.isWithin(line)) {
+                        lines.remove(i);
+                        i--;
+                    }
+                }
+
             }
         }
 
