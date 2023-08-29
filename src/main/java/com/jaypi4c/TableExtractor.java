@@ -14,6 +14,7 @@ import java.awt.geom.Rectangle2D;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
+import java.nio.Buffer;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -93,71 +94,79 @@ public class TableExtractor {
     }
 
 
-    private void labelIntersections() {
+    private void labelIntersections(BufferedImage image) {
         byte[][] nodeMatrix = new byte[imageWidth][imageHeight];
         for (Point2D intersection : intersections) {
             // check if above, below, left and / or is a line
             int i = 0;
 
-             byte b = 0b0000;
+            byte b = 0b0000;
+            int intersectionOffset = 5;
+
+            Point2D pointAbove = new Point2D.Double(intersection.getX(), intersection.getY() - intersectionOffset);
+            Point2D pointBelow = new Point2D.Double(intersection.getX(), intersection.getY() + intersectionOffset);
+            Point2D pointLeft = new Point2D.Double(intersection.getX() - intersectionOffset, intersection.getY());
+            Point2D pointRight = new Point2D.Double(intersection.getX() + intersectionOffset, intersection.getY());
+
             for (Line2D line : lines) {
 
                 // maybe bitmasking is better
-                if (line.intersectsLine(intersection.getX(), intersection.getY(), intersection.getX(), intersection.getY() - 1)) {
-                    b =(byte)( b | 0b0001);
+                if (line.contains(pointAbove)) {
+                    b = (byte) (b | 0b0001);
                 }
-                if (line.intersectsLine(intersection.getX(), intersection.getY(), intersection.getX(), intersection.getY() + 1)) {
-                    b = (byte)(b | 0b0010);
+                if (line.contains(pointBelow)) {
+                    b = (byte) (b | 0b0010);
                 }
-                if (line.intersectsLine(intersection.getX(), intersection.getY(), intersection.getX() - 1, intersection.getY())) {
-                    b = (byte)(b | 0b0100);
+                if (line.contains(pointLeft)) {
+                    b = (byte) (b | 0b0100);
                 }
-                if (line.intersectsLine(intersection.getX(), intersection.getY(), intersection.getX() + 1, intersection.getY())) {
-                    b = (byte)(b | 0b1000);
+                if (line.contains(pointRight)) {
+                    b = (byte) (b | 0b1000);
                 }
             }
             log.info("b: {}", b);
             // b is now a number between 0 and 15
-            // 0 = no line
-            // 1 = above
-            // 2 = below
-            // 3 = above and below
-            // 4 = left
-            // 5 = above and left
-            // 6 = below and left
-            // 7 = above, below and left
-            // 8 = right
-            // 9 = above and right
-            // 10 = below and right
-            // 11 = above, below and right
-            // 12 = left and right
-            // 13 = above, left and right
-            // 14 = below, left and right
-            // 15 = above, below, left and right
+            // 0  = 0000 = no line
+            // 1  = 0001 = above
+            // 2  = 0010 = below
+            // 3  = 0011 = above and below
+            // 4  = 0100 = left
+            // 5  = 0101 = above and left
+            // 6  = 0110 = below and left
+            // 7  = 0111 = above, below and left
+            // 8  = 1000 = right
+            // 9  = 1001 = above and right
+            // 10 = 1010 = below and right
+            // 11 = 1011 = above, below and right
+            // 12 = 1100 = left and right
+            // 13 = 1101 = above, left and right
+            // 14 = 1110 = below, left and right
+            // 15 = 1111 = above, below, left and right
 
-            switch(b){
-                case 15 ->
-                    nodeMatrix[(int)intersection.getX()][(int)intersection.getY()] = 5;
-                case 14 ->
-                    nodeMatrix[(int)intersection.getX()][(int)intersection.getY()] = 2;
-                case 13 ->
-                    nodeMatrix[(int)intersection.getX()][(int)intersection.getY()] = 8;
-                case 11 ->
-                    nodeMatrix[(int)intersection.getX()][(int)intersection.getY()] = 4;
-                case 10 ->
-                    nodeMatrix[(int)intersection.getX()][(int)intersection.getY()] = 1;
-                case 9 ->
-                    nodeMatrix[(int)intersection.getX()][(int)intersection.getY()] = 7;
-                case 7 ->
-                    nodeMatrix[(int)intersection.getX()][(int)intersection.getY()] = 6;
-                case 6 ->
-                    nodeMatrix[(int)intersection.getX()][(int)intersection.getY()] = 3;
-                case 5 ->
-                    nodeMatrix[(int)intersection.getX()][(int)intersection.getY()] = 9;
-                default ->
-                    nodeMatrix[(int)intersection.getX()][(int)intersection.getY()] = 0;
+            switch (b) {
+                case 15 -> nodeMatrix[(int) intersection.getX()][(int) intersection.getY()] = 5;
+                case 14 -> nodeMatrix[(int) intersection.getX()][(int) intersection.getY()] = 2;
+                case 13 -> nodeMatrix[(int) intersection.getX()][(int) intersection.getY()] = 8;
+                case 11 -> nodeMatrix[(int) intersection.getX()][(int) intersection.getY()] = 4;
+                case 10 -> nodeMatrix[(int) intersection.getX()][(int) intersection.getY()] = 1;
+                case 9 -> nodeMatrix[(int) intersection.getX()][(int) intersection.getY()] = 7;
+                case 7 -> nodeMatrix[(int) intersection.getX()][(int) intersection.getY()] = 6;
+                case 6 -> nodeMatrix[(int) intersection.getX()][(int) intersection.getY()] = 3;
+                case 5 -> nodeMatrix[(int) intersection.getX()][(int) intersection.getY()] = 9;
+                default -> nodeMatrix[(int) intersection.getX()][(int) intersection.getY()] = 0;
             }
         }
+    }
+
+    private boolean hasAreaBlackPixel(BufferedImage image, int x, int y, int width, int height) {
+        for (int i = x; i < x + width; i++) {
+            for (int j = y; j < y + height; j++) {
+                if (getGray(image.getRGB(i, j)) < 200) {
+                    return true;
+                }
+            }
+        }
+        return  false;
     }
 
     private BufferedImage filterLines(BufferedImage bi) {
