@@ -17,7 +17,7 @@ public class Main {
         String file3 = "SF_20220511_50091_HA1_LETTER.pdf";
         String file4 = "SF_20220620_50193_HA1_LETTER.pdf";
 
-        pdfPath += file1;
+        pdfPath += file4;
 
         String imageResult = "/home/jonas/Studium/cloud/BA/BA Daten/out.jpg";
         TableExtractor tableExtractor = new TableExtractor(pdfPath);
@@ -27,8 +27,10 @@ public class Main {
         List<Rectangle2D> cells = tableExtractor.getCells();
         tableExtractor.finish();
 
-        for(Rectangle2D cell : cells){
-            log.info("Cell: " + cell);
+        CellReader cr = new CellReader(pdfPath, cells);
+        String[] results = cr.readArea();
+        for (String result : results) {
+            log.info(result);
         }
 
         log.info("Finished application");

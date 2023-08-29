@@ -474,6 +474,7 @@ public class TableExtractor {
      * top right and bottom left corner of the cell to create a rectangle.
      * <br>
      * Future implementation may also check for the bottom right corner to validate the cell.
+     *
      * @param intersection the intersection to find the cell for
      */
     private void findCellForIntersection(Point2D intersection) {
@@ -531,7 +532,7 @@ public class TableExtractor {
         Color color = randomColor();
         if (topRight != null && bottomLeft != null) {
             log.info("found cell: topRight: {}, bottomLeft: {}", topRight, bottomLeft);
-            cells.add(new Rectangle2D.Double(topRight.getX(), topRight.getY(), bottomLeft.getX() - topRight.getX(), bottomLeft.getY() - topRight.getY()));
+            cells.add(new Rectangle2D.Double(bottomLeft.getX(), topRight.getY(), topRight.getX() - bottomLeft.getX(), bottomLeft.getY() - topRight.getY()));
             for (int x = (int) intersection.getX(); x <= topRight.getX(); x++) {
                 for (int y = (int) intersection.getY(); y <= bottomLeft.getY(); y++) {
                     debugImage.setRGB(x, y, color.getRGB());
@@ -546,6 +547,7 @@ public class TableExtractor {
 
     /**
      * Not in use. Maybe this will be part in Image preprocessing in the future.
+     *
      * @param inputImage
      * @param contrastFactor
      * @return
@@ -611,14 +613,6 @@ public class TableExtractor {
         return (red + green + blue) / 3;
     }
 
-    /**
-     * 72 points per inch
-     * points = pixels * 72 / DPI
-     */
-    private int pixelsToPoints(int pixelVal, int dpi) {
-        return pixelVal * 72 / dpi;
-    }
-
 
     private boolean checkAreaAroundForBlackPixel(BufferedImage image, Point2D center, int offset) {
         for (double i = center.getX() - offset; i < center.getX() + offset; i++) {
@@ -656,31 +650,6 @@ public class TableExtractor {
         double delta = a1 * b2 - a2 * b1;
         return new Point2D.Float((float) ((b2 * c1 - b1 * c2) / delta), (float) ((a1 * c2 - a2 * c1) / delta));
 
-    }
-
-    public void readArea(String in) throws Exception {
-        final int DPI = 300;
-
-        int page = 0;
-        int x = pixelsToPoints(100, DPI);
-        int y = pixelsToPoints(647, DPI);
-        int width = pixelsToPoints(470, DPI);
-        int height = pixelsToPoints(125, DPI);
-
-        PDDocument document = PDDocument.load(new File(in));
-
-        PDFTextStripperByArea textStripper = new PDFTextStripperByArea();
-        Rectangle2D rect = new Rectangle2D.Float(x, y, width, height);
-        textStripper.addRegion("region", rect);
-
-
-        PDPage docPage = document.getPage(page);
-
-        textStripper.extractRegions(docPage);
-
-        String textForRegion = textStripper.getTextForRegion("region");
-
-        System.out.println(textForRegion);
     }
 
     /**
