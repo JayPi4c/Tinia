@@ -14,7 +14,7 @@ public class Main {
         String file3 = "SF_20220511_50091_HA1_LETTER.pdf";
         String file4 = "SF_20220620_50193_HA1_LETTER.pdf";
 
-        pdfPath += file4;
+        pdfPath += file1;
 
         String imageResult = "/home/jonas/Studium/cloud/BA/BA Daten/out.jpg";
         TableExtractor tableExtractor = new TableExtractor();

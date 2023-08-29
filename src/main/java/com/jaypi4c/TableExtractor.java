@@ -14,6 +14,7 @@ import java.awt.geom.Rectangle2D;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
+import java.nio.Buffer;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -165,6 +166,75 @@ public class TableExtractor {
             g.setColor(Color.RED);
             g.drawString(String.valueOf(nodeMatrix[x][y]), x, y);
         }
+        for (Point2D.Float intersection : intersections)
+            findCellForIntersection(image, nodeMatrix, intersections, intersection);
+
+
+    }
+
+    void findCellForIntersection(BufferedImage image, byte[][] nodeMatrix, List<Point2D.Float> intersections, Point2D intersection) {
+
+        byte node = nodeMatrix[(int) intersection.getX()][(int) intersection.getY()];
+        if (node != 1 && node != 2 && node != 4 && node != 5) {
+            log.info("intersection not valid for cell top right");
+            return;
+        }
+
+
+        Point2D.Float topRight = null;
+        Point2D.Float bottomLeft = null;
+
+        for (Point2D.Float other : intersections) {
+            if (other == intersection) {
+                continue;
+            }
+
+            //----------- check for top right node ----------------
+
+            // check if y is within plus minus 5 pixels
+            if (other.getY() > intersection.getY() - 5 && other.getY() < intersection.getY() + 5) {
+                // check if intersection is of type 2, 3, 5, 6
+                byte otherNode = nodeMatrix[(int) other.getX()][(int) other.getY()];
+                if (otherNode == 2 || otherNode == 3 || otherNode == 5 || otherNode == 6) {
+                    // check if x is closer than previous best for topRight
+                    if (other.getX() > intersection.getX() && (topRight == null || other.getX() < topRight.getX())) {
+                        // then use it!
+                        topRight = other;
+                    }
+                }
+            }
+
+            //----------- check for bottom left node ----------------
+
+            // check if x is within plus minus 5 pixels
+
+            if (other.getX() > intersection.getX() - 5 && other.getX() < intersection.getX() + 5) {
+                // check if intersection is of type 4, 5, 7, 8
+                byte otherNode = nodeMatrix[(int) other.getX()][(int) other.getY()];
+                if (otherNode == 4 || otherNode == 5 || otherNode == 7 || otherNode == 8) {
+                    // check if y is closer than previous best for bottomLeft
+                    if (other.getY() > intersection.getY() && (bottomLeft == null || other.getY() < bottomLeft.getY())) {
+                        // then use it!
+                        bottomLeft = other;
+                    }
+                }
+            }
+            // TODO: check for bottom right to validate full cell.
+
+        }
+
+        // draw cell for the points found.
+        Color color = randomColor();
+        if (topRight != null && bottomLeft != null) {
+            log.info("found cell: topRight: {}, bottomLeft: {}", topRight, bottomLeft);
+            for (int x = (int) intersection.getX(); x <= topRight.getX(); x++) {
+                for (int y = (int) intersection.getY(); y <= bottomLeft.getY(); y++) {
+                    image.setRGB(x, y, color.getRGB());
+                }
+            }
+        } else {
+            log.info("no cell found for intersection: {}", intersection);
+        }
 
 
     }
@@ -290,7 +360,6 @@ public class TableExtractor {
                 }
             }
         }
-
 
 
         // draw blue intersections
