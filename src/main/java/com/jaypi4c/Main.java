@@ -2,6 +2,9 @@ package com.jaypi4c;
 
 import lombok.extern.slf4j.Slf4j;
 
+import java.awt.geom.Rectangle2D;
+import java.util.List;
+
 @Slf4j
 public class Main {
 
@@ -17,11 +20,16 @@ public class Main {
         pdfPath += file1;
 
         String imageResult = "/home/jonas/Studium/cloud/BA/BA Daten/out.jpg";
-        TableExtractor tableExtractor = new TableExtractor();
+        TableExtractor tableExtractor = new TableExtractor(pdfPath);
 
-        // tableExtractor.readArea(pdfPath);
+        tableExtractor.start();
 
-        tableExtractor.execute(pdfPath, imageResult);
+        List<Rectangle2D> cells = tableExtractor.getCells();
+        tableExtractor.finish();
+
+        for(Rectangle2D cell : cells){
+            log.info("Cell: " + cell);
+        }
 
         log.info("Finished application");
     }
