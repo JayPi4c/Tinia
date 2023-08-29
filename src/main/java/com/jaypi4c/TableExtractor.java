@@ -14,7 +14,6 @@ import java.awt.geom.Rectangle2D;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
-import java.nio.Buffer;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -84,7 +83,7 @@ public class TableExtractor {
 
             BufferedImage output = filterLines(bi);
             output = findIntersections(output);
-            labelIntersections();
+            labelIntersections(output);
 
 
             ImageIO.write(output, "JPEG", new File(out));
@@ -101,29 +100,28 @@ public class TableExtractor {
             int i = 0;
 
             byte b = 0b0000;
-            int intersectionOffset = 5;
+            int intersectionOffset = 10;
 
             Point2D pointAbove = new Point2D.Double(intersection.getX(), intersection.getY() - intersectionOffset);
             Point2D pointBelow = new Point2D.Double(intersection.getX(), intersection.getY() + intersectionOffset);
             Point2D pointLeft = new Point2D.Double(intersection.getX() - intersectionOffset, intersection.getY());
             Point2D pointRight = new Point2D.Double(intersection.getX() + intersectionOffset, intersection.getY());
 
-            for (Line2D line : lines) {
 
-                // maybe bitmasking is better
-                if (line.contains(pointAbove)) {
-                    b = (byte) (b | 0b0001);
-                }
-                if (line.contains(pointBelow)) {
-                    b = (byte) (b | 0b0010);
-                }
-                if (line.contains(pointLeft)) {
-                    b = (byte) (b | 0b0100);
-                }
-                if (line.contains(pointRight)) {
-                    b = (byte) (b | 0b1000);
-                }
+            // maybe bitmasking is better
+            if (checkAreaAroundForBlackPixel(image, pointAbove, 3)) {
+                b = (byte) (b | 0b0001);
             }
+            if (checkAreaAroundForBlackPixel(image, pointBelow, 3)) {
+                b = (byte) (b | 0b0010);
+            }
+            if (checkAreaAroundForBlackPixel(image, pointLeft, 3)) {
+                b = (byte) (b | 0b0100);
+            }
+            if (checkAreaAroundForBlackPixel(image, pointRight, 3)) {
+                b = (byte) (b | 0b1000);
+            }
+
             log.info("b: {}", b);
             // b is now a number between 0 and 15
             // 0  = 0000 = no line
@@ -156,17 +154,31 @@ public class TableExtractor {
                 default -> nodeMatrix[(int) intersection.getX()][(int) intersection.getY()] = 0;
             }
         }
+
+        // debug: draw number for node
+        for (Point2D intersection : intersections) {
+            int x = (int) intersection.getX();
+            int y = (int) intersection.getY();
+            image.setRGB(x, y, Color.GREEN.getRGB());
+            // write String into image
+            Graphics g = image.getGraphics();
+            g.setColor(Color.RED);
+            g.drawString(String.valueOf(nodeMatrix[x][y]), x, y);
+        }
+
+
     }
 
-    private boolean hasAreaBlackPixel(BufferedImage image, int x, int y, int width, int height) {
-        for (int i = x; i < x + width; i++) {
-            for (int j = y; j < y + height; j++) {
-                if (getGray(image.getRGB(i, j)) < 200) {
+
+    private boolean checkAreaAroundForBlackPixel(BufferedImage image, Point2D center, int offset) {
+        for (double i = center.getX() - offset; i < center.getX() + offset; i++) {
+            for (double j = center.getY() - offset; j < center.getY() + offset; j++) {
+                if (getGray(image.getRGB((int) i, (int) j)) < 50) {
                     return true;
                 }
             }
         }
-        return  false;
+        return false;
     }
 
     private BufferedImage filterLines(BufferedImage bi) {
@@ -268,27 +280,28 @@ public class TableExtractor {
                     boolean found = false;
 
                     for (Point2D.Float p : intersections) {
-                        if (Math.abs(p.x - interceptionPoint.x) < 2 && Math.abs(p.y - interceptionPoint.y) < 2) {
+                        if (p.distance(interceptionPoint) < 5) {
                             found = true;
                             break;
                         }
                     }
                     if (!found)
                         intersections.add(interceptionPoint);
-
                 }
             }
         }
 
+
+
         // draw blue intersections
-        int len = 3;
+        /*int len = 3;
         for (Point2D.Float p : intersections) {
             for (int x = (int) p.x - len; x <= p.x + len; x++) {
                 for (int y = (int) p.y - len; y <= p.y + len; y++) {
                     input.setRGB(x, y, Color.BLUE.getRGB());
                 }
             }
-        }
+        }*/
         return input;
 
     }
