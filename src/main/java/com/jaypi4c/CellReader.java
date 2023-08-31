@@ -15,10 +15,12 @@ public class CellReader {
     private final String pdfPath;
     private final List<Rectangle2D> cells;
     final int DPI = 300;
+    private int pageIndex;
 
-    public CellReader(String pdfPath, List<Rectangle2D> cells) {
+    public CellReader(String pdfPath, int pageIndex, List<Rectangle2D> cells) {
         this.pdfPath = pdfPath;
         this.cells = cells;
+        this.pageIndex = pageIndex;
     }
 
     /**
@@ -31,9 +33,6 @@ public class CellReader {
 
     public String[] readArea() throws Exception {
         String[] results = new String[cells.size()];
-
-
-        int page = 0;
 
         try (PDDocument pd = PDDocument.load(new File(pdfPath))) {
 
@@ -52,7 +51,7 @@ public class CellReader {
                 textStripper.addRegion("cell" + i, rect);
 
             }
-            PDPage docPage = pd.getPage(page);
+            PDPage docPage = pd.getPage(pageIndex);
 
             textStripper.extractRegions(docPage);
 

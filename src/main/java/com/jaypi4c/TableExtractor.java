@@ -3,9 +3,7 @@ package com.jaypi4c;
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.pdfbox.pdmodel.PDDocument;
-import org.apache.pdfbox.pdmodel.PDPage;
 import org.apache.pdfbox.rendering.PDFRenderer;
-import org.apache.pdfbox.text.PDFTextStripperByArea;
 
 import javax.imageio.ImageIO;
 import java.awt.*;
@@ -43,6 +41,8 @@ public class TableExtractor {
 
     private byte[][] nodeMatrix;
 
+    private int pageIndex;
+
     /**
      * May only be filled after calling start()
      */
@@ -60,14 +60,15 @@ public class TableExtractor {
      *
      * @param in path to file pdf file to read
      */
-    public TableExtractor(String in) {
+    public TableExtractor(String in, int pageIndex) {
         //https://stackoverflow.com/a/57724726
         // read pdf
         try {
             document = PDDocument.load(new File(in));
             PDFRenderer pr = new PDFRenderer(document);
+            this.pageIndex = pageIndex;
             // get page as image
-            originalImage = pr.renderImageWithDPI(0, 300);
+            originalImage = pr.renderImageWithDPI(pageIndex, 300);
             imgInEdit = deepCopy(originalImage);
             imageWidth = originalImage.getWidth();
             imageHeight = originalImage.getHeight();
