@@ -6,6 +6,7 @@ import org.apache.pdfbox.pdmodel.PDDocument;
 import java.awt.geom.Rectangle2D;
 import java.io.File;
 import java.io.IOException;
+import java.util.Arrays;
 import java.util.List;
 
 @Slf4j
@@ -22,7 +23,7 @@ public class Main {
 
         pdfPath += file4;
 
-        int numberOfPages = getNumberOfPages(pdfPath);
+        int numberOfPages = 1;// getNumberOfPages(pdfPath);
         for (int i = 0; i < numberOfPages; i++) {
 
             TableExtractor tableExtractor = new TableExtractor(pdfPath, i);
@@ -33,10 +34,13 @@ public class Main {
             tableExtractor.finish();
             if (!cells.isEmpty()) {
                 CellReader cr = new CellReader(pdfPath, i, cells);
-                String[] results = cr.readArea();
-                for (String result : results) {
-                    log.debug(result);
-                }
+                String[][] results = cr.readArea();
+                print2D(results);
+                /*for (String[] row : results) {
+                    for (String entry : row) {
+                        log.debug(entry);
+                    }
+                }*/
             } else {
                 log.info("No cells found");
             }
@@ -53,5 +57,16 @@ public class Main {
             log.error("Failed to get number of pages", e);
             return -1;
         }
+    }
+
+    /**
+     * https://www.geeksforgeeks.org/print-2-d-array-matrix-java/
+     *
+     * @param mat
+     */
+    public static void print2D(String mat[][]) {
+        // Loop through all rows
+        for (int i = 0; i < mat.length; i++)
+            System.out.println(Arrays.toString(mat[i]));
     }
 }
