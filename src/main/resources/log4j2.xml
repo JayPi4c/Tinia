@@ -20,6 +20,5 @@
             <AppenderRef ref="LogToFile"/>
             <AppenderRef ref="LogToConsole"/>
         </Root>
-
     </Loggers>
 </Configuration>
