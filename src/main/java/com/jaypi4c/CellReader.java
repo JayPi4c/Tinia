@@ -45,7 +45,7 @@ public class CellReader {
                 int y = pixelsToPoints((int) cell.getY(), DPI);
                 int width = pixelsToPoints((int) cell.getWidth(), DPI);
                 int height = pixelsToPoints((int) cell.getHeight(), DPI);
-                log.info("creating rectangle: {}, {}, {}, {}", cell.getX(), cell.getY(), cell.getWidth(), cell.getHeight());
+                log.debug("creating rectangle: {}, {}, {}, {}", cell.getX(), cell.getY(), cell.getWidth(), cell.getHeight());
                 Rectangle2D rect = new Rectangle2D.Float(x, y, width, height);
 
                 textStripper.addRegion("cell" + i, rect);

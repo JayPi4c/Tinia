@@ -5,18 +5,21 @@
     </Properties>
     <Appenders>
         <Console name="LogToConsole" target="SYSTEM_OUT">
-            <PatternLayout pattern="${appenderPatternLayout}" />
+            <PatternLayout pattern="${appenderPatternLayout}"/>
         </Console>
         <File name="LogToFile" fileName="logs/pipeline.log" immediateFlush="false" append="false">
-            <PatternLayout pattern="${appenderPatternLayout}" />
+            <ThresholdFilter level="${sys:logging.level:-info}" onMatch="ACCEPT" onMismatch="DENY"/>
+            <PatternLayout pattern="${appenderPatternLayout}"/>
         </File>
     </Appenders>
+
     <Loggers>
-        <Logger name="com.jaypi4c" level="${sys:logging.level:-info}">
-            <AppenderRef ref="LogToFile" />
-        </Logger>
-        <Root level="debug">
-            <AppenderRef ref="LogToConsole" />
+        <Logger name="com.jaypi4c" level="debug"/>
+
+        <Root level="${sys:logging.level:-info}">
+            <AppenderRef ref="LogToFile"/>
+            <AppenderRef ref="LogToConsole"/>
         </Root>
+
     </Loggers>
 </Configuration>

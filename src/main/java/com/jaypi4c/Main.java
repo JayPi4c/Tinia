@@ -20,9 +20,7 @@ public class Main {
         String file3 = "SF_20220511_50091_HA1_LETTER.pdf";
         String file4 = "SF_20220620_50193_HA1_LETTER.pdf";
 
-        pdfPath += file1;
-
-        String imageResult = "/home/jonas/Studium/cloud/BA/BA Daten/out.jpg";
+        pdfPath += file4;
 
         int numberOfPages = getNumberOfPages(pdfPath);
         for (int i = 0; i < numberOfPages; i++) {
@@ -37,7 +35,7 @@ public class Main {
                 CellReader cr = new CellReader(pdfPath, i, cells);
                 String[] results = cr.readArea();
                 for (String result : results) {
-                    log.info(result);
+                    log.debug(result);
                 }
             } else {
                 log.info("No cells found");
