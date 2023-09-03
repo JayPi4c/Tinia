@@ -482,13 +482,14 @@ public class TableExtractor {
 
         byte node = nodeMatrix[(int) intersection.getX()][(int) intersection.getY()];
         if (node != 1 && node != 2 && node != 4 && node != 5) {
-            log.info("intersection not valid for cell top right");
+            log.info("intersection not valid for cell top left");
             return;
         }
 
 
         Point2D.Float topRight = null;
         Point2D.Float bottomLeft = null;
+        Point2D.Float bottomRight = null;
 
         for (Point2D.Float other : intersections) {
             if (other == intersection) {// don't check with yourself
@@ -525,60 +526,43 @@ public class TableExtractor {
                     }
                 }
             }
-            // TODO: check for bottom right to validate full cell.
+
+            //---------------- check for bottom right node ----------------
+
+            // it's a candidate if it's of type 5, 6, 8 or 9
+            byte otherNode = nodeMatrix[(int) other.getX()][(int) other.getY()];
+            if (otherNode == 5 || otherNode == 6 || otherNode == 8 || otherNode == 9) {
+                // check if x is more than 5 pixels greater than intersection
+                if (other.getX() > intersection.getX() + 15) {
+                    // check if y is more than 5 pixels greater than intersection
+                    if (other.getY() > intersection.getY() + 15) {
+                        // check if x and y are closer or equal (+-5 pixels)to the previous best for bottomRight
+                        if (bottomRight == null) {
+                            bottomRight = other;
+                        } else if (other.getX() <= bottomRight.getX() + 5 && other.getY() <= bottomRight.getY() + 5) {
+                            bottomRight = other;
+                        }
+                    }
+                }
+            }
 
         }
-        if (bottomLeft == null || topRight == null) {
+        if (topRight == null || bottomLeft == null || bottomRight == null) {
             log.debug("no cell found for intersection: {}", intersection);
             return;
-        }
-
-        // check for bottom right candidate
-        Point2D.Float bottomRight = null;
-        for (Point2D.Float other : intersections) {
-            if (other == topRight || other == bottomLeft) { // don't check with yourself
-                continue;
-            }
-            // check for type 5, 7, 8, 9 (bottom right)
-            byte otherNode = nodeMatrix[(int) other.getX()][(int) other.getY()];
-            if (otherNode == 5 || otherNode == 7 || otherNode == 8 || otherNode == 9) {
-
-                // check x if y is on the same level as bottom left
-
-                if (Math.abs(other.getY() - bottomLeft.getY()) < 5) {
-                    // check if x is closer than previous best for bottomRight
-                    if (other.getX() > intersection.getX() && (bottomRight == null || other.getX() < bottomRight.getX())) {
-                        bottomRight = other;
-                    }
-                }
-                // check y if x is on the same level as top right
-                if (Math.abs(other.getY() - topRight.getY()) < 5) {
-                    // check if y is closer than previous best for bottomRight
-                    if (other.getY() > intersection.getY() && (bottomRight == null || other.getY() < bottomRight.getY())) {
-                        bottomRight = other;
-                    }
-                }
-
-
-            }
         }
 
 
         // Add the cell to the list and color it in the debug image
         Color color = randomColor();
-        if (bottomRight != null) {
-            log.info("found cell: topRight: {}, bottomLeft: {}", topRight, bottomLeft);
-            cells.add(new Rectangle2D.Double(bottomLeft.getX(), topRight.getY(), Math.min(topRight.getX(), bottomRight.getX()) - bottomLeft.getX(), Math.min(bottomLeft.getY(), bottomRight.getY()) - topRight.getY()));
-            for (int x = (int) intersection.getX(); x <= topRight.getX(); x++) {
-                for (int y = (int) intersection.getY(); y <= bottomLeft.getY(); y++) {
-                    debugImage.setRGB(x, y, color.getRGB());
-                }
+        log.debug("found cell: topRight: {}, bottomLeft: {}, bottomRight {}", topRight, bottomLeft, bottomRight);
+        Rectangle2D.Double cell = new Rectangle2D.Double(intersection.getX(), intersection.getY(), Math.min(topRight.getX(), bottomRight.getX()) - intersection.getX(), Math.min(bottomLeft.getY(), bottomRight.getY()) - intersection.getY());
+        cells.add(cell);
+        for (int x = (int) intersection.getX(); x <= intersection.getX() + cell.getWidth(); x++) {
+            for (int y = (int) intersection.getY(); y <= intersection.getY() + cell.getHeight(); y++) {
+                debugImage.setRGB(x, y, color.getRGB());
             }
-        } else {
-            log.debug("no cell found for intersection: {}", intersection);
         }
-
-
     }
 
     /**
