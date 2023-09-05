@@ -21,7 +21,7 @@ public class Main {
         String file3 = "SF_20220511_50091_HA1_LETTER.pdf";
         String file4 = "SF_20220620_50193_HA1_LETTER.pdf";
 
-        pdfPath += file4;
+        pdfPath += file1;
 
         int numberOfPages = 1;// getNumberOfPages(pdfPath);
         for (int i = 0; i < numberOfPages; i++) {
@@ -36,6 +36,12 @@ public class Main {
                 CellReader cr = new CellReader(pdfPath, i, cells);
                 String[][] results = cr.readArea();
                 print2D(results);
+
+                Medication[] medications = Medication.fromStringArray(results);
+                for (Medication medication : medications) {
+                    log.info(medication.toString());
+                }
+
                 /*for (String[] row : results) {
                     for (String entry : row) {
                         log.debug(entry);
