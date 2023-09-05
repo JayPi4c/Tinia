@@ -133,6 +133,7 @@ public class TableExtractor {
     private void removeText() {
         // create empty result image
         imgInEdit = createWhiteBackgroundImage(imageWidth, imageHeight);
+        debugImage = createWhiteBackgroundImage(imageWidth, imageHeight);
 
         // we want to store all lines and be able to look them up at any time.
         lines = new ArrayList<>();
@@ -150,15 +151,22 @@ public class TableExtractor {
         for (int y = 0; y < originalImage.getHeight(); y++) {
             int beginX = -1;
             for (int x = 0; x < originalImage.getWidth(); x++) {
-                int gray = getGray(originalImage.getRGB(x, y));
-
-                if (gray < blackThreshold) {
+                if (isBlack(originalImage, x, y, blackThreshold, true)) {
                     if (beginX < 0) {
                         beginX = x;
                     }
                 } else {
+
+                    // TODO check for pixels above or below. Maybe there the line continues...
                     if (beginX >= 0 && (x - beginX) > n) {
-                        lines.add(new Line2D.Float(beginX, y, x, y));
+                        Line2D.Float line = new Line2D.Float(beginX, y, x, y);
+                        lines.add(line);
+                        Color color = randomColor();
+                        for (int x_ = (int) line.getX1(); x_ <= line.getX2(); x_++) {
+                            for (int y_ = (int) line.getY1(); y_ <= line.getY2(); y_++) {
+                                debugImage.setRGB(x_, y_, color.getRGB());
+                            }
+                        }
                     }
                     beginX = -1;
                 }
@@ -181,11 +189,23 @@ public class TableExtractor {
                     }
                 } else {
                     if (beginY >= 0 && (y - beginY) > n) {
-                        lines.add(new Line2D.Float(x, beginY, x, y));
+                        Line2D.Float line = new Line2D.Float(x, beginY, x, y);
+                        lines.add(line);
+                        Color color = randomColor();
+                        for (int x_ = (int) line.getX1(); x_ <= line.getX2(); x_++) {
+                            for (int y_ = (int) line.getY1(); y_ <= line.getY2(); y_++) {
+                                debugImage.setRGB(x_, y_, color.getRGB());
+                            }
+                        }
                     }
                     beginY = -1;
                 }
             }
+        }
+        try {
+            ImageIO.write(debugImage, "JPEG", new File("/home/jonas/Studium/cloud/BA/BA Daten/debug.jpg"));
+        } catch (IOException e) {
+            log.error("Failed to write debug image", e);
         }
 
         // draw the found lines onto the white image in edit
@@ -197,6 +217,31 @@ public class TableExtractor {
                 }
             }
         }
+    }
+
+    private boolean isBlack(BufferedImage image, int x, int y, int threshold, boolean xAxis) {
+        if (xAxis) {
+            for (int i = y - 1; i <= y + 1; i++) {
+                try {
+                    if (getGray(image.getRGB(x, i)) < threshold) {
+                        return true;
+                    }
+                } catch (Exception e) {
+                    log.debug("pixel out of bounds");
+                }
+            }
+        } else {
+            for (int i = x - 1; i <= x + 1; i++) {
+                try {
+                    if (getGray(image.getRGB(i, y)) < threshold) {
+                        return true;
+                    }
+                } catch (Exception e) {
+                    log.debug("pixel out of bounds");
+                }
+            }
+        }
+        return false;
     }
 
     /**
