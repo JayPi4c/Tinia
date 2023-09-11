@@ -5,6 +5,7 @@ target/
 
 # project specific files
 /logs/
+.pgdata/
 
 ### IntelliJ IDEA ###
 .idea/modules.xml
