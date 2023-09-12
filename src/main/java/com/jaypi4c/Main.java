@@ -20,12 +20,13 @@ public class Main {
         String file2 = "SF_20220412_50061_HA1_LETTER.pdf";
         String file3 = "SF_20220511_50091_HA1_LETTER.pdf";
         String file4 = "SF_20220620_50193_HA1_LETTER.pdf";
+        String file5 = "SF_20220213_50007_HA1_LETTER.pdf";
 
-        pdfPath += file1;
+        pdfPath += file3;
 
         int numberOfPages = 1;// getNumberOfPages(pdfPath);
         for (int i = 0; i < numberOfPages; i++) {
-
+            //i=1;
             TableExtractor tableExtractor = new TableExtractor(pdfPath, i);
 
             tableExtractor.start();

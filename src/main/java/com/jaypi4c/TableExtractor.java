@@ -122,6 +122,9 @@ public class TableExtractor {
         // connected components labeling to remove black areas
         log.info("removing black areas from the image");
         connectedComponentsLabeling();
+
+        // log.info("combining Lines");
+        // combineLines();
     }
 
     /**
@@ -161,12 +164,7 @@ public class TableExtractor {
                     if (beginX >= 0 && (x - beginX) > n) {
                         Line2D.Float line = new Line2D.Float(beginX, y, x, y);
                         lines.add(line);
-                        Color color = randomColor();
-                        for (int x_ = (int) line.getX1(); x_ <= line.getX2(); x_++) {
-                            for (int y_ = (int) line.getY1(); y_ <= line.getY2(); y_++) {
-                                debugImage.setRGB(x_, y_, color.getRGB());
-                            }
-                        }
+                        drawRandomColorLine(debugImage, line);
                     }
                     beginX = -1;
                 }
@@ -191,12 +189,7 @@ public class TableExtractor {
                     if (beginY >= 0 && (y - beginY) > n) {
                         Line2D.Float line = new Line2D.Float(x, beginY, x, y);
                         lines.add(line);
-                        Color color = randomColor();
-                        for (int x_ = (int) line.getX1(); x_ <= line.getX2(); x_++) {
-                            for (int y_ = (int) line.getY1(); y_ <= line.getY2(); y_++) {
-                                debugImage.setRGB(x_, y_, color.getRGB());
-                            }
-                        }
+                        drawRandomColorLine(debugImage, line);
                     }
                     beginY = -1;
                 }
@@ -211,43 +204,55 @@ public class TableExtractor {
         // draw the found lines onto the white image in edit
         // this image will be used for further processing as it only contains the lines and black areas
         for (Line2D line : lines) {
-            for (int x = (int) line.getX1(); x <= line.getX2(); x++) {
-                for (int y = (int) line.getY1(); y <= line.getY2(); y++) {
-                    imgInEdit.setRGB(x, y, 0x00000000);
-                }
-            }
+            drawBlackLine(imgInEdit, line);
         }
     }
 
-    private boolean isBlack(BufferedImage image, int x, int y, int threshold, boolean xAxis) {
-        if (xAxis) {
-            for (int i = y - 1; i <= y + 1; i++) {
-                try {
-                    if (getGray(image.getRGB(x, i)) < threshold) {
-                        return true;
+
+    private void combineLines() {
+        List<Line2D.Float> list = new ArrayList<>(lines);
+
+        List<Line2D.Float> result = new ArrayList<>();
+
+        // The number of pixels between two lines to be considered as one line.
+        int lineThreshold = 10;
+
+        while (!list.isEmpty()) {
+
+            Line2D.Float line = list.remove(0);
+            boolean horizontal = Math.abs(line.getX1() - line.getX2()) > Math.abs(line.getY1() - line.getY2());
+            boolean match;
+            do {
+                match = false;
+                for (int i = list.size() - 1; i >= 1; i--) {
+                    Line2D.Float line2 = list.get(i);
+                    // x coords must overlap
+                    if (horizontal && (Math.abs(line.getY1() - line2.getY1()) < lineThreshold && line.getX1() <= line2.getX2() && line.getX2() >= line2.getX1())) {
+                        line.setLine(Math.min(line.getX1(), line2.getX1()), line.getY1(), Math.max(line.getX2(), line2.getX2()), line.getY2());
+                        list.remove(i);
+                        match = true;
+                    } else if (Math.abs(line.getX1() - line2.getX1()) < lineThreshold && line.getY1() <= line2.getY2() && line.getY2() >= line2.getY1()) { // y coords must overlap
+                        line.setLine(line.getX1(), Math.min(line.getY1(), line2.getY1()), line.getX2(), Math.max(line.getY2(), line2.getY2()));
+                        list.remove(i);
+                        match = true;
                     }
-                } catch (Exception e) {
-                    log.debug("pixel out of bounds");
                 }
-            }
-        } else {
-            for (int i = x - 1; i <= x + 1; i++) {
-                try {
-                    if (getGray(image.getRGB(i, y)) < threshold) {
-                        return true;
-                    }
-                } catch (Exception e) {
-                    log.debug("pixel out of bounds");
-                }
-            }
+            } while (match);
+            result.add(line);
         }
-        return false;
+        lines = result;
+
+        // draw the found lines onto the white image in edit
+        // this image will be used for further processing as it only contains the lines and black areas
+        for (Line2D line : lines) {
+            drawBlackLine(debugImage, line);
+        }
     }
 
     /**
      * ConnectedComponentsAlgorithm to remove black areas from the image
      * <br>
-     * https://aishack.in/tutorials/labelling-connected-components-example/
+     * See <a href="https://aishack.in/tutorials/labelling-connected-components-example/">Tutorial</a> for reference.
      *
      * <br>
      * As there are only the colors black and white left, the algorithm is straight forward: In the first pass, all
@@ -613,9 +618,9 @@ public class TableExtractor {
     /**
      * Not in use. Maybe this will be part in Image preprocessing in the future.
      *
-     * @param inputImage
-     * @param contrastFactor
-     * @return
+     * @param inputImage     the image to increase the contrast of
+     * @param contrastFactor the factor to increase the contrast by
+     * @return the image with increased contrast
      */
     public static BufferedImage increaseContrast(BufferedImage inputImage, double contrastFactor) {
         int width = inputImage.getWidth();
@@ -656,6 +661,48 @@ public class TableExtractor {
         return new Color((int) (Math.random() * 0x1000000));
     }
 
+    private void drawBlackLine(BufferedImage image, Line2D line) {
+        drawLine(image, line, Color.BLACK);
+    }
+
+    private void drawLine(BufferedImage image, Line2D line, Color color) {
+        for (int x_ = (int) line.getX1(); x_ <= line.getX2(); x_++) {
+            for (int y_ = (int) line.getY1(); y_ <= line.getY2(); y_++) {
+                image.setRGB(x_, y_, color.getRGB());
+            }
+        }
+    }
+
+    private void drawRandomColorLine(BufferedImage image, Line2D line) {
+        Color color = randomColor();
+        drawLine(image, line, color);
+    }
+
+    private boolean isBlack(BufferedImage image, int x, int y, int threshold, boolean xAxis) {
+        if (xAxis) {
+            for (int i = y - 1; i <= y + 1; i++) {
+                try {
+                    if (getGray(image.getRGB(x, i)) < threshold) {
+                        return true;
+                    }
+                } catch (Exception e) {
+                    log.debug("pixel out of bounds");
+                }
+            }
+        } else {
+            for (int i = x - 1; i <= x + 1; i++) {
+                try {
+                    if (getGray(image.getRGB(i, y)) < threshold) {
+                        return true;
+                    }
+                } catch (Exception e) {
+                    log.debug("pixel out of bounds");
+                }
+            }
+        }
+        return false;
+    }
+
     private BufferedImage createWhiteBackgroundImage(int width, int height) {
         BufferedImage image = new BufferedImage(width, height, BufferedImage.TYPE_INT_RGB);
         Graphics2D graphics = image.createGraphics();
@@ -692,9 +739,9 @@ public class TableExtractor {
 
 
     /**
-     * @param line1
-     * @param line2
-     * @return
+     * @param line1 the first line
+     * @param line2 the second line
+     * @return the intersection point of the two lines
      * @see <a href=https://stackoverflow.com/a/61574355>Stackoverflow</a>
      */
     public static Point2D.Float calculateInterceptionPoint(Line2D.Float line1, Line2D.Float line2) {
@@ -718,10 +765,10 @@ public class TableExtractor {
     }
 
     /**
-     * https://stackoverflow.com/a/3514297
+     * <a href="https://stackoverflow.com/a/3514297">...</a>
      *
-     * @param bi
-     * @return
+     * @param bi the image to copy
+     * @return a deep copy of the image
      */
     private static BufferedImage deepCopy(BufferedImage bi) {
         ColorModel cm = bi.getColorModel();
