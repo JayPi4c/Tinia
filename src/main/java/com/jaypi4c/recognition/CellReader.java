@@ -1,4 +1,4 @@
-package com.jaypi4c;
+package com.jaypi4c.recognition;
 
 import lombok.extern.slf4j.Slf4j;
 import org.apache.pdfbox.pdmodel.PDDocument;

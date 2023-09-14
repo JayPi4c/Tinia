@@ -1,30 +1,19 @@
-package com.jaypi4c.openehr.compositions;
+package com.jaypi4c.openehr.compositions.nephromedikationcomposition;
 
-import com.jaypi4c.openehr.compositions.nephromedikationcomposition.NephroMedikationComposition;
-import com.jaypi4c.openehr.compositions.nephromedikationcomposition.NephroMedikationTemplateProvider;
+import com.jaypi4c.openehr.compositions.ICompositionFactory;
 import com.jaypi4c.openehr.compositions.nephromedikationcomposition.definition.*;
-import com.nedap.archie.rm.RMObject;
-import com.nedap.archie.rm.datavalues.DvText;
-import com.nedap.archie.rm.ehr.EhrStatus;
+
 import com.nedap.archie.rm.generic.PartyIdentified;
 import com.nedap.archie.rm.generic.PartySelf;
-import com.nedap.archie.rm.support.identification.GenericId;
-import com.nedap.archie.rm.support.identification.PartyRef;
+
 import org.ehrbase.client.classgenerator.shareddefinition.Language;
 import org.ehrbase.client.classgenerator.shareddefinition.Setting;
 import org.ehrbase.client.classgenerator.shareddefinition.Territory;
-import org.ehrbase.client.flattener.Unflattener;
-import org.ehrbase.client.openehrclient.CompositionEndpoint;
-import org.ehrbase.client.openehrclient.EhrEndpoint;
-import org.ehrbase.client.openehrclient.OpenEhrClient;
-import org.ehrbase.serialisation.jsonencoding.CanonicalJson;
-import org.ehrbase.webtemplate.templateprovider.TemplateProvider;
 
-import java.net.URISyntaxException;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.UUID;
+
 
 /**
  * Factory class which will later be used to create compositions and send them to an EhrBase instance.
@@ -34,10 +23,9 @@ import java.util.UUID;
  *
  * @see <a href="https://ckm.highmed.org/ckm/templates/1246.169.1019">Nephro_Medikation in CKM</a> for more information.
  */
-public class CompositionFactory {
+public class NephroMedikationCompositionFactory implements ICompositionFactory<NephroMedikationComposition> {
 
-    public static void main(String[] args) throws URISyntaxException {
-
+    public NephroMedikationComposition createComposition(String[][] medicationMatrix) {
         NephroMedikationComposition composition = prepareComposition(new NephroMedikationComposition());
 
         // setting Fallidentifikation
@@ -49,16 +37,32 @@ public class CompositionFactory {
         // jede Zeile in der Tabelle ist eine Verordnung. So kann eine ganze Tabelle in einer composition gespeichert werden.
         List<VerordnungVonArzneimittelInstruction> list = new ArrayList<>();
 
-        for (int i = 0; i < 1; i++) {
+        for (int i = 1; i < medicationMatrix.length; i++) {
+            String[] row = medicationMatrix[i];
+            String wirkstoff = row[0].trim();
+            String handelsname = row[1].trim();
+            String staerke = row[2].trim();
+            String form = row[3].trim();
+
+
+            // TODO: extract information from matrix and put into composition
             VerordnungVonArzneimittelInstruction arzneimittel = prepareInstruction(new VerordnungVonArzneimittelInstruction());
 
+
             VerordnungVonArzneimittelVerordnungActivity verordnung = new VerordnungVonArzneimittelVerordnungActivity();
-            verordnung.setHandelsnameValue("Handelsname " + i);
+            verordnung.setHandelsnameValue(handelsname);
+
 
             ArzneimittelCluster arzneimittelCluster = new ArzneimittelCluster();
+
             ArzneimittelDarreichungsformElement arzneimittelDarreichungsformElement = new ArzneimittelDarreichungsformElement();
-            arzneimittelDarreichungsformElement.setValue("Tabletten");
+            arzneimittelDarreichungsformElement.setValue(form + "en");
             arzneimittelCluster.setDarreichungsform(List.of(arzneimittelDarreichungsformElement));
+
+            WirkstoffCluster wirkstoffCluster = new WirkstoffCluster();
+            wirkstoffCluster.setWirkstoffValue(wirkstoff);
+            arzneimittelCluster.setWirkstoff(wirkstoffCluster);
+
             verordnung.setArzneimittel(arzneimittelCluster);
 
 
@@ -68,48 +72,7 @@ public class CompositionFactory {
 
         composition.setVerordnungVonArzneimittel(list);
 
-
-        TemplateProvider provider = new NephroMedikationTemplateProvider();
-
-        Unflattener unflattener = new Unflattener(provider);
-        RMObject rmObject = unflattener.unflatten(composition);
-
-        CanonicalJson json = new CanonicalJson();
-        System.out.println(json.marshal(rmObject));
-
-        // see https://ehrbase.readthedocs.io/en/latest/02_getting_started/04_create_ehr/index.html#client-library
-        OpenEhrClient openEhrClient = DefaultRestClientHelper.setupRestClient();
-        EhrEndpoint ehrEndpoint = openEhrClient.ehrEndpoint();
-        UUID applicationUserID = UUID.randomUUID();
-        UUID ehr = ehrEndpoint.createEhr(createEhr(applicationUserID));
-
-        CompositionEndpoint compositionEndpoint = openEhrClient.compositionEndpoint(ehr);
-        compositionEndpoint.mergeCompositionEntity(composition);
-    }
-
-    private static EhrStatus createEhr(UUID applicationUserID) {
-        EhrStatus status = new EhrStatus();
-        status.setArchetypeNodeId("openEHR-EHR-ITEM_TREE.generic.v1");
-
-        DvText name = new DvText();
-        name.setValue("any EHR STATUS");
-        status.setName(name);
-
-        PartySelf subject = new PartySelf();
-        PartyRef externalRef = new PartyRef();
-        GenericId id = new GenericId();
-        id.setValue(applicationUserID.toString());
-        id.setScheme("id_scheme");
-        externalRef.setId(id);
-        externalRef.setNamespace("BA");
-        externalRef.setType("PERSON");
-        subject.setExternalRef(externalRef);
-        status.setSubject(subject);
-
-        status.setModifiable(true);
-        status.setQueryable(true);
-
-        return status;
+        return composition;
     }
 
     private static VerordnungVonArzneimittelInstruction prepareInstruction(VerordnungVonArzneimittelInstruction instruction) {

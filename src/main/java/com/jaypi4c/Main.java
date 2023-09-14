@@ -1,5 +1,9 @@
 package com.jaypi4c;
 
+import com.jaypi4c.openehr.OpenEhrManager;
+import com.jaypi4c.recognition.CellReader;
+import com.jaypi4c.recognition.Medication;
+import com.jaypi4c.recognition.TableExtractor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.pdfbox.pdmodel.PDDocument;
 
@@ -22,7 +26,10 @@ public class Main {
         String file4 = "SF_20220620_50193_HA1_LETTER.pdf";
         String file5 = "SF_20220213_50007_HA1_LETTER.pdf";
 
-        pdfPath += file3;
+        pdfPath += file1;
+
+        OpenEhrManager openEhrManager = new OpenEhrManager();
+
 
         int numberOfPages = 1;// getNumberOfPages(pdfPath);
         for (int i = 0; i < numberOfPages; i++) {
@@ -36,18 +43,11 @@ public class Main {
             if (!cells.isEmpty()) {
                 CellReader cr = new CellReader(pdfPath, i, cells);
                 String[][] results = cr.readArea();
+
                 print2D(results);
 
-                Medication[] medications = Medication.fromStringArray(results);
-                for (Medication medication : medications) {
-                    log.info(medication.toString());
-                }
+                openEhrManager.sendNephroMedikationData(results);
 
-                /*for (String[] row : results) {
-                    for (String entry : row) {
-                        log.debug(entry);
-                    }
-                }*/
             } else {
                 log.info("No cells found");
             }
@@ -67,13 +67,12 @@ public class Main {
     }
 
     /**
-     * https://www.geeksforgeeks.org/print-2-d-array-matrix-java/
+     * <a href="https://www.geeksforgeeks.org/print-2-d-array-matrix-java/">source</a>
      *
-     * @param mat
+     * @param mat 2D String array
      */
-    public static void print2D(String mat[][]) {
+    public static void print2D(String[][] mat) {
         // Loop through all rows
-        for (int i = 0; i < mat.length; i++)
-            System.out.println(Arrays.toString(mat[i]));
+        for (String[] strings : mat) System.out.println(Arrays.toString(strings));
     }
 }

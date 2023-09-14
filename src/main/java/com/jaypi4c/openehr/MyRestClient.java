@@ -1,4 +1,4 @@
-package com.jaypi4c.openehr.compositions;
+package com.jaypi4c.openehr;
 
 import com.nedap.archie.rm.RMObject;
 import org.ehrbase.client.openehrclient.OpenEhrClientConfig;

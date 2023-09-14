@@ -1,4 +1,4 @@
-package com.jaypi4c.openehr.compositions;
+package com.jaypi4c.openehr;
 
 import com.jaypi4c.openehr.compositions.nephromedikationcomposition.NephroMedikationTemplateProvider;
 import org.ehrbase.client.openehrclient.OpenEhrClientConfig;

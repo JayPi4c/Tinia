@@ -1,4 +1,4 @@
-package com.jaypi4c;
+package com.jaypi4c.recognition;
 
 import java.awt.geom.Line2D;
 
