@@ -4,8 +4,12 @@ import com.jaypi4c.openehr.compositions.nephromedikationcomposition.NephroMedika
 import com.jaypi4c.openehr.compositions.nephromedikationcomposition.NephroMedikationTemplateProvider;
 import com.jaypi4c.openehr.compositions.nephromedikationcomposition.definition.*;
 import com.nedap.archie.rm.RMObject;
+import com.nedap.archie.rm.datavalues.DvText;
+import com.nedap.archie.rm.ehr.EhrStatus;
 import com.nedap.archie.rm.generic.PartyIdentified;
 import com.nedap.archie.rm.generic.PartySelf;
+import com.nedap.archie.rm.support.identification.GenericId;
+import com.nedap.archie.rm.support.identification.PartyRef;
 import org.ehrbase.client.classgenerator.shareddefinition.Language;
 import org.ehrbase.client.classgenerator.shareddefinition.Setting;
 import org.ehrbase.client.classgenerator.shareddefinition.Territory;
@@ -27,6 +31,7 @@ import java.util.UUID;
  * <br>
  * For now, it is just used for testing purposes.
  * <br>
+ *
  * @see <a href="https://ckm.highmed.org/ckm/templates/1246.169.1019">Nephro_Medikation in CKM</a> for more information.
  */
 public class CompositionFactory {
@@ -66,8 +71,8 @@ public class CompositionFactory {
 
         TemplateProvider provider = new NephroMedikationTemplateProvider();
 
-        Unflattener unflat = new Unflattener(provider);
-        RMObject rmObject = unflat.unflatten(composition);
+        Unflattener unflattener = new Unflattener(provider);
+        RMObject rmObject = unflattener.unflatten(composition);
 
         CanonicalJson json = new CanonicalJson();
         System.out.println(json.marshal(rmObject));
@@ -75,10 +80,36 @@ public class CompositionFactory {
         // see https://ehrbase.readthedocs.io/en/latest/02_getting_started/04_create_ehr/index.html#client-library
         OpenEhrClient openEhrClient = DefaultRestClientHelper.setupRestClient();
         EhrEndpoint ehrEndpoint = openEhrClient.ehrEndpoint();
-        UUID ehr = ehrEndpoint.createEhr();
+        UUID applicationUserID = UUID.randomUUID();
+        UUID ehr = ehrEndpoint.createEhr(createEhr(applicationUserID));
 
         CompositionEndpoint compositionEndpoint = openEhrClient.compositionEndpoint(ehr);
         compositionEndpoint.mergeCompositionEntity(composition);
+    }
+
+    private static EhrStatus createEhr(UUID applicationUserID) {
+        EhrStatus status = new EhrStatus();
+        status.setArchetypeNodeId("openEHR-EHR-ITEM_TREE.generic.v1");
+
+        DvText name = new DvText();
+        name.setValue("any EHR STATUS");
+        status.setName(name);
+
+        PartySelf subject = new PartySelf();
+        PartyRef externalRef = new PartyRef();
+        GenericId id = new GenericId();
+        id.setValue(applicationUserID.toString());
+        id.setScheme("id_scheme");
+        externalRef.setId(id);
+        externalRef.setNamespace("BA");
+        externalRef.setType("PERSON");
+        subject.setExternalRef(externalRef);
+        status.setSubject(subject);
+
+        status.setModifiable(true);
+        status.setQueryable(true);
+
+        return status;
     }
 
     private static VerordnungVonArzneimittelInstruction prepareInstruction(VerordnungVonArzneimittelInstruction instruction) {
