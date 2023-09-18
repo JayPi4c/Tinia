@@ -3,20 +3,20 @@ package com.jaypi4c.openehr.compositions.nephromedikationcomposition;
 import com.jaypi4c.openehr.compositions.ICompositionFactory;
 import com.jaypi4c.openehr.compositions.nephromedikationcomposition.definition.*;
 
+import static com.jaypi4c.utils.WordUtils.loadDictionary;
+import static com.jaypi4c.utils.WordUtils.LDResult;
+import static com.jaypi4c.utils.WordUtils.findClosestWord;
+
 import com.nedap.archie.rm.generic.PartyIdentified;
 import com.nedap.archie.rm.generic.PartySelf;
 
 import lombok.extern.slf4j.Slf4j;
-import org.apache.commons.text.similarity.LevenshteinDistance;
+
 import org.ehrbase.client.classgenerator.shareddefinition.Language;
 import org.ehrbase.client.classgenerator.shareddefinition.Setting;
 import org.ehrbase.client.classgenerator.shareddefinition.Territory;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.nio.charset.StandardCharsets;
+
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -88,39 +88,6 @@ public class NephroMedikationCompositionFactory implements ICompositionFactory<N
         return composition;
     }
 
-    private LDResult findClosestWord(String word, String[] dict) {
-        final LevenshteinDistance ld = LevenshteinDistance.getDefaultInstance();
-
-        int minDistance = Integer.MAX_VALUE;
-        String closestWord = "";
-
-        for (String dictWord : dict) {
-            int distance = ld.apply(word, dictWord);
-            if (distance < minDistance) {
-                minDistance = distance;
-                closestWord = dictWord;
-                if (minDistance == 0) // we found exact match
-                    break;
-            }
-        }
-        return new LDResult(minDistance, closestWord, word);
-    }
-
-    private String[] loadDictionary(String path) {
-        List<String> lines = new ArrayList<>();
-
-        try (InputStream is = NephroMedikationCompositionFactory.class.getResourceAsStream(path);
-             BufferedReader br = new BufferedReader(new InputStreamReader(is, StandardCharsets.UTF_8))) {
-            String line;
-            while ((line = br.readLine()) != null) {
-                lines.add(line);
-            }
-        } catch (IOException e) {
-            log.error("Failed to load dictionary", e);
-        }
-        return lines.toArray(new String[0]);
-    }
-
 
     private static VerordnungVonArzneimittelInstruction prepareInstruction(VerordnungVonArzneimittelInstruction instruction) {
         instruction.setLanguage(Language.DE);
@@ -152,12 +119,6 @@ public class NephroMedikationCompositionFactory implements ICompositionFactory<N
         composition.setHealthCareFacility(healthCareFacility);
 
         return composition;
-    }
-
-    public record LDResult(int distance, String closestWord, String targetWord) {
-        public boolean exactMatch() {
-            return distance == 0;
-        }
     }
 
 
