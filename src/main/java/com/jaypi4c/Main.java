@@ -46,7 +46,7 @@ public class Main {
 
                 print2D(results);
 
-                openEhrManager.sendNephroMedikationData(results);
+                // openEhrManager.sendNephroMedikationData(results);
 
             } else {
                 log.info("No cells found");

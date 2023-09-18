@@ -6,6 +6,7 @@ import org.apache.pdfbox.pdmodel.PDDocument;
 import org.apache.pdfbox.rendering.PDFRenderer;
 
 import javax.imageio.ImageIO;
+import javax.sound.sampled.Line;
 import java.awt.*;
 import java.awt.geom.Line2D;
 import java.awt.geom.Point2D;
@@ -15,6 +16,7 @@ import java.awt.image.ColorModel;
 import java.awt.image.WritableRaster;
 import java.io.File;
 import java.io.IOException;
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -124,7 +126,7 @@ public class TableExtractor {
         connectedComponentsLabeling();
 
         // log.info("combining Lines");
-        // combineLines();
+        combineLines();
     }
 
     /**
@@ -203,50 +205,88 @@ public class TableExtractor {
 
         // draw the found lines onto the white image in edit
         // this image will be used for further processing as it only contains the lines and black areas
-        for (Line2D line : lines) {
-            drawBlackLine(imgInEdit, line);
+        // for (Line2D line : lines) {
+        //     drawBlackLine(imgInEdit, line);
+        // }
+    }
+
+    LineCombinationResult combine(Line2D.Float line, List<Line2D.Float> lines) {
+
+        boolean horizontal = isHorizontal(line);
+
+        int lineThreshold = 15;
+
+
+        boolean match = false;
+        for (int i = lines.size() - 1; i >= 0; i--) {
+            Line2D.Float candidate = lines.get(i);
+            boolean candidateHorizontal = isHorizontal(candidate);
+            if (horizontal && candidateHorizontal) {
+                if (Math.abs(line.getY1() - candidate.getY1()) < lineThreshold) {
+                    if (line.getX1() <= candidate.getX2() && line.getX2() >= candidate.getX1()) {
+                        match = true;
+                        lines.remove(i);
+                        line.setLine(Math.min(line.getX1(), candidate.getX1()), line.getY1(), Math.max(line.getX2(), candidate.getX2()), line.getY2());
+                    }
+                }
+            } else if (!horizontal && !candidateHorizontal) {
+                if (Math.abs(line.getX1() - candidate.getX1()) < lineThreshold) {
+                    if (line.getY1() <= candidate.getY2() && line.getY2() >= candidate.getY1()) {
+                        match = true;
+                        lines.remove(i);
+                        line.setLine(line.getX1(), Math.min(line.getY1(), candidate.getY1()), line.getX2(), Math.max(line.getY2(), candidate.getY2()));
+                    }
+                }
+            }
         }
+        return new LineCombinationResult(match, line, lines);
+    }
+
+    record LineCombinationResult(boolean match, Line2D.Float newLine, List<Line2D.Float> remainingLines) {
+
+    }
+
+    boolean isHorizontal(Line2D line) {
+        return Math.abs(line.getX1() - line.getX2()) > Math.abs(line.getY1() - line.getY2());
     }
 
 
     private void combineLines() {
+        log.debug("Starting with {} lines", lines.size());
         List<Line2D.Float> list = new ArrayList<>(lines);
-
         List<Line2D.Float> result = new ArrayList<>();
 
-        // The number of pixels between two lines to be considered as one line.
-        int lineThreshold = 10;
-
         while (!list.isEmpty()) {
-
+            boolean match = true;
             Line2D.Float line = list.remove(0);
-            boolean horizontal = Math.abs(line.getX1() - line.getX2()) > Math.abs(line.getY1() - line.getY2());
-            boolean match;
-            do {
-                match = false;
-                for (int i = list.size() - 1; i >= 1; i--) {
-                    Line2D.Float line2 = list.get(i);
-                    // x coords must overlap
-                    if (horizontal && (Math.abs(line.getY1() - line2.getY1()) < lineThreshold && line.getX1() <= line2.getX2() && line.getX2() >= line2.getX1())) {
-                        line.setLine(Math.min(line.getX1(), line2.getX1()), line.getY1(), Math.max(line.getX2(), line2.getX2()), line.getY2());
-                        list.remove(i);
-                        match = true;
-                    } else if (Math.abs(line.getX1() - line2.getX1()) < lineThreshold && line.getY1() <= line2.getY2() && line.getY2() >= line2.getY1()) { // y coords must overlap
-                        line.setLine(line.getX1(), Math.min(line.getY1(), line2.getY1()), line.getX2(), Math.max(line.getY2(), line2.getY2()));
-                        list.remove(i);
-                        match = true;
-                    }
-                }
-            } while (match);
+            while (match) {
+                LineCombinationResult lcr = combine(line, list);
+                match = lcr.match();
+                line = lcr.newLine();
+                list = lcr.remainingLines();
+            }
             result.add(line);
         }
-        lines = result;
 
-        // draw the found lines onto the white image in edit
-        // this image will be used for further processing as it only contains the lines and black areas
-        for (Line2D line : lines) {
-            drawBlackLine(debugImage, line);
+        log.debug("ended with {} lines", result.size());
+
+        /*
+        BufferedImage image = createWhiteBackgroundImage(imageWidth, imageHeight);
+        for (Line2D line : result) {
+            drawRandomColorLine(image, line);
         }
+        try {
+            ImageIO.write(image, "JPEG", new File("/home/jonas/Studium/cloud/BA/BA Daten/lines.jpg"));
+        } catch (IOException e) {
+            log.error("Failed to write debug image", e);
+        }
+        */
+        imgInEdit = createWhiteBackgroundImage(imageWidth, imageHeight);
+        lines = result;
+        for (Line2D line : lines) {
+            drawBlackLine(imgInEdit, line);
+        }
+
     }
 
     /**
