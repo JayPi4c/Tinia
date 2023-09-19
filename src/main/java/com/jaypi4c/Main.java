@@ -22,7 +22,7 @@ public class Main {
 
         String pdfPath = "/home/jonas/Studium/cloud/BA/BA Daten/";
         String file1 = "SF_20220104_50335_HA1_LETTER.pdf";
-        String file2 = "SF_20220412_50061_HA1_LETTER.pdf";
+        String file2 = "SF_20220412_50061_HA1_LETTER.pdf";// no medication plan
         String file3 = "SF_20220511_50091_HA1_LETTER.pdf";
         String file4 = "SF_20220620_50193_HA1_LETTER.pdf";
         String file5 = "SF_20220213_50007_HA1_LETTER.pdf";

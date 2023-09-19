@@ -30,14 +30,20 @@ public class LineExtractor {
         extractLines();
 
         BufferedImage newImage = ImageUtils.createImageWithLines(image.getWidth(), image.getHeight(), lines);
+        ImageUtils.saveImage(newImage, "debug/rawLines.jpg");
 
         log.info("removing black areas");
         connectedComponentsLabeling(newImage);
 
+        newImage = ImageUtils.createImageWithLines(image.getWidth(), image.getHeight(), lines);
+        ImageUtils.saveImage(newImage, "debug/removedBlackAreas.jpg");
+
         // TODO update combine lines algorithm to keep intersections
         combineLines();
-        // idea: increment line length by up to x pixels and check for intersection with other lines. if found, stop and
-        // keep length, if not, undo increment
+        // idea: extend line length by up to x pixels and check for intersection with other lines. if found, stop and
+        // keep length, if not, undo extension
+
+        extendLines();
 
         newImage = ImageUtils.createImageWithLines(image.getWidth(), image.getHeight(), lines);
 
@@ -273,6 +279,75 @@ public class LineExtractor {
     private record Chunk(int minX, int minY, int maxX, int maxY) {
         public boolean contains(Line2D line) {
             return line.intersectsLine(minX, minY, maxX, maxY);
+        }
+    }
+
+
+    private void extendLines() {
+        for (Line2D line : lines) {
+            if (ImageUtils.isHorizontal(line)) {
+                if (line.getX1() > line.getX2())
+                    line.setLine(line.getX2(), line.getY1(), line.getX1(), line.getY2());
+                extendHorizontalLine(line);
+            } else {
+                if (line.getY1() > line.getY2())
+                    line.setLine(line.getX1(), line.getY2(), line.getX2(), line.getY1());
+                extendVerticalLine(line);
+            }
+        }
+    }
+
+    private void extendHorizontalLine(Line2D line) {
+        BufferedImage image = ImageUtils.createImageWithLines(this.image.getWidth(), this.image.getHeight(), lines);
+        int x = (int) line.getX1() - 1;
+        int y = (int) line.getY1();
+        int x2 = (int) line.getX2() + 1;
+        int threshold = 180;
+        int maxExtension = 20;
+        int extension = 0;
+        while (x > 0 && extension < maxExtension) {
+            if (ImageUtils.getGray(image.getRGB(x, y)) < threshold) {
+                line.setLine(x, line.getY1(), line.getX2(), line.getY2());
+                break;
+            }
+            x--;
+            extension++;
+        }
+        extension = 0;
+        while (x2 < image.getWidth() && extension < maxExtension) {
+            if (ImageUtils.getGray(image.getRGB(x2, y)) < threshold) {
+                line.setLine(line.getX1(), line.getY1(), x2, line.getY2());
+                break;
+            }
+            x2++;
+            extension++;
+        }
+    }
+
+    private void extendVerticalLine(Line2D line) {
+        BufferedImage image = ImageUtils.createImageWithLines(this.image.getWidth(), this.image.getHeight(), lines);
+        int x = (int) line.getX1();
+        int y = (int) line.getY1() - 1;
+        int y2 = (int) line.getY2() + 1;
+        int threshold = 180;
+        int maxExtension = 20;
+        int extension = 0;
+        while (y > 0 && extension < maxExtension) {
+            if (ImageUtils.getGray(image.getRGB(x, y)) < threshold) {
+                line.setLine(line.getX1(), y, line.getX2(), line.getY2());
+                break;
+            }
+            y--;
+            extension++;
+        }
+        extension = 0;
+        while (y2 < image.getWidth() && extension < maxExtension) {
+            if (ImageUtils.getGray(image.getRGB(x, y2)) < threshold) {
+                line.setLine(line.getX1(), line.getY1(), line.getX2(), y2);
+                break;
+            }
+            y2++;
+            extension++;
         }
     }
 
