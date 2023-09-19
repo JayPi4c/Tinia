@@ -38,9 +38,9 @@ public class Main {
 
             tableExtractor.start();
 
-            List<Rectangle2D> cells = tableExtractor.getCells();
+            //List<Rectangle2D> cells = tableExtractor.getCells();
             tableExtractor.finish();
-            if (!cells.isEmpty()) {
+            /*if (!cells.isEmpty()) {
                 CellReader cr = new CellReader(pdfPath, i, cells);
                 String[][] results = cr.readArea();
 
@@ -50,7 +50,7 @@ public class Main {
 
             } else {
                 log.info("No cells found");
-            }
+            }*/
             log.info("Finished page {}", i);
         }
 

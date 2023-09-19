@@ -1,26 +1,22 @@
 package com.jaypi4c.recognition;
 
+import com.jaypi4c.recognition.preprocessing.ImageUtils;
+import com.jaypi4c.recognition.preprocessing.LineExtractor;
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.pdfbox.pdmodel.PDDocument;
 import org.apache.pdfbox.rendering.PDFRenderer;
 
 import javax.imageio.ImageIO;
-import javax.sound.sampled.Line;
 import java.awt.*;
 import java.awt.geom.Line2D;
 import java.awt.geom.Point2D;
 import java.awt.geom.Rectangle2D;
 import java.awt.image.BufferedImage;
-import java.awt.image.ColorModel;
-import java.awt.image.WritableRaster;
 import java.io.File;
 import java.io.IOException;
-import java.lang.reflect.Array;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 @Slf4j
 public class TableExtractor {
@@ -33,7 +29,7 @@ public class TableExtractor {
      */
 
 
-    private List<Line2D.Float> lines;
+    private List<Line2D> lines;
     private List<Point2D.Float> intersections;
     private int imageWidth;
     private int imageHeight;
@@ -71,7 +67,7 @@ public class TableExtractor {
             this.pageIndex = pageIndex;
             // get page as image
             originalImage = pr.renderImageWithDPI(pageIndex, 300);
-            imgInEdit = deepCopy(originalImage);
+            imgInEdit = ImageUtils.deepCopy(originalImage);
             imageWidth = originalImage.getWidth();
             imageHeight = originalImage.getHeight();
             nodeMatrix = new byte[imageWidth][imageHeight];
@@ -100,333 +96,21 @@ public class TableExtractor {
      * - labeling the intersections and finding the cells
      */
     public void start() {
-        filterLines();
+        LineExtractor le = new LineExtractor(originalImage);
+        le.execute();
+
+        lines = le.getLines();
+        imgInEdit = ImageUtils.createImageWithLines(imageWidth, imageHeight, lines);
+
         findIntersections();
         labelIntersections();
+
         // Find the corresponding Cell for each intersection
+
         for (Point2D.Float intersection : intersections)
             findCellForIntersection(intersection);
     }
 
-    /**
-     * extracts the lines from the image given in originalImage
-     * <br>
-     * For it to work, the image may not be skewed.
-     */
-    private void filterLines() {
-
-        // increase contrast
-        // bi = increaseContrast(bi, 1.7);
-
-        log.info("removing the text from the image");
-        removeText();
-
-        // connected components labeling to remove black areas
-        log.info("removing black areas from the image");
-        connectedComponentsLabeling();
-
-        // log.info("combining Lines");
-        combineLines();
-    }
-
-    /**
-     * Removes the text from the image as it scans for continuous black lines. <br>
-     * If n (= 50) pixels are black in a row, it is considered a line. Checking each column and row for lines with this method leaves the images with none of the text.
-     * <br>
-     * Blackened areas are considered as continuous black lines and therefore remain in the image. Using the connected Components Algorithm on the image can remove those areas.
-     */
-    private void removeText() {
-        // create empty result image
-        imgInEdit = createWhiteBackgroundImage(imageWidth, imageHeight);
-        debugImage = createWhiteBackgroundImage(imageWidth, imageHeight);
-
-        // we want to store all lines and be able to look them up at any time.
-        lines = new ArrayList<>();
-
-
-        log.info("Processing horizontal lines...");
-        // perform line detection on image
-        final int n = 50; // taken from literature
-        final int blackThreshold = 180;
-
-        // TODO find efficient way to move horizontally and vertically
-        // horizontal lines
-        // go through each row and check if there are n consecutive black pixels
-        // keep going until there is a white pixel. Then add the line to the list
-        for (int y = 0; y < originalImage.getHeight(); y++) {
-            int beginX = -1;
-            for (int x = 0; x < originalImage.getWidth(); x++) {
-                if (isBlack(originalImage, x, y, blackThreshold, true)) {
-                    if (beginX < 0) {
-                        beginX = x;
-                    }
-                } else {
-
-                    // TODO check for pixels above or below. Maybe there the line continues...
-                    if (beginX >= 0 && (x - beginX) > n) {
-                        Line2D.Float line = new Line2D.Float(beginX, y, x, y);
-                        lines.add(line);
-                        drawRandomColorLine(debugImage, line);
-                    }
-                    beginX = -1;
-                }
-            }
-        }
-
-
-        log.info("Processing vertical lines...");
-        // vertical lines
-        // go through each column and check if there are n consecutive black pixels
-        // keep going until there is a white pixel. Then add the line to the list
-        for (int x = 0; x < originalImage.getWidth(); x++) {
-            int beginY = -1;
-            for (int y = 0; y < originalImage.getHeight(); y++) {
-                int gray = getGray(originalImage.getRGB(x, y));
-
-                if (gray < blackThreshold) {
-                    if (beginY < 0) {
-                        beginY = y;
-                    }
-                } else {
-                    if (beginY >= 0 && (y - beginY) > n) {
-                        Line2D.Float line = new Line2D.Float(x, beginY, x, y);
-                        lines.add(line);
-                        drawRandomColorLine(debugImage, line);
-                    }
-                    beginY = -1;
-                }
-            }
-        }
-        try {
-            ImageIO.write(debugImage, "JPEG", new File("/home/jonas/Studium/cloud/BA/BA Daten/debug.jpg"));
-        } catch (IOException e) {
-            log.error("Failed to write debug image", e);
-        }
-
-        // draw the found lines onto the white image in edit
-        // this image will be used for further processing as it only contains the lines and black areas
-        // for (Line2D line : lines) {
-        //     drawBlackLine(imgInEdit, line);
-        // }
-    }
-
-    LineCombinationResult combine(Line2D.Float line, List<Line2D.Float> lines) {
-
-        boolean horizontal = isHorizontal(line);
-
-        int lineThreshold = 15;
-
-
-        boolean match = false;
-        for (int i = lines.size() - 1; i >= 0; i--) {
-            Line2D.Float candidate = lines.get(i);
-            boolean candidateHorizontal = isHorizontal(candidate);
-            if (horizontal && candidateHorizontal) {
-                if (Math.abs(line.getY1() - candidate.getY1()) < lineThreshold) {
-                    if (line.getX1() <= candidate.getX2() && line.getX2() >= candidate.getX1()) {
-                        match = true;
-                        lines.remove(i);
-                        line.setLine(Math.min(line.getX1(), candidate.getX1()), line.getY1(), Math.max(line.getX2(), candidate.getX2()), line.getY2());
-                    }
-                }
-            } else if (!horizontal && !candidateHorizontal) {
-                if (Math.abs(line.getX1() - candidate.getX1()) < lineThreshold) {
-                    if (line.getY1() <= candidate.getY2() && line.getY2() >= candidate.getY1()) {
-                        match = true;
-                        lines.remove(i);
-                        line.setLine(line.getX1(), Math.min(line.getY1(), candidate.getY1()), line.getX2(), Math.max(line.getY2(), candidate.getY2()));
-                    }
-                }
-            }
-        }
-        return new LineCombinationResult(match, line, lines);
-    }
-
-    record LineCombinationResult(boolean match, Line2D.Float newLine, List<Line2D.Float> remainingLines) {
-
-    }
-
-    boolean isHorizontal(Line2D line) {
-        return Math.abs(line.getX1() - line.getX2()) > Math.abs(line.getY1() - line.getY2());
-    }
-
-
-    private void combineLines() {
-        log.debug("Starting with {} lines", lines.size());
-        List<Line2D.Float> list = new ArrayList<>(lines);
-        List<Line2D.Float> result = new ArrayList<>();
-
-        while (!list.isEmpty()) {
-            boolean match = true;
-            Line2D.Float line = list.remove(0);
-            while (match) {
-                LineCombinationResult lcr = combine(line, list);
-                match = lcr.match();
-                line = lcr.newLine();
-                list = lcr.remainingLines();
-            }
-            result.add(line);
-        }
-
-        log.debug("ended with {} lines", result.size());
-
-        /*
-        BufferedImage image = createWhiteBackgroundImage(imageWidth, imageHeight);
-        for (Line2D line : result) {
-            drawRandomColorLine(image, line);
-        }
-        try {
-            ImageIO.write(image, "JPEG", new File("/home/jonas/Studium/cloud/BA/BA Daten/lines.jpg"));
-        } catch (IOException e) {
-            log.error("Failed to write debug image", e);
-        }
-        */
-        imgInEdit = createWhiteBackgroundImage(imageWidth, imageHeight);
-        lines = result;
-        for (Line2D line : lines) {
-            drawBlackLine(imgInEdit, line);
-        }
-
-    }
-
-    /**
-     * ConnectedComponentsAlgorithm to remove black areas from the image
-     * <br>
-     * See <a href="https://aishack.in/tutorials/labelling-connected-components-example/">Tutorial</a> for reference.
-     *
-     * <br>
-     * As there are only the colors black and white left, the algorithm is straight forward: In the first pass, all
-     * black pixels get a label. In the following pass, connected labels will be reduced to on common root label.
-     * This leaves connected areas with the same label and the density of black pixels in one connected area can be used
-     * to determine if it is a blackened area.
-     */
-    private void connectedComponentsLabeling() {
-        int[][] labels = new int[imageWidth][imageHeight];
-        int label = 1;
-        int backgroundLabel = 0;
-
-        Map<Integer, Integer> mergeList = new HashMap<>();
-
-        int backgroundThreshold = 200;
-
-        log.info("starting first pass");
-        // first pass
-        for (int y = 0; y < imageHeight; y++) {
-            for (int x = 0; x < imageWidth; x++) {
-                if (getGray(imgInEdit.getRGB(x, y)) > backgroundThreshold) {
-                    // it's a background pixel -> skip
-                    // setting to background label is not needed as default value is 0
-                    continue;
-                }
-                int labelAbove = y > 0 ? labels[x][y - 1] : backgroundLabel; // 0 (background) if out of bounds
-                int labelLeft = x > 0 ? labels[x - 1][y] : backgroundLabel; // 0 (background) if out of bounds
-                if (labelAbove == backgroundLabel && labelLeft == backgroundLabel) {
-                    // new label
-                    labels[x][y] = label;
-                    label++;
-                } else if (labelAbove != backgroundLabel && labelLeft == backgroundLabel) {
-                    // label above
-                    labels[x][y] = labelAbove;
-                } else if (labelAbove == backgroundLabel && labelLeft != backgroundLabel) {
-                    // label left
-                    labels[x][y] = labelLeft;
-                } else if (labelAbove != backgroundLabel && labelLeft != backgroundLabel) {
-                    // merge labels
-                    labels[x][y] = labelLeft;
-                    if (labelLeft != labelAbove && !mergeList.containsKey(labelLeft)) {
-                        // add to merge list
-                        mergeList.put(labelLeft, labelAbove);
-                    }
-                }
-
-            }
-        }
-
-        log.debug("merge list: {}", mergeList);
-        log.info("starting second pass");
-        // second pass
-        for (int y = 0; y < imageHeight; y++) {
-            for (int x = 0; x < imageWidth; x++) {
-                int l = labels[x][y];
-                if (l == backgroundLabel) {
-                    // it's a background pixel -> skip
-                    continue;
-                }
-                while (mergeList.containsKey(l)) {
-                    l = mergeList.get(l);
-                }
-                labels[x][y] = l;
-            }
-        }
-        /*
-        // debug: colorize chunks that are considered blackened areas
-        Map<Byte, Color> colors = new HashMap<>();
-        for (int x = 0; x < input.getWidth(); x++) {
-            for (int y = 0; y < input.getHeight(); y++) {
-                byte l = labels[x][y];
-                if (l == backgroundLabel) {
-                    continue;
-                }
-                if (!colors.containsKey(l)) {
-                    colors.put(l, randomColor());
-                }
-                input.setRGB(x, y, colors.get(l).getRGB());
-            }
-        }
-        */
-
-        /* Now the label array can be used to determine the connected chunks. This is done by iterating over the labels array
-         * and checking if the label is already in the chunks map. If it is, the chunk is updated/expanded with the new
-         * coordinates. Finally, this leaves us with a map of chunks that have all the same label. Checking the black pixel-density
-         * will give the information if the chunk is a blackened area or not.
-         */
-        Map<Integer, Chunk> chunks = new HashMap<>();
-
-        for (int y = 0; y < imageHeight; y++) {
-            for (int x = 0; x < imageWidth; x++) {
-                int l = labels[x][y];
-                if (l == backgroundLabel) {
-                    continue;
-                }
-                if (chunks.containsKey(l)) {
-                    Chunk chunk = chunks.get(l);
-                    chunk = new Chunk(Math.min(chunk.minX(), x), Math.min(chunk.minY(), y), Math.max(chunk.maxX(), x), Math.max(chunk.maxY(), y));
-                    chunks.put(l, chunk);
-                } else {
-                    chunks.put(l, new Chunk(x, y, x, y));
-                }
-            }
-        }
-        log.info("remove black chunks");
-        for (Chunk c : chunks.values()) {
-            long avg = 0;
-            for (int x = c.minX(); x <= c.maxX(); x++) {
-                for (int y = c.minY(); y <= c.maxY(); y++) {
-                    avg += getGray(imgInEdit.getRGB(x, y));
-                }
-            }
-            // if average color is dark the chunk is probably a blackened area -> remove
-            // also if the chunk is too small, meaning just a single line -> remove
-            // TODO: maybe a single line should stay...
-            avg /= (long) (c.maxX() - c.minX() + 1) * (c.maxY() - c.minY() + 1);
-            if (avg < 150 || c.maxX() - c.minX() < 20 || c.maxY() - c.minY() < 20) {
-                for (int x = c.minX(); x <= c.maxX(); x++) {
-                    for (int y = c.minY(); y <= c.maxY(); y++) {
-                        imgInEdit.setRGB(x, y, Color.WHITE.getRGB());
-                    }
-                }
-
-                // remove all lines from lines list if they are in the blackened chunk
-                for (int i = 0; i < lines.size(); i++) {
-                    Line2D.Float line = lines.get(i);
-                    if (c.isWithin(line)) {
-                        lines.remove(i);
-                        i--;
-                    }
-                }
-            }
-        }
-    }
 
     /**
      * Checks all the lines that are in the list for intersections and adds them to the intersections list.
@@ -437,8 +121,8 @@ public class TableExtractor {
         log.info("Checking for intersections...");
         for (int i = 0; i < lines.size(); i++) {
             for (int j = i + 1; j < lines.size(); j++) {
-                Line2D.Float line1 = lines.get(i);
-                Line2D.Float line2 = lines.get(j);
+                Line2D line1 = lines.get(i);
+                Line2D line2 = lines.get(j);
                 if (line1.intersectsLine(line2)) {
                     // they intersect -> find the intersection point:
                     Point2D.Float interceptionPoint = calculateInterceptionPoint(line1, line2);
@@ -496,16 +180,16 @@ public class TableExtractor {
             Point2D pointRight = new Point2D.Double(intersection.getX() + intersectionOffset, intersection.getY());
 
 
-            if (checkAreaAroundForBlackPixel(imgInEdit, pointAbove, 3)) {
+            if (ImageUtils.checkAreaAroundForBlackPixel(imgInEdit, pointAbove, 3)) {
                 b = (byte) (b | 0b0001);
             }
-            if (checkAreaAroundForBlackPixel(imgInEdit, pointBelow, 3)) {
+            if (ImageUtils.checkAreaAroundForBlackPixel(imgInEdit, pointBelow, 3)) {
                 b = (byte) (b | 0b0010);
             }
-            if (checkAreaAroundForBlackPixel(imgInEdit, pointLeft, 3)) {
+            if (ImageUtils.checkAreaAroundForBlackPixel(imgInEdit, pointLeft, 3)) {
                 b = (byte) (b | 0b0100);
             }
-            if (checkAreaAroundForBlackPixel(imgInEdit, pointRight, 3)) {
+            if (ImageUtils.checkAreaAroundForBlackPixel(imgInEdit, pointRight, 3)) {
                 b = (byte) (b | 0b1000);
             }
 
@@ -542,7 +226,7 @@ public class TableExtractor {
                 default -> nodeMatrix[(int) intersection.getX()][(int) intersection.getY()] = 0;
             }
         }
-        debugImage = deepCopy(imgInEdit);
+        debugImage = ImageUtils.deepCopy(imgInEdit);
 
         // debug: draw number for node
         for (Point2D intersection : intersections) {
@@ -644,7 +328,7 @@ public class TableExtractor {
 
 
         // Add the cell to the list and color it in the debug image
-        Color color = randomColor();
+        Color color = ImageUtils.randomColor();
         log.debug("found cell: topRight: {}, bottomLeft: {}, bottomRight {}", topRight, bottomLeft, bottomRight);
         Rectangle2D.Double cell = new Rectangle2D.Double(intersection.getX(), intersection.getY(), Math.min(topRight.getX(), bottomRight.getX()) - intersection.getX(), Math.min(bottomLeft.getY(), bottomRight.getY()) - intersection.getY());
         cells.add(cell);
@@ -697,94 +381,13 @@ public class TableExtractor {
     //------------------ HELPER ---------------------
     //-----------------------------------------------
 
-    private Color randomColor() {
-        return new Color((int) (Math.random() * 0x1000000));
-    }
-
-    private void drawBlackLine(BufferedImage image, Line2D line) {
-        drawLine(image, line, Color.BLACK);
-    }
-
-    private void drawLine(BufferedImage image, Line2D line, Color color) {
-        for (int x_ = (int) line.getX1(); x_ <= line.getX2(); x_++) {
-            for (int y_ = (int) line.getY1(); y_ <= line.getY2(); y_++) {
-                image.setRGB(x_, y_, color.getRGB());
-            }
-        }
-    }
-
-    private void drawRandomColorLine(BufferedImage image, Line2D line) {
-        Color color = randomColor();
-        drawLine(image, line, color);
-    }
-
-    private boolean isBlack(BufferedImage image, int x, int y, int threshold, boolean xAxis) {
-        if (xAxis) {
-            for (int i = y - 1; i <= y + 1; i++) {
-                try {
-                    if (getGray(image.getRGB(x, i)) < threshold) {
-                        return true;
-                    }
-                } catch (Exception e) {
-                    log.debug("pixel out of bounds");
-                }
-            }
-        } else {
-            for (int i = x - 1; i <= x + 1; i++) {
-                try {
-                    if (getGray(image.getRGB(i, y)) < threshold) {
-                        return true;
-                    }
-                } catch (Exception e) {
-                    log.debug("pixel out of bounds");
-                }
-            }
-        }
-        return false;
-    }
-
-    private BufferedImage createWhiteBackgroundImage(int width, int height) {
-        BufferedImage image = new BufferedImage(width, height, BufferedImage.TYPE_INT_RGB);
-        Graphics2D graphics = image.createGraphics();
-
-        // Fill the entire image with white color
-        graphics.setColor(Color.WHITE);
-        graphics.fillRect(0, 0, width, height);
-
-        // Dispose the graphics context to free resources
-        graphics.dispose();
-
-        return image;
-    }
-
-
-    static int getGray(int rgb) {
-        int red = (rgb & 0x00ff0000) >> 16;
-        int green = (rgb & 0x0000ff00) >> 8;
-        int blue = rgb & 0x000000ff;
-        return (red + green + blue) / 3;
-    }
-
-
-    private boolean checkAreaAroundForBlackPixel(BufferedImage image, Point2D center, int offset) {
-        for (double i = center.getX() - offset; i < center.getX() + offset; i++) {
-            for (double j = center.getY() - offset; j < center.getY() + offset; j++) {
-                if (getGray(image.getRGB((int) i, (int) j)) < 50) {
-                    return true;
-                }
-            }
-        }
-        return false;
-    }
-
-
     /**
      * @param line1 the first line
      * @param line2 the second line
      * @return the intersection point of the two lines
      * @see <a href=https://stackoverflow.com/a/61574355>Stackoverflow</a>
      */
-    public static Point2D.Float calculateInterceptionPoint(Line2D.Float line1, Line2D.Float line2) {
+    public static Point2D.Float calculateInterceptionPoint(Line2D line1, Line2D line2) {
 
         Point2D.Float s1 = (Point2D.Float) line1.getP1();
         Point2D.Float s2 = (Point2D.Float) line1.getP2();
@@ -804,16 +407,5 @@ public class TableExtractor {
 
     }
 
-    /**
-     * <a href="https://stackoverflow.com/a/3514297">...</a>
-     *
-     * @param bi the image to copy
-     * @return a deep copy of the image
-     */
-    private static BufferedImage deepCopy(BufferedImage bi) {
-        ColorModel cm = bi.getColorModel();
-        boolean isAlphaPremultiplied = cm.isAlphaPremultiplied();
-        WritableRaster raster = bi.copyData(null);
-        return new BufferedImage(cm, raster, isAlphaPremultiplied, null);
-    }
+
 }
