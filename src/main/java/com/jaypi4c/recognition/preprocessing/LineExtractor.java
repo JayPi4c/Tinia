@@ -64,7 +64,7 @@ public class LineExtractor {
                     }
                 } else {
                     if (beginX >= 0 && (x - beginX) > n) {
-                        Line2D.Float line = new Line2D.Float(beginX, y, x, y);
+                        Line2D line = new Line2D.Double(beginX, y, x, y);
                         lines.add(line);
                     }
                     beginX = -1;
@@ -82,7 +82,7 @@ public class LineExtractor {
                     }
                 } else {
                     if (beginY >= 0 && (y - beginY) > n) {
-                        Line2D.Float line = new Line2D.Float(x, beginY, x, y);
+                        Line2D line = new Line2D.Double(x, beginY, x, y);
                         lines.add(line);
                     }
                     beginY = -1;

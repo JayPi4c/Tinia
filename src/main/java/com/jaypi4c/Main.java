@@ -1,8 +1,8 @@
 package com.jaypi4c;
 
 import com.jaypi4c.openehr.OpenEhrManager;
+
 import com.jaypi4c.recognition.CellReader;
-import com.jaypi4c.recognition.Medication;
 import com.jaypi4c.recognition.TableExtractor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.pdfbox.pdmodel.PDDocument;
@@ -12,6 +12,7 @@ import java.io.File;
 import java.io.IOException;
 import java.util.Arrays;
 import java.util.List;
+
 
 @Slf4j
 public class Main {
@@ -38,9 +39,9 @@ public class Main {
 
             tableExtractor.start();
 
-            //List<Rectangle2D> cells = tableExtractor.getCells();
+            List<Rectangle2D> cells = tableExtractor.getCells();
             tableExtractor.finish();
-            /*if (!cells.isEmpty()) {
+            if (!cells.isEmpty()) {
                 CellReader cr = new CellReader(pdfPath, i, cells);
                 String[][] results = cr.readArea();
 
@@ -50,7 +51,7 @@ public class Main {
 
             } else {
                 log.info("No cells found");
-            }*/
+            }
             log.info("Finished page {}", i);
         }
 
