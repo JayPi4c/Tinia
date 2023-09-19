@@ -68,13 +68,7 @@ public class CellReader {
 
             for (int i = 0; i < rows.size(); i++) {
                 for (int j = 0; j < rows.get(i).size(); j++) {
-                    Rectangle2D cell = rows.get(i).get(j);
-                    int x = pixelsToPoints((int) cell.getX(), DPI);
-                    int y = pixelsToPoints((int) cell.getY(), DPI);
-                    int width = pixelsToPoints((int) cell.getWidth(), DPI);
-                    int height = pixelsToPoints((int) cell.getHeight(), DPI);
-                    // log.debug("creating rectangle: {}, {}, {}, {}", cell.getX(), cell.getY(), cell.getWidth(), cell.getHeight());
-                    Rectangle2D rect = new Rectangle2D.Double(x, y, width, height);
+                    Rectangle2D rect = transformToPDFRectangle(rows, i, j);
 
                     textStripper.addRegion(i + "_" + j, rect);
                 }
@@ -97,6 +91,16 @@ public class CellReader {
             throw e;
         }
         return results;
+    }
+
+    private Rectangle2D transformToPDFRectangle(List<List<Rectangle2D>> rows, int i, int j) {
+        Rectangle2D cell = rows.get(i).get(j);
+        int x = pixelsToPoints((int) cell.getX(), DPI);
+        int y = pixelsToPoints((int) cell.getY(), DPI);
+        int width = pixelsToPoints((int) cell.getWidth(), DPI);
+        int height = pixelsToPoints((int) cell.getHeight(), DPI);
+        // log.debug("creating rectangle: {}, {}, {}, {}", cell.getX(), cell.getY(), cell.getWidth(), cell.getHeight());
+        return new Rectangle2D.Double(x, y, width, height);
     }
 
 }
