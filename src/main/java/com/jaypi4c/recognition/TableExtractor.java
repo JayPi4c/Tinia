@@ -106,6 +106,7 @@ public class TableExtractor {
         final int EXPECTED_NUM_CELLS = 11;
         for (List<Rectangle2D> row : rows) {
             if (row.size() == EXPECTED_NUM_CELLS) {
+                row.sort((o1, o2) -> (int) (o1.getX() - o2.getX()));
                 tableRows.add(row.toArray(new Rectangle2D[0]));
             } else if (Math.abs(row.size() - EXPECTED_NUM_CELLS) > 3) {
                 continue; // skip the row as there are too many or too few cells
