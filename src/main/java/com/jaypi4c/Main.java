@@ -33,16 +33,16 @@ public class Main {
 
 
         int numberOfPages = 1;// getNumberOfPages(pdfPath);
-        for (int i = 0; i < numberOfPages; i++) {
-            //i=1;
-            TableExtractor tableExtractor = new TableExtractor(pdfPath, i);
+        for (int page = 0; page < numberOfPages; page++) {
+            // page = 1;
+            TableExtractor tableExtractor = new TableExtractor(pdfPath, page);
 
             tableExtractor.start();
-
-            List<Rectangle2D> cells = tableExtractor.getCells();
             tableExtractor.finish();
-            if (!cells.isEmpty()) {
-                CellReader cr = new CellReader(pdfPath, i, cells);
+
+            if (tableExtractor.wasSuccessful()) {
+                Rectangle2D[][] table = tableExtractor.getTable();
+                CellReader cr = new CellReader(pdfPath, page, table);
                 String[][] results = cr.readArea();
 
                 print2D(results);
@@ -52,7 +52,7 @@ public class Main {
             } else {
                 log.info("No cells found");
             }
-            log.info("Finished page {}", i);
+            log.info("Finished page {}", page);
         }
 
         log.info("Finished application");

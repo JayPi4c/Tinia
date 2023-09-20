@@ -14,7 +14,9 @@ import java.awt.geom.Rectangle2D;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @Slf4j
 public class TableExtractor {
@@ -33,7 +35,7 @@ public class TableExtractor {
     private BufferedImage originalImage;
 
     @Getter
-    private List<Rectangle2D> cells;
+    private Rectangle2D[][] table;
 
 
     /**
@@ -73,7 +75,51 @@ public class TableExtractor {
 
         CellIdentifier ci = new CellIdentifier(imgInEdit, lines);
         ci.execute();
-        cells = ci.getCells();
+        List<Rectangle2D> rawCells = ci.getCells();
+
+        table = createTable(rawCells);
+    }
+
+
+    private Rectangle2D[][] createTable(List<Rectangle2D> cells) {
+        List<List<Rectangle2D>> rows = new ArrayList<>();
+        // iterate through all cells. If there is a cell in a row with roughly the same y value, add it to the row
+        // otherwise create a new row
+        for (Rectangle2D cell : cells) {
+            boolean found = false;
+            for (List<Rectangle2D> row : rows) { // check existing rows
+                if (Math.abs(row.get(0).getY() - cell.getY()) < 10) {
+                    row.add(cell);
+                    found = true;
+                    break;
+                }
+            }
+            if (!found) { // create new row
+                List<Rectangle2D> newRow = new ArrayList<>();
+                newRow.add(cell);
+                rows.add(newRow);
+            }
+        }
+
+        List<Rectangle2D[]> tableRows = new ArrayList<>();
+
+        final int EXPECTED_NUM_CELLS = 11;
+        for (List<Rectangle2D> row : rows) {
+            if (row.size() == EXPECTED_NUM_CELLS) {
+                tableRows.add(row.toArray(new Rectangle2D[0]));
+            } else if (Math.abs(row.size() - EXPECTED_NUM_CELLS) > 3) {
+                continue; // skip the row as there are too many or too few cells
+            } else {
+                // TODO find missing cells
+            }
+
+        }
+
+        return tableRows.toArray(new Rectangle2D[0][0]);
+    }
+
+    public boolean wasSuccessful() {
+        return table.length > 0;
     }
 
     /**
