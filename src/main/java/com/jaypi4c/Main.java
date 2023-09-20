@@ -27,7 +27,7 @@ public class Main {
         String file4 = "SF_20220620_50193_HA1_LETTER.pdf";
         String file5 = "SF_20220213_50007_HA1_LETTER.pdf";
 
-        pdfPath += file1;
+        pdfPath += file4;
 
         OpenEhrManager openEhrManager = new OpenEhrManager();
 

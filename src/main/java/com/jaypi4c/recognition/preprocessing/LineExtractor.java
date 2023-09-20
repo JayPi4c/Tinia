@@ -1,9 +1,9 @@
 package com.jaypi4c.recognition.preprocessing;
 
-import com.jaypi4c.recognition.TableExtractor;
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
 
+import java.awt.*;
 import java.awt.geom.Line2D;
 import java.awt.image.BufferedImage;
 import java.util.ArrayList;
@@ -26,17 +26,16 @@ public class LineExtractor {
 
     public void execute() {
 
-        log.info("Extracting lines");
-        extractLines();
-
-        BufferedImage newImage = ImageUtils.createImageWithLines(image.getWidth(), image.getHeight(), lines);
-        ImageUtils.saveImage(newImage, "debug/rawLines.jpg");
-
         log.info("removing black areas");
-        connectedComponentsLabeling(newImage);
+        BufferedImage newImage = ImageUtils.deepCopy(image);
+        newImage = removeBlackAreas(newImage);
+        ImageUtils.saveImage(newImage, "debug/removedBlackAreas.jpg");
+
+        log.info("Extracting lines");
+        extractLines(newImage);
 
         newImage = ImageUtils.createImageWithLines(image.getWidth(), image.getHeight(), lines);
-        ImageUtils.saveImage(newImage, "debug/removedBlackAreas.jpg");
+        ImageUtils.saveImage(newImage, "debug/rawLines.jpg");
 
         // TODO update combine lines algorithm to keep intersections
         combineLines();
@@ -56,7 +55,7 @@ public class LineExtractor {
      * <br>
      * Blackened areas are considered as continuous black lines and therefore remain in the image. Using the connected Components Algorithm on the image can remove those areas.
      */
-    private void extractLines() {
+    private void extractLines(BufferedImage image) {
         final int n = 50;
         final int blackThreshold = 180;
 
@@ -95,6 +94,44 @@ public class LineExtractor {
                 }
             }
         }
+    }
+
+    private BufferedImage removeBlackAreas(BufferedImage bi) {
+
+        return removeByAverageIntensity(bi);
+
+        // connectedComponentsLabeling(bi);
+    }
+
+
+    private BufferedImage removeByAverageIntensity(BufferedImage bi) {
+        BufferedImage newImage = ImageUtils.deepCopy(bi);
+
+        for (int x = 0; x < bi.getWidth(); x++) {
+            for (int y = 0; y < bi.getHeight(); y++) {
+                double avg = getAverageIntensity(bi, x, y);
+                if (avg < 0.35) {
+                    newImage.setRGB(x, y, Color.WHITE.getRGB());
+                }
+            }
+        }
+        return newImage;
+    }
+
+    private double getAverageIntensity(BufferedImage bi, int x, int y) {
+        int offset = 5;
+        int pixelCounter = 0;
+        double sum = 0;
+        for (int i = x - offset; i <= x + offset; i++) {
+            for (int j = y - offset; j <= y + offset; j++) {
+                if (i < 0 || i >= bi.getWidth() || j < 0 || j >= bi.getHeight()) {
+                    continue;
+                }
+                pixelCounter++;
+                sum += ImageUtils.getGray(bi.getRGB(i, j));
+            }
+        }
+        return sum / 255d / (double)pixelCounter;
     }
 
     /**
@@ -231,6 +268,11 @@ public class LineExtractor {
                 line = lcr.newLine();
                 list = lcr.remainingLines();
             }
+            // because the combination shifts the line a bit downwards, a small correction is needed
+            // it could also be, that the horizontal lines are shifted upwards. But one correction is enough
+            if(!ImageUtils.isHorizontal(line)){
+                line.setLine(line.getX1(), line.getY1()-5, line.getX2(), line.getY2()-5);
+            }
             result.add(line);
         }
 
@@ -303,7 +345,7 @@ public class LineExtractor {
         int y = (int) line.getY1();
         int x2 = (int) line.getX2() + 1;
         int threshold = 180;
-        int maxExtension = 20;
+        int maxExtension = 15;
         int extension = 0;
         while (x > 0 && extension < maxExtension) {
             if (ImageUtils.getGray(image.getRGB(x, y)) < threshold) {
@@ -330,7 +372,7 @@ public class LineExtractor {
         int y = (int) line.getY1() - 1;
         int y2 = (int) line.getY2() + 1;
         int threshold = 180;
-        int maxExtension = 20;
+        int maxExtension = 15;
         int extension = 0;
         while (y > 0 && extension < maxExtension) {
             if (ImageUtils.getGray(image.getRGB(x, y)) < threshold) {
