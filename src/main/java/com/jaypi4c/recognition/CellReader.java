@@ -16,14 +16,14 @@ import java.util.Optional;
 @Slf4j
 public class CellReader {
 
-    private final String pdfPath;
-    private final List<Rectangle2D> cells;
+    private final File pdfFile;
+    private final Rectangle2D[][] table;
     final int DPI = 300;
     private int pageIndex;
 
-    public CellReader(String pdfPath, int pageIndex, List<Rectangle2D> cells) {
-        this.pdfPath = pdfPath;
-        this.cells = cells;
+    public CellReader(File pdfFile, int pageIndex, Rectangle2D[][] table) {
+        this.pdfFile = pdfFile;
+        this.table = table;
         this.pageIndex = pageIndex;
     }
 
@@ -37,44 +37,15 @@ public class CellReader {
 
     public String[][] readArea() throws Exception {
 
-        // group the cells by the y coordinate. Different y coordinates within +-10 Pixels are considered to be the same row
-        List<List<Rectangle2D>> rows = new ArrayList<>();
-        for (Rectangle2D cell : cells) {
-            boolean found = false;
-            for (List<Rectangle2D> row : rows) {
-                if (Math.abs(row.get(0).getY() - cell.getY()) < 10) {
-                    row.add(cell);
-                    found = true;
-                    break;
-                }
-            }
-            if (!found) {
-                List<Rectangle2D> newRow = new ArrayList<>();
-                newRow.add(cell);
-                rows.add(newRow);
-            }
-        }
-        Optional<List<Rectangle2D>> longestRowOpt = rows.stream().reduce((a, b) -> a.size() > b.size() ? a : b);
-        if (longestRowOpt.isEmpty()) {
-            throw new Exception("Failed to determine the longest row");
-        }
-        int numEntries = longestRowOpt.get().size();
+        String[][] results = new String[table.length][table[0].length];
 
-        String[][] results = new String[rows.size()][numEntries];
-
-        try (PDDocument pd = PDDocument.load(new File(pdfPath))) {
+        try (PDDocument pd = PDDocument.load(pdfFile)) {
 
             PDFTextStripperByArea textStripper = new PDFTextStripperByArea();
 
-            for (int i = 0; i < rows.size(); i++) {
-                for (int j = 0; j < rows.get(i).size(); j++) {
-                    Rectangle2D cell = rows.get(i).get(j);
-                    int x = pixelsToPoints((int) cell.getX(), DPI);
-                    int y = pixelsToPoints((int) cell.getY(), DPI);
-                    int width = pixelsToPoints((int) cell.getWidth(), DPI);
-                    int height = pixelsToPoints((int) cell.getHeight(), DPI);
-                    log.debug("creating rectangle: {}, {}, {}, {}", cell.getX(), cell.getY(), cell.getWidth(), cell.getHeight());
-                    Rectangle2D rect = new Rectangle2D.Float(x, y, width, height);
+            for (int i = 0; i < table.length; i++) {
+                for (int j = 0; j < table[i].length; j++) {
+                    Rectangle2D rect = transformToPDFRectangle(table, i, j);
 
                     textStripper.addRegion(i + "_" + j, rect);
                 }
@@ -83,8 +54,8 @@ public class CellReader {
 
             textStripper.extractRegions(docPage);
 
-            for (int i = 0; i < rows.size(); i++) {
-                for (int j = 0; j < rows.get(i).size(); j++) {
+            for (int i = 0; i < table.length; i++) {
+                for (int j = 0; j < table[i].length; j++) {
                     String textForRegion = textStripper.getTextForRegion(i + "_" + j);
                     textForRegion = textForRegion.replaceAll("\n", " ").replaceAll("\r", " ");
                     results[i][j] = textForRegion;
@@ -97,6 +68,16 @@ public class CellReader {
             throw e;
         }
         return results;
+    }
+
+    private Rectangle2D transformToPDFRectangle(Rectangle2D[][] table, int i, int j) {
+        Rectangle2D cell = table[i][j];
+        int x = pixelsToPoints((int) cell.getX(), DPI);
+        int y = pixelsToPoints((int) cell.getY(), DPI);
+        int width = pixelsToPoints((int) cell.getWidth(), DPI);
+        int height = pixelsToPoints((int) cell.getHeight(), DPI);
+        // log.debug("creating rectangle: {}, {}, {}, {}", cell.getX(), cell.getY(), cell.getWidth(), cell.getHeight());
+        return new Rectangle2D.Double(x, y, width, height);
     }
 
 }
