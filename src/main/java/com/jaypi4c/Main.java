@@ -49,7 +49,7 @@ public class Main {
                 // openEhrManager.sendNephroMedikationData(results);
 
             } else {
-                log.info("No cells found");
+                log.info("No medication table found");
             }
             log.info("Finished page {}", page);
         }

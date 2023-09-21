@@ -131,7 +131,7 @@ public class LineExtractor {
                 sum += ImageUtils.getGray(bi.getRGB(i, j));
             }
         }
-        return sum / 255d / (double)pixelCounter;
+        return sum / 255d / (double) pixelCounter;
     }
 
     /**
@@ -269,9 +269,11 @@ public class LineExtractor {
                 list = lcr.remainingLines();
             }
             // because the combination shifts the line a bit downwards, a small correction is needed
-            // it could also be, that the horizontal lines are shifted upwards. But one correction is enough
-            if(!ImageUtils.isHorizontal(line)){
-                line.setLine(line.getX1(), line.getY1()-5, line.getX2(), line.getY2()-5);
+            final int lineOffset = 3;
+            if (ImageUtils.isHorizontal(line)) {
+                line.setLine(line.getX1() - lineOffset, line.getY1(), line.getX2() - lineOffset, line.getY2());
+            } else {
+                line.setLine(line.getX1(), line.getY1() - lineOffset, line.getX2(), line.getY2() - lineOffset);
             }
             result.add(line);
         }
