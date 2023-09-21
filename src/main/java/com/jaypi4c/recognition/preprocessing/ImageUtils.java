@@ -49,7 +49,11 @@ public class ImageUtils {
     public static void drawLine(BufferedImage image, Line2D line, Color color) {
         for (int x_ = (int) line.getX1(); x_ <= line.getX2(); x_++) {
             for (int y_ = (int) line.getY1(); y_ <= line.getY2(); y_++) {
-                image.setRGB(x_, y_, color.getRGB());
+                try {
+                    image.setRGB(x_, y_, color.getRGB());
+                } catch (ArrayIndexOutOfBoundsException e) {
+                    // ignore as pixel is simply not in image
+                }
             }
         }
     }

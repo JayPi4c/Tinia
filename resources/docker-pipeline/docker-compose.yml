@@ -1,0 +1,9 @@
+version: '3'
+
+services:
+  pipeline:
+    image: registry.gitlab.uni-oldenburg.de/ebki3136/mediaktionsplan-pipeline:cicd
+    volumes:
+      - /home/jonas/Studium/cloud/BA/BA Daten:/data/input
+    environment:
+      EHRBASE_BASE_URL: http://10.17.2.25:8080

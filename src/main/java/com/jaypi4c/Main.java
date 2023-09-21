@@ -19,8 +19,7 @@ public class Main {
     public static void main(String[] args) throws Exception {
         log.info("Starting application");
 
-        String inputFolder = System.getenv("inputFolder");
-        inputFolder = inputFolder == null ? "/home/jonas/Studium/cloud/BA/BA Daten/" : inputFolder;
+        String inputFolder = "/data/input";
 
         File[] files = getFiles(inputFolder);
 

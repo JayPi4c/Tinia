@@ -10,7 +10,7 @@ import java.net.URISyntaxException;
 
 public class DefaultRestClientHelper {
 
-    private static final String OPEN_EHR_URL = "http://localhost:8080/ehrbase/";
+    private static final String OPEN_EHR_URL = System.getenv("EHRBASE_BASE_URL") == null ? "http://localhost:8080" + "/ehrbase/" : System.getenv("EHRBASE_BASE_URL") + "/ehrbase/";
 
     /**
      * Creates a new {@link DefaultRestClient} with the {@link NephroMedikationTemplateProvider}
