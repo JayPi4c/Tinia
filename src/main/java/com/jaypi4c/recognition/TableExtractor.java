@@ -43,11 +43,11 @@ public class TableExtractor {
      *
      * @param in path to file pdf file to read
      */
-    public TableExtractor(String in, int pageIndex) {
+    public TableExtractor(File in, int pageIndex) {
         //https://stackoverflow.com/a/57724726
         // read pdf
         try {
-            document = PDDocument.load(new File(in));
+            document = PDDocument.load(in);
             PDFRenderer pr = new PDFRenderer(document);
             // get page as image
             originalImage = pr.renderImageWithDPI(pageIndex, 300);

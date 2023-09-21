@@ -19,46 +19,52 @@ public class Main {
     public static void main(String[] args) throws Exception {
         log.info("Starting application");
 
-        String pdfPath = "/home/jonas/Studium/cloud/BA/BA Daten/";
-        String file1 = "SF_20220104_50335_HA1_LETTER.pdf";
-        String file2 = "SF_20220412_50061_HA1_LETTER.pdf";// no medication plan
-        String file3 = "SF_20220511_50091_HA1_LETTER.pdf";
-        String file4 = "SF_20220620_50193_HA1_LETTER.pdf";
-        String file5 = "SF_20220213_50007_HA1_LETTER.pdf";
+        String inputFolder = System.getenv("inputFolder");
+        inputFolder = inputFolder == null ? "/home/jonas/Studium/cloud/BA/BA Daten/" : inputFolder;
 
-        pdfPath += file1;
+        File[] files = getFiles(inputFolder);
+
+        // files = new File[]{new File("/home/jonas/Studium/cloud/BA/BA Daten/" + "SF_20220104_50335_HA1_LETTER.pdf")};
 
         OpenEhrManager openEhrManager = new OpenEhrManager();
 
+        for (File file : files) {
+            int numberOfPages = getNumberOfPages(file);
+            for (int page = 0; page < numberOfPages; page++) {
+                TableExtractor tableExtractor = new TableExtractor(file, page);
 
-        int numberOfPages = 1;// getNumberOfPages(pdfPath);
-        for (int page = 0; page < numberOfPages; page++) {
-            // page = 1;
-            TableExtractor tableExtractor = new TableExtractor(pdfPath, page);
+                tableExtractor.start();
+                tableExtractor.finish();
 
-            tableExtractor.start();
-            tableExtractor.finish();
+                if (tableExtractor.wasSuccessful()) {
+                    Rectangle2D[][] table = tableExtractor.getTable();
+                    CellReader cr = new CellReader(file, page, table);
+                    String[][] results = cr.readArea();
 
-            if (tableExtractor.wasSuccessful()) {
-                Rectangle2D[][] table = tableExtractor.getTable();
-                CellReader cr = new CellReader(pdfPath, page, table);
-                String[][] results = cr.readArea();
+                    print2D(results);
 
-                print2D(results);
+                    openEhrManager.sendNephroMedikationData(results);
 
-                // openEhrManager.sendNephroMedikationData(results);
-
-            } else {
-                log.info("No medication table found");
+                } else {
+                    log.info("No medication table found");
+                }
+                log.info("Finished page {}", page);
             }
-            log.info("Finished page {}", page);
+            log.info("Finished file {}", file.getName());
         }
-
         log.info("Finished application");
     }
 
-    private static int getNumberOfPages(String in) {
-        try (PDDocument document = PDDocument.load(new File(in))) {
+    private static File[] getFiles(String path) {
+        File folder = new File(path);
+        return Arrays.stream(folder.listFiles())
+                .filter(file -> file.getName().endsWith(".pdf"))
+                .toArray(File[]::new);
+    }
+
+
+    private static int getNumberOfPages(File in) {
+        try (PDDocument document = PDDocument.load(in)) {
             return document.getNumberOfPages();
         } catch (IOException e) {
             log.error("Failed to get number of pages", e);

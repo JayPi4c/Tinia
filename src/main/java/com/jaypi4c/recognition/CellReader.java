@@ -16,13 +16,13 @@ import java.util.Optional;
 @Slf4j
 public class CellReader {
 
-    private final String pdfPath;
+    private final File pdfFile;
     private final Rectangle2D[][] table;
     final int DPI = 300;
     private int pageIndex;
 
-    public CellReader(String pdfPath, int pageIndex, Rectangle2D[][] table) {
-        this.pdfPath = pdfPath;
+    public CellReader(File pdfFile, int pageIndex, Rectangle2D[][] table) {
+        this.pdfFile = pdfFile;
         this.table = table;
         this.pageIndex = pageIndex;
     }
@@ -39,7 +39,7 @@ public class CellReader {
 
         String[][] results = new String[table.length][table[0].length];
 
-        try (PDDocument pd = PDDocument.load(new File(pdfPath))) {
+        try (PDDocument pd = PDDocument.load(pdfFile)) {
 
             PDFTextStripperByArea textStripper = new PDFTextStripperByArea();
 
