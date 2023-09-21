@@ -7,9 +7,7 @@ import java.awt.*;
 import java.awt.geom.Line2D;
 import java.awt.image.BufferedImage;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 @Slf4j
 public class LineExtractor {
@@ -18,6 +16,8 @@ public class LineExtractor {
     private List<Line2D> lines;
     private final BufferedImage image;
 
+    private final int BLACK_THRESHOLD = 180;
+
     public LineExtractor(BufferedImage image) {
         this.image = image;
         lines = new ArrayList<>();
@@ -25,8 +25,9 @@ public class LineExtractor {
 
 
     public void execute() {
+        log.info("Starting line extraction");
 
-        log.info("removing black areas");
+        log.info("Removing black areas");
         BufferedImage newImage = ImageUtils.deepCopy(image);
         newImage = removeBlackAreas(newImage);
         ImageUtils.saveImage(newImage, "debug/removedBlackAreas.jpg");
@@ -37,15 +38,13 @@ public class LineExtractor {
         newImage = ImageUtils.createImageWithLines(image.getWidth(), image.getHeight(), lines);
         ImageUtils.saveImage(newImage, "debug/rawLines.jpg");
 
-        // TODO update combine lines algorithm to keep intersections
+        log.info("Combining lines");
         combineLines();
-        // idea: extend line length by up to x pixels and check for intersection with other lines. if found, stop and
-        // keep length, if not, undo extension
 
+        log.info("Extending lines");
         extendLines();
 
         newImage = ImageUtils.createImageWithLines(image.getWidth(), image.getHeight(), lines);
-
         ImageUtils.saveImage(newImage, "debug/lines.jpg");
     }
 
@@ -57,7 +56,7 @@ public class LineExtractor {
      */
     private void extractLines(BufferedImage image) {
         final int n = 50;
-        final int blackThreshold = 180;
+        final int blackThreshold = BLACK_THRESHOLD;
 
         log.info("Extracting horizontal lines");
         for (int y = 0; y < image.getHeight(); y++) {
@@ -97,20 +96,18 @@ public class LineExtractor {
     }
 
     private BufferedImage removeBlackAreas(BufferedImage bi) {
-
         return removeByAverageIntensity(bi);
-
-        // connectedComponentsLabeling(bi);
     }
 
 
     private BufferedImage removeByAverageIntensity(BufferedImage bi) {
+        final double threshold = 0.35;
         BufferedImage newImage = ImageUtils.deepCopy(bi);
 
         for (int x = 0; x < bi.getWidth(); x++) {
             for (int y = 0; y < bi.getHeight(); y++) {
                 double avg = getAverageIntensity(bi, x, y);
-                if (avg < 0.35) {
+                if (avg < threshold) {
                     newImage.setRGB(x, y, Color.WHITE.getRGB());
                 }
             }
@@ -133,126 +130,6 @@ public class LineExtractor {
         }
         return sum / 255d / (double) pixelCounter;
     }
-
-    /**
-     * ConnectedComponentsAlgorithm to remove black areas from the image
-     * <br>
-     * See <a href="https://aishack.in/tutorials/labelling-connected-components-example/">Tutorial</a> for reference.
-     *
-     * <br>
-     * As there are only the colors black and white left, the algorithm is straight forward: In the first pass, all
-     * black pixels get a label. In the following pass, connected labels will be reduced to on common root label.
-     * This leaves connected areas with the same label and the density of black pixels in one connected area can be used
-     * to determine if it is a blackened area.
-     */
-    private void connectedComponentsLabeling(BufferedImage bi) {
-        int imageWidth = image.getWidth();
-        int imageHeight = image.getHeight();
-
-        int[][] labels = new int[imageWidth][imageHeight];
-        int label = 1;
-        int backgroundLabel = 0;
-
-        Map<Integer, Integer> mergeList = new HashMap<>();
-
-        int backgroundThreshold = 200;
-
-        log.info("starting first pass");
-        // first pass
-        for (int y = 0; y < imageHeight; y++) {
-            for (int x = 0; x < imageWidth; x++) {
-                if (ImageUtils.getGray(bi.getRGB(x, y)) > backgroundThreshold) {
-                    // it's a background pixel -> skip
-                    // setting to background label is not needed as default value is 0
-                    continue;
-                }
-                int labelAbove = y > 0 ? labels[x][y - 1] : backgroundLabel; // 0 (background) if out of bounds
-                int labelLeft = x > 0 ? labels[x - 1][y] : backgroundLabel; // 0 (background) if out of bounds
-                if (labelAbove == backgroundLabel && labelLeft == backgroundLabel) {
-                    // new label
-                    labels[x][y] = label;
-                    label++;
-                } else if (labelAbove != backgroundLabel && labelLeft == backgroundLabel) {
-                    // label above
-                    labels[x][y] = labelAbove;
-                } else if (labelAbove == backgroundLabel && labelLeft != backgroundLabel) {
-                    // label left
-                    labels[x][y] = labelLeft;
-                } else if (labelAbove != backgroundLabel && labelLeft != backgroundLabel) {
-                    // merge labels
-                    labels[x][y] = labelLeft;
-                    if (labelLeft != labelAbove && !mergeList.containsKey(labelLeft)) {
-                        // add to merge list
-                        mergeList.put(labelLeft, labelAbove);
-                    }
-                }
-
-            }
-        }
-
-        log.info("starting second pass");
-        // second pass
-        for (int y = 0; y < imageHeight; y++) {
-            for (int x = 0; x < imageWidth; x++) {
-                int l = labels[x][y];
-                if (l == backgroundLabel) {
-                    // it's a background pixel -> skip
-                    continue;
-                }
-                while (mergeList.containsKey(l)) {
-                    l = mergeList.get(l);
-                }
-                labels[x][y] = l;
-            }
-        }
-
-        /* Now the label array can be used to determine the connected chunks. This is done by iterating over the labels array
-         * and checking if the label is already in the chunks map. If it is, the chunk is updated/expanded with the new
-         * coordinates. Finally, this leaves us with a map of chunks that have all the same label. Checking the black pixel-density
-         * will give the information if the chunk is a blackened area or not.
-         */
-        Map<Integer, Chunk> chunks = new HashMap<>();
-
-        for (int y = 0; y < imageHeight; y++) {
-            for (int x = 0; x < imageWidth; x++) {
-                int l = labels[x][y];
-                if (l == backgroundLabel) {
-                    continue;
-                }
-                if (chunks.containsKey(l)) {
-                    Chunk chunk = chunks.get(l);
-                    chunk = new Chunk(Math.min(chunk.minX(), x), Math.min(chunk.minY(), y), Math.max(chunk.maxX(), x), Math.max(chunk.maxY(), y));
-                    chunks.put(l, chunk);
-                } else {
-                    chunks.put(l, new Chunk(x, y, x, y));
-                }
-            }
-        }
-        log.info("remove black chunks");
-        for (Chunk chunk : chunks.values()) {
-            long avg = 0;
-            for (int x = chunk.minX(); x <= chunk.maxX(); x++) {
-                for (int y = chunk.minY(); y <= chunk.maxY(); y++) {
-                    avg += ImageUtils.getGray(bi.getRGB(x, y));
-                }
-            }
-            // if average color is dark the chunk is probably a blackened area -> remove
-            // also if the chunk is too small, meaning just a single line -> remove
-            // TODO: maybe a single line should stay...
-            avg /= (long) (chunk.maxX() - chunk.minX() + 1) * (chunk.maxY() - chunk.minY() + 1);
-            if (avg < 150 || chunk.maxX() - chunk.minX() < 20 || chunk.maxY() - chunk.minY() < 20) {
-
-                // remove all lines from lines list if they are in the blackened chunk
-                for (int i = lines.size() - 1; i >= 0; i--) {
-                    Line2D line = lines.get(i);
-                    if (chunk.contains(line)) {
-                        lines.remove(i);
-                    }
-                }
-            }
-        }
-    }
-
 
     private void combineLines() {
         log.debug("Starting with {} lines", lines.size());
@@ -278,10 +155,8 @@ public class LineExtractor {
             result.add(line);
         }
 
-        log.debug("ended with {} lines", result.size());
+        log.debug("Ended with {} lines", result.size());
         lines = result;
-
-
     }
 
     private LineCombinationResult combine(Line2D line, List<Line2D> lines) {
@@ -320,13 +195,6 @@ public class LineExtractor {
 
     }
 
-    private record Chunk(int minX, int minY, int maxX, int maxY) {
-        public boolean contains(Line2D line) {
-            return line.intersectsLine(minX, minY, maxX, maxY);
-        }
-    }
-
-
     private void extendLines() {
         for (Line2D line : lines) {
             if (ImageUtils.isHorizontal(line)) {
@@ -346,7 +214,7 @@ public class LineExtractor {
         int x = (int) line.getX1() - 1;
         int y = (int) line.getY1();
         int x2 = (int) line.getX2() + 1;
-        int threshold = 180;
+        int threshold = BLACK_THRESHOLD;
         int maxExtension = 15;
         int extension = 0;
         while (x > 0 && extension < maxExtension) {
@@ -373,7 +241,7 @@ public class LineExtractor {
         int x = (int) line.getX1();
         int y = (int) line.getY1() - 1;
         int y2 = (int) line.getY2() + 1;
-        int threshold = 180;
+        int threshold = BLACK_THRESHOLD;
         int maxExtension = 15;
         int extension = 0;
         while (y > 0 && extension < maxExtension) {
@@ -394,6 +262,5 @@ public class LineExtractor {
             extension++;
         }
     }
-
 
 }

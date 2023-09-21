@@ -30,6 +30,7 @@ public class CellIdentifier {
 
     public void execute() {
         log.info("Starting CellIdentifier");
+
         log.info("Searching intersections...");
         findIntersections();
 
@@ -175,6 +176,7 @@ public class CellIdentifier {
         }
         ImageUtils.saveImage(debugImage, "debug/labels.jpg");
 
+        log.debug("Found {} intersections", intersections.size());
     }
 
     private void identifyCells() {
@@ -226,7 +228,6 @@ public class CellIdentifier {
 
         byte node = nodeMatrix[(int) intersection.getX()][(int) intersection.getY()];
         if (node != 1 && node != 2 && node != 4 && node != 5) {
-            log.info("intersection not valid for cell top left");
             return Optional.empty();
         }
 
@@ -292,7 +293,7 @@ public class CellIdentifier {
 
         }
         if (topRight == null || bottomLeft == null || bottomRight == null) {
-            log.debug("no cell found for intersection: {}", intersection);
+            // log.debug("no cell found for intersection: {}", intersection);
             return Optional.empty();
         }
 
@@ -323,7 +324,6 @@ public class CellIdentifier {
 
         byte node = nodeMatrix[(int) intersection.getX()][(int) intersection.getY()];
         if (node != 4 && node != 5 && node != 7 && node != 8) {
-            log.info("intersection not valid for cell bottom left");
             return Optional.empty();
         }
 
@@ -389,7 +389,7 @@ public class CellIdentifier {
 
         }
         if (topRight == null || topLeft == null || bottomRight == null) {
-            log.debug("no cell found for intersection: {}", intersection);
+            // log.debug("no cell found for intersection: {}", intersection);
             return Optional.empty();
         }
 
