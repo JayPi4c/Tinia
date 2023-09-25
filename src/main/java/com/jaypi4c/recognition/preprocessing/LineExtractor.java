@@ -253,7 +253,7 @@ public class LineExtractor {
             extension++;
         }
         extension = 0;
-        while (y2 < image.getWidth() && extension < maxExtension) {
+        while (y2 < image.getHeight() && extension < maxExtension) {
             if (ImageUtils.getGray(image.getRGB(x, y2)) < threshold) {
                 line.setLine(line.getX1(), line.getY1(), line.getX2(), y2);
                 break;

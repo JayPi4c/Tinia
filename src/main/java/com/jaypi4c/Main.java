@@ -11,6 +11,7 @@ import java.awt.geom.Rectangle2D;
 import java.io.File;
 import java.io.IOException;
 import java.util.Arrays;
+import java.util.Optional;
 
 
 @Slf4j
@@ -28,6 +29,7 @@ public class Main {
         OpenEhrManager openEhrManager = new OpenEhrManager();
 
         for (File file : files) {
+            log.info("Starting with file {}", file.getName());
             int numberOfPages = getNumberOfPages(file);
             for (int page = 0; page < numberOfPages; page++) {
                 TableExtractor tableExtractor = new TableExtractor(file, page);
@@ -38,12 +40,12 @@ public class Main {
                 if (tableExtractor.wasSuccessful()) {
                     Rectangle2D[][] table = tableExtractor.getTable();
                     CellReader cr = new CellReader(file, page, table);
-                    String[][] results = cr.readArea();
-
-                    print2D(results);
-
-                    openEhrManager.sendNephroMedikationData(results);
-
+                    Optional<String[][]> resultsOpt = cr.readArea();
+                    if (resultsOpt.isPresent()) {
+                        String[][] results = resultsOpt.get();
+                        print2D(results);
+                        openEhrManager.sendNephroMedikationData(results);
+                    }
                 } else {
                     log.info("No medication table found");
                 }
