@@ -1,5 +1,6 @@
 package com.jaypi4c.recognition;
 
+import com.jaypi4c.utils.WordUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.pdfbox.pdmodel.PDDocument;
 import org.apache.pdfbox.pdmodel.PDPage;
@@ -20,6 +21,8 @@ public class CellReader {
     private final Rectangle2D[][] table;
     final int DPI = 300;
     private int pageIndex;
+
+    private static final String[] DEFAULT_HEADER = WordUtils.loadDictionary("/dictionaries/HeaderAllowList.txt");
 
     public CellReader(File pdfFile, int pageIndex, Rectangle2D[][] table) {
         this.pdfFile = pdfFile;
@@ -61,7 +64,7 @@ public class CellReader {
                     results[i][j] = textForRegion;
                 }
             }
-
+            results = verifyTable(results);
 
         } catch (Exception e) {
             log.error("Error while reading pdf: " + e.getMessage());
@@ -69,6 +72,54 @@ public class CellReader {
         }
         return results;
     }
+
+    private String[][] verifyTable(String[][] table) {
+        int rowIndex = 0;
+        // first row should be the header. Let's check if some Words are in there:
+
+        List<String[]> result = new ArrayList<>();
+        String[] header = table[0];
+
+        if (!verifyHeader(header)) {
+            log.debug("Table has no Header. Inserting a Default Header...");
+            result.add(DEFAULT_HEADER);
+        } else {
+            log.debug("Found header in table");
+            result.add(header);
+            rowIndex++;
+        }
+        for (; rowIndex < table.length; rowIndex++) {
+            String[] row = table[rowIndex];
+            if (verifyRow(row)) {
+                result.add(row);
+            }
+        }
+        return result.toArray(new String[0][0]);
+    }
+
+    private boolean verifyHeader(String[] header) {
+        int totalDistance = 0;
+        int totalMatches = 0;
+        for (String word : header) {
+            WordUtils.LDResult result = WordUtils.findClosestWord(word, DEFAULT_HEADER);
+            totalDistance += result.distance();
+            if (result.exactMatch())
+                totalMatches++;
+        }
+        return totalMatches >= 4 || (totalDistance < 15);
+    }
+
+    private boolean verifyRow(String[] row) {
+        if (row.length != 11) {
+            return false;
+        }
+        String rowString = String.join(" ", row);
+        if(rowString.length() < 10) {
+            return false; // less than 10 characters is probably an almost empty row with no information
+        }
+        return !row[3].isEmpty(); // Darreichungsform darf nicht leer sein.
+    }
+
 
     private Rectangle2D transformToPDFRectangle(Rectangle2D[][] table, int i, int j) {
         Rectangle2D cell = table[i][j];
