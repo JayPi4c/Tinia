@@ -1,9 +1,9 @@
 package com.jaypi4c.recognition.preprocessing;
 
+import com.jaypi4c.utils.DebugDrawer;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.w3c.dom.css.Rect;
 
 import java.awt.*;
 import java.awt.geom.Line2D;
@@ -55,7 +55,7 @@ public class CellIdentifier {
                 }
             }
         }
-        ImageUtils.saveImage(image, "debug/cells.jpg");
+        DebugDrawer.saveDebugImage(image, "cells");
     }
 
 
@@ -174,7 +174,7 @@ public class CellIdentifier {
             g.setColor(Color.RED);
             g.drawString(String.valueOf(nodeMatrix[x][y]), x, y);
         }
-        ImageUtils.saveImage(debugImage, "debug/labels.jpg");
+        DebugDrawer.saveDebugImage(debugImage, "labels");
 
         log.debug("Found {} intersections", intersections.size());
     }

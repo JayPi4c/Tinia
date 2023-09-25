@@ -1,5 +1,6 @@
 package com.jaypi4c.recognition.preprocessing;
 
+import com.jaypi4c.utils.DebugDrawer;
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
 
@@ -30,13 +31,13 @@ public class LineExtractor {
         log.info("Removing black areas");
         BufferedImage newImage = ImageUtils.deepCopy(image);
         newImage = removeBlackAreas(newImage);
-        ImageUtils.saveImage(newImage, "debug/removedBlackAreas.jpg");
+        DebugDrawer.saveDebugImage(newImage, "removedBlackAreas");
 
         log.info("Extracting lines");
         extractLines(newImage);
 
         newImage = ImageUtils.createImageWithLines(image.getWidth(), image.getHeight(), lines);
-        ImageUtils.saveImage(newImage, "debug/rawLines.jpg");
+        DebugDrawer.saveDebugImage(newImage, "rawLines");
 
         log.info("Combining lines");
         combineLines();
@@ -45,7 +46,7 @@ public class LineExtractor {
         extendLines();
 
         newImage = ImageUtils.createImageWithLines(image.getWidth(), image.getHeight(), lines);
-        ImageUtils.saveImage(newImage, "debug/lines.jpg");
+        DebugDrawer.saveDebugImage(newImage, "lines");
     }
 
     /**
