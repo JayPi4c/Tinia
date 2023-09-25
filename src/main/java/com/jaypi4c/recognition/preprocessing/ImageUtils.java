@@ -48,12 +48,14 @@ public class ImageUtils {
 
     public static void drawLine(BufferedImage image, Line2D line, Color color) {
         for (int x_ = (int) line.getX1(); x_ <= line.getX2(); x_++) {
+            if (x_ < 0 || x_ >= image.getWidth()) {
+                continue;
+            }
             for (int y_ = (int) line.getY1(); y_ <= line.getY2(); y_++) {
-                try {
-                    image.setRGB(x_, y_, color.getRGB());
-                } catch (ArrayIndexOutOfBoundsException e) {
-                    // ignore as pixel is simply not in image
+                if (y_ < 0 || y_ >= image.getHeight()) {
+                    continue;
                 }
+                image.setRGB(x_, y_, color.getRGB());
             }
         }
     }
@@ -99,7 +101,13 @@ public class ImageUtils {
 
     public static boolean checkAreaAroundForBlackPixel(BufferedImage image, Point2D center, int offset) {
         for (double i = center.getX() - offset; i < center.getX() + offset; i++) {
+            if (i < 0 || i >= image.getWidth()) {
+                continue;
+            }
             for (double j = center.getY() - offset; j < center.getY() + offset; j++) {
+                if (j < 0 || j >= image.getHeight()) {
+                    continue;
+                }
                 if (getGray(image.getRGB((int) i, (int) j)) < 50) {
                     return true;
                 }
