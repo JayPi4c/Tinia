@@ -51,6 +51,8 @@ public class CellIdentifier {
             Color color = ImageUtils.randomColor();
             for (int x = (int) cell.getX(); x < cell.getX() + cell.getWidth(); x++) {
                 for (int y = (int) cell.getY(); y < cell.getY() + cell.getHeight(); y++) {
+                    if (x < 0 || x >= image.getWidth() || y < 0 || y >= image.getHeight())
+                        continue;
                     image.setRGB(x, y, color.getRGB());
                 }
             }
