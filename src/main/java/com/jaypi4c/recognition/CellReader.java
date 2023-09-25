@@ -22,7 +22,7 @@ public class CellReader {
     final int DPI = 300;
     private int pageIndex;
 
-    private static final String[] DEFAULT_HEADER = WordUtils.loadDictionary("/dictionaries/HeaderAllowList.txt");
+    private static final String[] DEFAULT_HEADER = WordUtils.loadDictionary("/dictionaries/HeaderAllowlist.txt");
 
     public CellReader(File pdfFile, int pageIndex, Rectangle2D[][] table) {
         this.pdfFile = pdfFile;
@@ -105,7 +105,7 @@ public class CellReader {
         int totalDistance = 0;
         int totalMatches = 0;
         for (String word : header) {
-            WordUtils.LDResult result = WordUtils.findClosestWord(word, DEFAULT_HEADER);
+            WordUtils.LDResult result = WordUtils.findClosestWord(word.trim(), DEFAULT_HEADER);
             totalDistance += result.distance();
             if (result.exactMatch())
                 totalMatches++;
@@ -118,10 +118,10 @@ public class CellReader {
             return false;
         }
         String rowString = String.join(" ", row);
-        if (rowString.length() < 10) {
+        if (rowString.replaceAll(" ", "").length() < 10) {
             return false; // less than 10 characters is probably an almost empty row with no information
         }
-        return !row[3].isEmpty(); // Darreichungsform darf nicht leer sein.
+        return !row[3].isBlank(); // Darreichungsform darf nicht leer sein.
     }
 
 
