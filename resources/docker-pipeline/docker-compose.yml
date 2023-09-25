@@ -2,10 +2,11 @@ version: '3'
 
 services:
   pipeline:
-    image: registry.gitlab.uni-oldenburg.de/ebki3136/mediaktionsplan-pipeline
+    image: registry.gitlab.uni-oldenburg.de/ebki3136/mediaktionsplan-pipeline:3-set-up-a-debug-folder-and-structure-in-docker
     volumes:
-      - /home/jonas/Studium/cloud/BA/BA Daten:/data/input
-      - /home/jonas/Studium/Programming/BA/Medikations-Pipeline/debug:/data/debug
+      - /home/jonas/Studium/cloud/BA/BA Daten:/io/data
+      - /home/jonas/Studium/Programming/BA/Medikations-Pipeline/debug:/io/debug
+      # - /home/jonas/Studium/Programming/BA/Medikations-Pipeline/logs:/io/logs
     environment:
       EHRBASE_BASE_URL: http://10.17.2.25:8080
       DEBUG: true
