@@ -38,7 +38,7 @@ public class CellReader {
         return pixelVal * 72 / dpi;
     }
 
-    public String[][] readArea() throws Exception {
+    public Optional<String[][]> readArea() throws Exception {
 
         String[][] results = new String[table.length][table[0].length];
 
@@ -70,7 +70,7 @@ public class CellReader {
             log.error("Error while reading pdf: " + e.getMessage());
             throw e;
         }
-        return results;
+        return Optional.ofNullable(results);
     }
 
     private String[][] verifyTable(String[][] table) {
@@ -94,6 +94,10 @@ public class CellReader {
                 result.add(row);
             }
         }
+        if (result.size() < 2) {
+            log.debug("Table has no rows. Returning empty table");
+            return null;
+        }
         return result.toArray(new String[0][0]);
     }
 
@@ -114,7 +118,7 @@ public class CellReader {
             return false;
         }
         String rowString = String.join(" ", row);
-        if(rowString.length() < 10) {
+        if (rowString.length() < 10) {
             return false; // less than 10 characters is probably an almost empty row with no information
         }
         return !row[3].isEmpty(); // Darreichungsform darf nicht leer sein.
