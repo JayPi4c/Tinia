@@ -4,6 +4,7 @@ import com.jaypi4c.openehr.OpenEhrManager;
 
 import com.jaypi4c.recognition.CellReader;
 import com.jaypi4c.recognition.TableExtractor;
+import com.jaypi4c.utils.DebugDrawer;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.pdfbox.pdmodel.PDDocument;
 
@@ -24,14 +25,16 @@ public class Main {
 
         File[] files = getFiles(inputFolder);
 
-        // files = new File[]{new File("/home/jonas/Studium/cloud/BA/BA Daten/" + "SF_20220104_50335_HA1_LETTER.pdf")};
+        // files = new File[]{new File("/home/jonas/Studium/cloud/BA/BA Daten/" + "SF_20220825_50170_HA1_LETTER.pdf")};
 
         OpenEhrManager openEhrManager = new OpenEhrManager();
 
         for (File file : files) {
             log.info("Starting with file {}", file.getName());
+            DebugDrawer.setCurrentFilename(file.getName());
             int numberOfPages = getNumberOfPages(file);
             for (int page = 0; page < numberOfPages; page++) {
+                DebugDrawer.setCurrentPage(page);
                 TableExtractor tableExtractor = new TableExtractor(file, page);
 
                 tableExtractor.start();
