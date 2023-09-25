@@ -21,7 +21,7 @@ public class Main {
     public static void main(String[] args) throws Exception {
         log.info("Starting application");
 
-        String inputFolder = "/data/input";
+        String inputFolder = "/io/data";
 
         File[] files = getFiles(inputFolder);
 

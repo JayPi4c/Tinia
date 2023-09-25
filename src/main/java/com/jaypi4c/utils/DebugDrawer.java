@@ -19,6 +19,6 @@ public class DebugDrawer {
     public static void saveDebugImage(BufferedImage image, String name) {
         if (!DEBUG)
             return;
-        ImageUtils.saveImage(image, "/debug/" + currentFilename + "/" + currentPage + "/" + name + ".jpg");
+        ImageUtils.saveImage(image, "/io/debug/" + currentFilename + "/" + currentPage + "/" + name + ".jpg");
     }
 }
