@@ -7,7 +7,7 @@
         <Console name="LogToConsole" target="SYSTEM_OUT">
             <PatternLayout pattern="${appenderPatternLayout}"/>
         </Console>
-        <File name="LogToFile" fileName="logs/pipeline.log" immediateFlush="false" append="false">
+        <File name="LogToFile" fileName="/io/logs/pipeline.log" immediateFlush="false" append="false">
             <ThresholdFilter level="${sys:logging.level:-info}" onMatch="ACCEPT" onMismatch="DENY"/>
             <PatternLayout pattern="${appenderPatternLayout}"/>
         </File>

@@ -76,7 +76,12 @@ public class Pipeline {
 
     private static File[] getFiles(String path) {
         File folder = new File(path);
-        return Arrays.stream(folder.listFiles())
+        File[] entries = folder.listFiles();
+        if (entries == null) {
+            log.error("Could not find folder {}", path);
+            System.exit(-1);
+        }
+        return Arrays.stream(entries)
                 .filter(file -> file.getName().endsWith(".pdf"))
                 .toArray(File[]::new);
     }
