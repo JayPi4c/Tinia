@@ -29,7 +29,8 @@ public class Main {
 
         OpenEhrManager openEhrManager = new OpenEhrManager();
 
-        for (File file : files) {
+        for (int i = 0; i < files.length; i++) {
+            File file = files[i];
             log.info("Starting with file {}", file.getName());
             DebugDrawer.setCurrentFilename(file.getName());
             int numberOfPages = getNumberOfPages(file);
@@ -52,9 +53,9 @@ public class Main {
                 } else {
                     log.info("No medication table found");
                 }
-                log.info("Finished page {}", page);
+                log.info("Finished page {}, {}%", page, (page + 1) * 100 / numberOfPages);
             }
-            log.info("Finished file {}", file.getName());
+            log.info("Finished file {}, {}%", file.getName(), (i + 1) * 100 / files.length);
         }
         log.info("Finished application");
     }

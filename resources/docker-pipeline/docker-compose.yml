@@ -2,7 +2,7 @@ version: '3'
 
 services:
   pipeline:
-    image: registry.gitlab.uni-oldenburg.de/ebki3136/mediaktionsplan-pipeline:exceptionFixes
+    image: registry.gitlab.uni-oldenburg.de/ebki3136/mediaktionsplan-pipeline:develop
     volumes:
       - /home/jonas/Studium/cloud/BA/BA Daten:/io/data
       - /home/jonas/Studium/Programming/BA/Medikations-Pipeline/debug:/io/debug
