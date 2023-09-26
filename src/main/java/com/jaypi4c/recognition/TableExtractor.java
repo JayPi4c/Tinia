@@ -7,6 +7,9 @@ import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.pdfbox.pdmodel.PDDocument;
 import org.apache.pdfbox.rendering.PDFRenderer;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Component;
 
 import java.awt.geom.Line2D;
 
@@ -16,9 +19,9 @@ import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 
 @Slf4j
+@Component
 public class TableExtractor {
 
     /*
@@ -32,49 +35,70 @@ public class TableExtractor {
     private int imageWidth;
     private int imageHeight;
     private PDDocument document;
+    private PDFRenderer pdfRenderer;
     private BufferedImage originalImage;
+
+    @Value("${pdf.dpi}")
+    private int DPI;
 
     @Getter
     private Rectangle2D[][] table;
 
+    private final LineExtractor le;
+    private final CellIdentifier ci;
 
-    /**
-     * Creates the table extractor and loads the pdf from the path
-     *
-     * @param in path to file pdf file to read
-     */
-    public TableExtractor(File in, int pageIndex) {
-        //https://stackoverflow.com/a/57724726
-        // read pdf
+    @Autowired
+    public TableExtractor(LineExtractor le, CellIdentifier ci) {
+        this.le = le;
+        this.ci = ci;
+    }
+
+
+    private boolean documentClosed = true;
+
+    public void setCurrentFile(File file) {
+        if (!documentClosed) {
+            finish();
+        }
         try {
-            document = PDDocument.load(in);
-            PDFRenderer pr = new PDFRenderer(document);
-            // get page as image
-            originalImage = pr.renderImageWithDPI(pageIndex, 300);
-            imageWidth = originalImage.getWidth();
-            imageHeight = originalImage.getHeight();
-        } catch (Exception e) {
-            log.error("Error while reading pdf", e);
+            document = PDDocument.load(file);
+            pdfRenderer = new PDFRenderer(document);
+            documentClosed = false;
+        } catch (IOException e) {
+            log.error("Error while loading pdf", e);
         }
     }
 
 
     /**
      * Starts the execution of the subtasks
+     * - load image from pdf page
      * - extracting the Lines
      * - finding the intersections
      * - labeling the intersections and finding the cells
      */
-    public void start() {
-        LineExtractor le = new LineExtractor(originalImage);
-        le.execute();
+    public void processPage(int page) {
+        if (documentClosed) {
+            log.error("Document is closed. Probably the file was not set.");
+            return;
+        }
+        // https://stackoverflow.com/a/57724726
+        // read pdf
+        try {
+            // get page as image
+            originalImage = pdfRenderer.renderImageWithDPI(page, DPI);
+            imageWidth = originalImage.getWidth();
+            imageHeight = originalImage.getHeight();
+        } catch (Exception e) {
+            log.error("Error while reading pdf", e);
+        }
+
+        le.execute(originalImage);
 
         List<Line2D> lines = le.getLines();
         BufferedImage imgInEdit = ImageUtils.createImageWithLines(imageWidth, imageHeight, lines);
 
-
-        CellIdentifier ci = new CellIdentifier(imgInEdit, lines);
-        ci.execute();
+        ci.execute(imgInEdit, lines);
         List<Rectangle2D> rawCells = ci.getCells();
 
         table = createTable(rawCells);
@@ -124,11 +148,12 @@ public class TableExtractor {
     }
 
     /**
-     * Closes the pdf document and saves the debug image
+     * Closes the pdf document
      */
     public void finish() {
         try {
             document.close();
+            documentClosed = true;
         } catch (IOException e) {
             log.error("Failed to close document: ", e);
         }

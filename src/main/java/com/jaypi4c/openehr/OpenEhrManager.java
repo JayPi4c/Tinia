@@ -13,28 +13,26 @@ import lombok.extern.slf4j.Slf4j;
 import org.ehrbase.client.openehrclient.CompositionEndpoint;
 import org.ehrbase.client.openehrclient.EhrEndpoint;
 import org.ehrbase.client.openehrclient.OpenEhrClient;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
-import java.net.URISyntaxException;
 import java.util.UUID;
 
 @Slf4j
+@Component
 public class OpenEhrManager {
 
     // see https://ehrbase.readthedocs.io/en/latest/02_getting_started/04_create_ehr/index.html#client-library
-    private final OpenEhrClient openEhrClient = DefaultRestClientHelper.setupRestClient();
-    private final EhrEndpoint ehrEndpoint = openEhrClient.ehrEndpoint();
-    private final NephroMedikationCompositionFactory nephroMedikationCompositionFactory = new NephroMedikationCompositionFactory();
+    private final OpenEhrClient openEhrClient;
+    private final EhrEndpoint ehrEndpoint;
+    private final NephroMedikationCompositionFactory nephroMedikationCompositionFactory;
 
+    @Autowired
+    public OpenEhrManager(OpenEhrClient openEhrClient, NephroMedikationCompositionFactory factory) {
+        this.openEhrClient = openEhrClient;
+        this.ehrEndpoint = openEhrClient.ehrEndpoint();
 
-    public OpenEhrManager() throws URISyntaxException {
-
-        //TemplateProvider provider = new NephroMedikationTemplateProvider();
-
-        //Unflattener unflattener = new Unflattener(provider);
-        //RMObject rmObject = unflattener.unflatten(composition);
-
-        //CanonicalJson json = new CanonicalJson();
-        //System.out.println(json.marshal(rmObject));
+        nephroMedikationCompositionFactory = factory;
     }
 
     public boolean sendNephroMedikationData(String[][] medicationMatrix) {

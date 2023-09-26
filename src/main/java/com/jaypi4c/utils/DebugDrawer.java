@@ -3,22 +3,28 @@ package com.jaypi4c.utils;
 import com.jaypi4c.recognition.preprocessing.ImageUtils;
 import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Component;
 
 import java.awt.image.BufferedImage;
 
 @Slf4j
+@Component
 public class DebugDrawer {
 
     @Setter
-    private static String currentFilename = null;
+    private String currentFilename = null;
     @Setter
-    private static int currentPage = -1;
+    private int currentPage = -1;
 
-    private static final boolean DEBUG = System.getenv("DEBUG") != null && System.getenv("DEBUG").equals("true");
+    @Value("${debug.drawImages}")
+    private boolean debug;
+    @Value("${io.debugFolder}")
+    private String debugFolder;
 
-    public static void saveDebugImage(BufferedImage image, String name) {
-        if (!DEBUG)
+    public void saveDebugImage(BufferedImage image, String name) {
+        if (!debug)
             return;
-        ImageUtils.saveImage(image, "/io/debug/" + currentFilename + "/" + currentPage + "/" + name + ".jpg");
+        ImageUtils.saveImage(image, debugFolder + currentFilename + "/" + currentPage + "/" + name + ".jpg");
     }
 }

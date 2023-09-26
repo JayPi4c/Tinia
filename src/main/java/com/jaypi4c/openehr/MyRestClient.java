@@ -5,6 +5,9 @@ import org.ehrbase.client.openehrclient.OpenEhrClientConfig;
 import org.ehrbase.client.openehrclient.VersionUid;
 import org.ehrbase.client.openehrclient.defaultrestclient.DefaultRestClient;
 import org.ehrbase.webtemplate.templateprovider.TemplateProvider;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Component;
 
 import java.net.URI;
 import java.util.Map;
@@ -14,14 +17,17 @@ import java.util.Map;
  * <br>
  * It just overrides the {@link #httpPost(URI, RMObject)} method and adds the authentication header.
  */
+@Component
 public class MyRestClient extends DefaultRestClient {
 
-    private String username, password;
+    @Value("${openehr.username}")
+    private String username;
+    @Value("${openehr.password}")
+    private String password;
 
+    @Autowired
     public MyRestClient(OpenEhrClientConfig config, TemplateProvider provider) {
         super(config, provider);
-        username = "ehrbase-user";
-        password = "SuperSecretPassword";
     }
 
     @Override

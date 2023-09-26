@@ -15,6 +15,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.ehrbase.client.classgenerator.shareddefinition.Language;
 import org.ehrbase.client.classgenerator.shareddefinition.Setting;
 import org.ehrbase.client.classgenerator.shareddefinition.Territory;
+import org.springframework.stereotype.Component;
 
 
 import java.time.LocalDateTime;
@@ -31,6 +32,7 @@ import java.util.List;
  * @see <a href="https://ckm.highmed.org/ckm/templates/1246.169.1019">Nephro_Medikation in CKM</a> for more information.
  */
 @Slf4j
+@Component
 public class NephroMedikationCompositionFactory implements ICompositionFactory<NephroMedikationComposition> {
 
     public NephroMedikationComposition createComposition(String[][] medicationMatrix) {

@@ -3,6 +3,8 @@ package com.jaypi4c.recognition.preprocessing;
 import com.jaypi4c.utils.DebugDrawer;
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
 import java.awt.*;
 import java.awt.geom.Line2D;
@@ -11,33 +13,38 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Slf4j
+@Component
 public class LineExtractor {
 
     @Getter
     private List<Line2D> lines;
-    private final BufferedImage image;
-
     private final int BLACK_THRESHOLD = 180;
 
-    public LineExtractor(BufferedImage image) {
-        this.image = image;
-        lines = new ArrayList<>();
+    private BufferedImage image;
+
+    private final DebugDrawer debugDrawer;
+
+    @Autowired
+    public LineExtractor(DebugDrawer debugDrawer) {
+        this.debugDrawer = debugDrawer;
     }
 
 
-    public void execute() {
+    public void execute(BufferedImage img) {
         log.info("Starting line extraction");
+        lines = new ArrayList<>();
+        image = img;
 
         log.info("Removing black areas");
         BufferedImage newImage = ImageUtils.deepCopy(image);
         newImage = removeBlackAreas(newImage);
-        DebugDrawer.saveDebugImage(newImage, "removedBlackAreas");
+        debugDrawer.saveDebugImage(newImage, "removedBlackAreas");
 
         log.info("Extracting lines");
         extractLines(newImage);
 
         newImage = ImageUtils.createImageWithLines(image.getWidth(), image.getHeight(), lines);
-        DebugDrawer.saveDebugImage(newImage, "rawLines");
+        debugDrawer.saveDebugImage(newImage, "rawLines");
 
         log.info("Combining lines");
         combineLines();
@@ -46,7 +53,7 @@ public class LineExtractor {
         extendLines();
 
         newImage = ImageUtils.createImageWithLines(image.getWidth(), image.getHeight(), lines);
-        DebugDrawer.saveDebugImage(newImage, "lines");
+        debugDrawer.saveDebugImage(newImage, "lines");
     }
 
     /**

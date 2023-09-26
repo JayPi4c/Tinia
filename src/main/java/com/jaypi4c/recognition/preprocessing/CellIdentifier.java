@@ -2,8 +2,9 @@ package com.jaypi4c.recognition.preprocessing;
 
 import com.jaypi4c.utils.DebugDrawer;
 import lombok.Getter;
-import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
 import java.awt.*;
 import java.awt.geom.Line2D;
@@ -15,21 +16,33 @@ import java.util.List;
 import java.util.Optional;
 
 @Slf4j
-@RequiredArgsConstructor
+@Component
 public class CellIdentifier {
 
-    private final BufferedImage image;
-    private final List<Line2D> lines;
+    private BufferedImage image;
+    private List<Line2D> lines;
 
     private byte[][] nodeMatrix;
 
     private List<Point2D> intersections;
 
-    @Getter
-    private final List<Rectangle2D> cells = new ArrayList<>();
+    private final DebugDrawer debugDrawer;
 
-    public void execute() {
+    @Getter
+    private List<Rectangle2D> cells;
+
+
+    @Autowired
+    public CellIdentifier(DebugDrawer debugDrawer) {
+        this.debugDrawer = debugDrawer;
+    }
+
+    public void execute(BufferedImage img, List<Line2D> ls) {
         log.info("Starting CellIdentifier");
+
+        image = img;
+        lines = ls;
+        cells = new ArrayList<>();
 
         log.info("Searching intersections...");
         findIntersections();
@@ -57,7 +70,7 @@ public class CellIdentifier {
                 }
             }
         }
-        DebugDrawer.saveDebugImage(image, "cells");
+        debugDrawer.saveDebugImage(image, "cells");
     }
 
 
@@ -176,7 +189,7 @@ public class CellIdentifier {
             g.setColor(Color.RED);
             g.drawString(String.valueOf(nodeMatrix[x][y]), x, y);
         }
-        DebugDrawer.saveDebugImage(debugImage, "labels");
+        debugDrawer.saveDebugImage(debugImage, "labels");
 
         log.debug("Found {} intersections", intersections.size());
     }

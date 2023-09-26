@@ -5,29 +5,49 @@ import lombok.extern.slf4j.Slf4j;
 import org.apache.pdfbox.pdmodel.PDDocument;
 import org.apache.pdfbox.pdmodel.PDPage;
 import org.apache.pdfbox.text.PDFTextStripperByArea;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Component;
 
 import java.awt.geom.Rectangle2D;
 import java.io.File;
-import java.sql.Array;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 import java.util.Optional;
 
 @Slf4j
+@Component
 public class CellReader {
 
-    private final File pdfFile;
-    private final Rectangle2D[][] table;
-    final int DPI = 300;
-    private int pageIndex;
-
+    @Value("${pdf.dpi}")
+    private int DPI;
     private static final String[] DEFAULT_HEADER = WordUtils.loadDictionary("/dictionaries/HeaderAllowlist.txt");
 
-    public CellReader(File pdfFile, int pageIndex, Rectangle2D[][] table) {
-        this.pdfFile = pdfFile;
-        this.table = table;
-        this.pageIndex = pageIndex;
+    private boolean documentClosed = true;
+    private PDDocument document;
+
+
+    public void setPdfFile(File pdfFile) {
+        if (!documentClosed)
+            finish();
+        try {
+            document = PDDocument.load(pdfFile);
+            documentClosed = false;
+        } catch (IOException e) {
+            log.error("Error while loading pdf", e);
+        }
+    }
+
+    /**
+     * Closes the pdf document
+     */
+    public void finish() {
+        try {
+            document.close();
+            documentClosed = true;
+        } catch (IOException e) {
+            log.error("Failed to close document: ", e);
+        }
     }
 
     /**
@@ -38,14 +58,15 @@ public class CellReader {
         return pixelVal * 72 / dpi;
     }
 
-    public Optional<String[][]> readArea() throws Exception {
-
+    public Optional<String[][]> processPage(int page, Rectangle2D[][] table) {
+        if (documentClosed) {
+            log.error("Document is closed. Probably the file was not set.");
+            return Optional.empty();
+        }
         String[][] results = new String[table.length][table[0].length];
 
-        try (PDDocument pd = PDDocument.load(pdfFile)) {
-
+        try {
             PDFTextStripperByArea textStripper = new PDFTextStripperByArea();
-
             for (int i = 0; i < table.length; i++) {
                 for (int j = 0; j < table[i].length; j++) {
                     Rectangle2D rect = transformToPDFRectangle(table, i, j);
@@ -53,7 +74,7 @@ public class CellReader {
                     textStripper.addRegion(i + "_" + j, rect);
                 }
             }
-            PDPage docPage = pd.getPage(pageIndex);
+            PDPage docPage = document.getPage(page);
 
             textStripper.extractRegions(docPage);
 
@@ -64,12 +85,10 @@ public class CellReader {
                     results[i][j] = textForRegion;
                 }
             }
-            results = verifyTable(results);
-
-        } catch (Exception e) {
-            log.error("Error while reading pdf: " + e.getMessage());
-            throw e;
+        } catch (IOException e) {
+            log.error("Error while reading pdf", e);
         }
+        results = verifyTable(results);
         return Optional.ofNullable(results);
     }
 
