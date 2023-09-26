@@ -7,6 +7,8 @@ target/
 /logs/
 .pgdata/
 /debug/
+application-dev.properties
+log4j2-dev.xml
 
 ### IntelliJ IDEA ###
 .idea/modules.xml

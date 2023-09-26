@@ -7,6 +7,9 @@ import com.jaypi4c.recognition.TableExtractor;
 import com.jaypi4c.utils.DebugDrawer;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.pdfbox.pdmodel.PDDocument;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Component;
 
 import java.awt.geom.Rectangle2D;
 import java.io.File;
@@ -14,37 +17,47 @@ import java.io.IOException;
 import java.util.Arrays;
 import java.util.Optional;
 
-
 @Slf4j
-public class Main {
+@Component
+public class Pipeline {
 
-    public static void main(String[] args) throws Exception {
-        log.info("Starting application");
+    @Value("${io.dataFolder}")
+    private String ioFolder;
 
-        String inputFolder = "/io/data";
+    private final OpenEhrManager openEhrManager;
+    private final TableExtractor tableExtractor;
+    private final CellReader cellReader;
+    private final DebugDrawer debugDrawer;
 
-        File[] files = getFiles(inputFolder);
+    @Autowired
+    Pipeline(OpenEhrManager openEhrManager, TableExtractor tableExtractor, CellReader cellReader, DebugDrawer debugDrawer) {
+        this.openEhrManager = openEhrManager;
+        this.tableExtractor = tableExtractor;
+        this.cellReader = cellReader;
+        this.debugDrawer = debugDrawer;
+    }
 
-        // files = new File[]{new File("/home/jonas/Studium/cloud/BA/BA Daten/" + "SF_20220825_50170_HA1_LETTER.pdf")};
+    public void start() {
 
-        OpenEhrManager openEhrManager = new OpenEhrManager();
-
+        File[] files = getFiles(ioFolder);
         for (int i = 0; i < files.length; i++) {
             File file = files[i];
             log.info("Starting with file {}", file.getName());
-            DebugDrawer.setCurrentFilename(file.getName());
+
+            debugDrawer.setCurrentFilename(file.getName());
+            tableExtractor.setCurrentFile(file);
+            cellReader.setPdfFile(file);
             int numberOfPages = getNumberOfPages(file);
             for (int page = 0; page < numberOfPages; page++) {
-                DebugDrawer.setCurrentPage(page);
-                TableExtractor tableExtractor = new TableExtractor(file, page);
+                debugDrawer.setCurrentPage(page);
 
-                tableExtractor.start();
-                tableExtractor.finish();
+                tableExtractor.processPage(page);
 
                 if (tableExtractor.wasSuccessful()) {
                     Rectangle2D[][] table = tableExtractor.getTable();
-                    CellReader cr = new CellReader(file, page, table);
-                    Optional<String[][]> resultsOpt = cr.readArea();
+
+
+                    Optional<String[][]> resultsOpt = cellReader.processPage(page, table);
                     if (resultsOpt.isPresent()) {
                         String[][] results = resultsOpt.get();
                         print2D(results);
@@ -55,14 +68,20 @@ public class Main {
                 }
                 log.info("Finished page {}, {}%", page, (page + 1) * 100 / numberOfPages);
             }
+            cellReader.finish();
+            tableExtractor.finish();
             log.info("Finished file {}, {}%", file.getName(), (i + 1) * 100 / files.length);
         }
-        log.info("Finished application");
     }
 
     private static File[] getFiles(String path) {
         File folder = new File(path);
-        return Arrays.stream(folder.listFiles())
+        File[] entries = folder.listFiles();
+        if (entries == null) {
+            log.error("Could not find folder {}", path);
+            System.exit(-1);
+        }
+        return Arrays.stream(entries)
                 .filter(file -> file.getName().endsWith(".pdf"))
                 .toArray(File[]::new);
     }
