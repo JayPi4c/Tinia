@@ -9,7 +9,11 @@ import org.springframework.stereotype.Component;
 import java.awt.*;
 import java.awt.geom.Line2D;
 import java.awt.image.BufferedImage;
+import java.awt.image.DataBufferByte;
+import java.awt.image.DataBufferInt;
+import java.awt.image.Raster;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 @Slf4j
@@ -110,34 +114,45 @@ public class LineExtractor {
 
     private BufferedImage removeByAverageIntensity(BufferedImage bi) {
         final double threshold = 0.35;
-        BufferedImage newImage = ImageUtils.deepCopy(bi);
+        final int offset = 5;
+
+        int[] pixels = ((DataBufferInt) bi.getRaster().getDataBuffer()).getData();
+        int[] result = Arrays.copyOf(pixels, pixels.length);
 
         for (int x = 0; x < bi.getWidth(); x++) {
             for (int y = 0; y < bi.getHeight(); y++) {
-                double avg = getAverageIntensity(bi, x, y);
-                if (avg < threshold) {
-                    newImage.setRGB(x, y, Color.WHITE.getRGB());
+                double sum = 0;
+                int pixelCounter = 0;
+                for (int dx = -offset; dx <= offset; dx++) {
+                    for (int dy = -offset; dy <= offset; dy++) {
+                        int neighborX = x + dx;
+                        int neighborY = y + dy;
+
+                        if (neighborX >= 0 && neighborX < bi.getWidth() && neighborY >= 0 && neighborY < bi.getHeight()) {
+                            int neighborIndex = (neighborY * bi.getWidth() + neighborX);
+                            int pixelVal = pixels[neighborIndex];
+                            int neighborRed = (pixelVal >> 16) & 0xff;
+                            int neighborGreen = (pixelVal >> 8) & 0xff;
+                            int neighborBlue = (pixelVal) & 0xff;
+                            pixelCounter++;
+                            sum += (neighborRed + neighborGreen + neighborBlue);
+                        }
+                    }
+                }
+                sum /= (3 * 255d);
+                if (sum / pixelCounter < threshold) {
+                    int currentIndex = (y * bi.getWidth() + x);
+                    result[currentIndex] = Color.WHITE.getRGB();
                 }
             }
         }
+
+        BufferedImage newImage = new BufferedImage(bi.getWidth(), bi.getHeight(), BufferedImage.TYPE_INT_ARGB);
+        final int[] a = ((DataBufferInt) newImage.getRaster().getDataBuffer()).getData();
+        System.arraycopy(result, 0, a, 0, result.length);
         return newImage;
     }
 
-    private double getAverageIntensity(BufferedImage bi, int x, int y) {
-        int offset = 5;
-        int pixelCounter = 0;
-        double sum = 0;
-        for (int i = x - offset; i <= x + offset; i++) {
-            for (int j = y - offset; j <= y + offset; j++) {
-                if (i < 0 || i >= bi.getWidth() || j < 0 || j >= bi.getHeight()) {
-                    continue;
-                }
-                pixelCounter++;
-                sum += ImageUtils.getGray(bi.getRGB(i, j));
-            }
-        }
-        return sum / 255d / (double) pixelCounter;
-    }
 
     private void combineLines() {
         log.debug("Starting with {} lines", lines.size());
