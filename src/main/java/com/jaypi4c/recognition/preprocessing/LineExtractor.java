@@ -3,13 +3,18 @@ package com.jaypi4c.recognition.preprocessing;
 import com.jaypi4c.utils.DebugDrawer;
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.pdfbox.rendering.ImageType;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.awt.*;
 import java.awt.geom.Line2D;
 import java.awt.image.BufferedImage;
+import java.awt.image.DataBufferByte;
+import java.awt.image.DataBufferInt;
+import java.awt.image.Raster;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 @Slf4j
@@ -110,34 +115,74 @@ public class LineExtractor {
 
     private BufferedImage removeByAverageIntensity(BufferedImage bi) {
         final double threshold = 0.35;
-        BufferedImage newImage = ImageUtils.deepCopy(bi);
 
-        for (int x = 0; x < bi.getWidth(); x++) {
-            for (int y = 0; y < bi.getHeight(); y++) {
-                double avg = getAverageIntensity(bi, x, y);
-                if (avg < threshold) {
-                    newImage.setRGB(x, y, Color.WHITE.getRGB());
+        int[] pixels = ((DataBufferInt) bi.getRaster().getDataBuffer()).getData();
+        int[] result = Arrays.copyOf(pixels, pixels.length);
+
+        final int THREAD_COUNT = 4;
+        List<Thread> threads = new ArrayList<>();
+        for (int i = 0; i < THREAD_COUNT; i++) {
+            int finalI = i;
+            int spacer = bi.getWidth() / THREAD_COUNT;
+            Thread thread = new Thread(() -> {
+                for (int x = finalI * spacer; x < (finalI + 1) * spacer; x++) {
+                    for (int y = 0; y < bi.getHeight(); y++) {
+                        if (getAvg(x, y, bi.getWidth(), bi.getHeight(), pixels) < threshold) {
+                            int currentIndex = (y * bi.getWidth() + x);
+                            result[currentIndex] = Color.WHITE.getRGB();
+                        }
+                    }
                 }
+            });
+            thread.start();
+            threads.add(thread);
+        }
+
+        for (Thread thread : threads) {
+            try {
+                thread.join();
+            } catch (InterruptedException e) {
+                log.error("Failed to join thread", e);
             }
         }
-        return newImage;
+
+        BufferedImage image = new BufferedImage(bi.getWidth(), bi.getHeight(), BufferedImage.TYPE_INT_RGB);
+        // expand the array to match the image data format
+        int[] imageArray = new int[result.length * 3];
+        for (int i = 0; i < result.length; i++) {
+            int pixel = result[i];
+            imageArray[i * 3] = (pixel >> 16) & 0xff;
+            imageArray[i * 3 + 1] = (pixel >> 8) & 0xff;
+            imageArray[i * 3 + 2] = (pixel) & 0xff;
+        }
+
+        image.getRaster().setPixels(0, 0, bi.getWidth(), bi.getHeight(), imageArray);
+        return image;
     }
 
-    private double getAverageIntensity(BufferedImage bi, int x, int y) {
+    private double getAvg(int x, int y, int w, int h, int[] pixels) {
         int offset = 5;
-        int pixelCounter = 0;
         double sum = 0;
-        for (int i = x - offset; i <= x + offset; i++) {
-            for (int j = y - offset; j <= y + offset; j++) {
-                if (i < 0 || i >= bi.getWidth() || j < 0 || j >= bi.getHeight()) {
-                    continue;
+        int pixelCounter = 0;
+        for (int dx = -offset; dx <= offset; dx++) {
+            for (int dy = -offset; dy <= offset; dy++) {
+                int neighborX = x + dx;
+                int neighborY = y + dy;
+
+                if (neighborX >= 0 && neighborX < w && neighborY >= 0 && neighborY < h) {
+                    int neighborIndex = (neighborY * w + neighborX);
+                    int pixelVal = pixels[neighborIndex];
+                    int neighborRed = (pixelVal >> 16) & 0xff;
+                    int neighborGreen = (pixelVal >> 8) & 0xff;
+                    int neighborBlue = (pixelVal) & 0xff;
+                    pixelCounter++;
+                    sum += (neighborRed + neighborGreen + neighborBlue);
                 }
-                pixelCounter++;
-                sum += ImageUtils.getGray(bi.getRGB(i, j));
             }
         }
-        return sum / 255d / (double) pixelCounter;
+        return sum / (3 * 255d) / pixelCounter;
     }
+
 
     private void combineLines() {
         log.debug("Starting with {} lines", lines.size());
