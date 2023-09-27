@@ -27,6 +27,16 @@ public class OpenEhrManager {
     private final EhrEndpoint ehrEndpoint;
     private final NephroMedikationCompositionFactory nephroMedikationCompositionFactory;
 
+    /**
+     * the ID for the Arztbrief on application level
+     */
+    private UUID applicationUserID;
+    /**
+     * The ID for the EHR returned from EHRBase
+     */
+    private UUID ehrID;
+
+
     @Autowired
     public OpenEhrManager(OpenEhrClient openEhrClient, NephroMedikationCompositionFactory factory) {
         this.openEhrClient = openEhrClient;
@@ -35,13 +45,18 @@ public class OpenEhrManager {
         nephroMedikationCompositionFactory = factory;
     }
 
-    public boolean sendNephroMedikationData(String[][] medicationMatrix) {
-        UUID applicationUserID = UUID.randomUUID();
-        UUID ehr = ehrEndpoint.createEhr(createEhrStatus(applicationUserID));
+    public void updateIDs() {
+        applicationUserID = UUID.randomUUID();
+        ehrID = ehrEndpoint.createEhr(createEhrStatus(applicationUserID));
+    }
 
+    public boolean sendNephroMedikationData(String[][] medicationMatrix) {
+        if (applicationUserID == null || ehrID == null) {
+            updateIDs();
+        }
         NephroMedikationComposition composition = nephroMedikationCompositionFactory.createComposition(medicationMatrix);
 
-        CompositionEndpoint compositionEndpoint = openEhrClient.compositionEndpoint(ehr);
+        CompositionEndpoint compositionEndpoint = openEhrClient.compositionEndpoint(ehrID);
         compositionEndpoint.mergeCompositionEntity(composition);
         return true;
     }
