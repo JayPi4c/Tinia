@@ -3,9 +3,7 @@ package com.jaypi4c.ba.pipeline.medicationplan.recognition.preprocessing;
 import lombok.extern.slf4j.Slf4j;
 
 import javax.imageio.ImageIO;
-
 import java.awt.*;
-import java.util.List;
 import java.awt.geom.Line2D;
 import java.awt.geom.Point2D;
 import java.awt.image.BufferedImage;
@@ -13,6 +11,7 @@ import java.awt.image.ColorModel;
 import java.awt.image.WritableRaster;
 import java.io.File;
 import java.io.IOException;
+import java.util.List;
 
 @Slf4j
 public class ImageUtils {

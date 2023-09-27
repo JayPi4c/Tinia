@@ -2,25 +2,19 @@ package com.jaypi4c.ba.pipeline.medicationplan.openehr.compositions.nephromedika
 
 import com.jaypi4c.ba.pipeline.medicationplan.openehr.compositions.ICompositionFactory;
 import com.jaypi4c.ba.pipeline.medicationplan.openehr.compositions.nephromedikationcomposition.definition.*;
-
-import static com.jaypi4c.ba.pipeline.medicationplan.utils.WordUtils.loadDictionary;
-import static com.jaypi4c.ba.pipeline.medicationplan.utils.WordUtils.LDResult;
-import static com.jaypi4c.ba.pipeline.medicationplan.utils.WordUtils.findClosestWord;
-
 import com.nedap.archie.rm.generic.PartyIdentified;
 import com.nedap.archie.rm.generic.PartySelf;
-
 import lombok.extern.slf4j.Slf4j;
-
 import org.ehrbase.client.classgenerator.shareddefinition.Language;
 import org.ehrbase.client.classgenerator.shareddefinition.Setting;
 import org.ehrbase.client.classgenerator.shareddefinition.Territory;
 import org.springframework.stereotype.Component;
 
-
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+
+import static com.jaypi4c.ba.pipeline.medicationplan.utils.WordUtils.*;
 
 
 /**

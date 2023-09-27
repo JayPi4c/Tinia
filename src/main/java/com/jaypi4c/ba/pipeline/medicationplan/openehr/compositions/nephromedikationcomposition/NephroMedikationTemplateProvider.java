@@ -15,7 +15,7 @@ public class NephroMedikationTemplateProvider implements TemplateProvider {
 
     @Override
     public Optional<OPERATIONALTEMPLATE> find(String templateId) {
-        InputStream stream = getClass().getResourceAsStream("/Nephro_Medikation.opt");
+        InputStream stream = getClass().getResourceAsStream("/templates/Nephro_Medikation.opt");
         try {
             TemplateDocument template = TemplateDocument.Factory.parse(stream);
             return Optional.ofNullable(template.getTemplate());
