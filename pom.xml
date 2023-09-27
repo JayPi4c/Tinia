@@ -7,12 +7,12 @@
         <version>3.1.4</version>
         <relativePath/>
     </parent>
-    <groupId>com.jaypi4c</groupId>
-    <artifactId>MedikationsPipeline</artifactId>
-    <version>0.0.1-SNAPSHOT</version>
+    <groupId>com.jaypi4c.ba.pipeline</groupId>
+    <artifactId>medicationplan</artifactId>
+    <version>1.0.0</version>
     <packaging>jar</packaging>
 
-    <name>MedikationsPipeline</name>
+    <name>medication plan pipeline</name>
     <url>http://maven.apache.org</url>
 
     <properties>
@@ -75,7 +75,7 @@
     </dependencies>
 
     <build>
-        <finalName>pipeline</finalName>
+        <finalName>medication-plan-pipeline</finalName>
         <plugins>
             <plugin>
                 <groupId>org.springframework.boot</groupId>
