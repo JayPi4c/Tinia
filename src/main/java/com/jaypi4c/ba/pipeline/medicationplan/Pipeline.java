@@ -1,10 +1,9 @@
 package com.jaypi4c.ba.pipeline.medicationplan;
 
-import com.jaypi4c.ba.pipeline.medicationplan.utils.DebugDrawer;
 import com.jaypi4c.ba.pipeline.medicationplan.openehr.OpenEhrManager;
-
 import com.jaypi4c.ba.pipeline.medicationplan.recognition.CellReader;
 import com.jaypi4c.ba.pipeline.medicationplan.recognition.TableExtractor;
+import com.jaypi4c.ba.pipeline.medicationplan.utils.DebugDrawer;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.pdfbox.pdmodel.PDDocument;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -38,6 +37,8 @@ public class Pipeline {
     }
 
     public void start() {
+
+        openEhrManager.checkForTemplate("Nephro_Medikation");
 
         File[] files = getFiles(ioFolder);
         for (int i = 0; i < files.length; i++) {
