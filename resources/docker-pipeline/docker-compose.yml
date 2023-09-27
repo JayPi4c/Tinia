@@ -2,7 +2,7 @@ version: '3'
 
 services:
   pipeline:
-    image: registry.gitlab.uni-oldenburg.de/ebki3136/mediaktionsplan-pipeline:7-introducing-spring-for-better-project-structure
+    image: registry.gitlab.uni-oldenburg.de/ebki3136/mediaktionsplan-pipeline
     volumes:
       - /home/jonas/Studium/cloud/BA/TestPDF:/io/data
       - /home/jonas/Studium/Programming/BA/Medikations-Pipeline/debug:/io/debug

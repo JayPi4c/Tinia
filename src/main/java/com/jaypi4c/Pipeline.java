@@ -47,6 +47,7 @@ public class Pipeline {
             debugDrawer.setCurrentFilename(file.getName());
             tableExtractor.setCurrentFile(file);
             cellReader.setPdfFile(file);
+            openEhrManager.updateIDs();
             int numberOfPages = getNumberOfPages(file);
             for (int page = 0; page < numberOfPages; page++) {
                 debugDrawer.setCurrentPage(page);
