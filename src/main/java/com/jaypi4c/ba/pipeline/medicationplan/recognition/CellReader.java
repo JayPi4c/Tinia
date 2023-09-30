@@ -14,7 +14,6 @@ import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -62,12 +61,12 @@ public class CellReader {
         return pixelVal * 72 / dpi;
     }
 
-    public Optional<String[][]> processPage(int page, Rectangle2D[][] table) {
+    public ReadingResult processPage(int page, Rectangle2D[][] table) {
         if (documentClosed) {
             log.error("Document is closed. Probably the file was not set.");
-            return Optional.empty();
+            return new ReadingResult(null, null);
         }
-
+        String date = null;
         String[][] results = new String[table.length][table[0].length];
         PDPage docPage = document.getPage(page);
 
@@ -80,12 +79,12 @@ public class CellReader {
             stripper.setEndPage(page + 1);
             String text = stripper.getText(document);
             Matcher matcher = DATE_PATTERN.matcher(text);
-            String date = null;
+
             if (matcher.find()) {
                 date = matcher.group(0);
-                log.info("Found date: {}", date);
+                log.debug("Found date: {}", date);
             } else {
-                log.info("No date found.");
+                log.debug("No date found.");
             }
 
 
@@ -112,7 +111,7 @@ public class CellReader {
             log.error("Error while reading pdf", e);
         }
         results = verifyTable(results);
-        return Optional.ofNullable(results);
+        return new ReadingResult(results, date);
     }
 
     private String[][] verifyTable(String[][] table) {
@@ -177,4 +176,15 @@ public class CellReader {
         return new Rectangle2D.Double(x, y, width, height);
     }
 
+    public static record ReadingResult(String[][] table, String date) {
+
+        public boolean hasTable() {
+            return table != null;
+        }
+
+        public boolean hasDate() {
+            return date != null;
+        }
+
+    }
 }

@@ -11,6 +11,9 @@ import org.ehrbase.client.classgenerator.shareddefinition.Territory;
 import org.springframework.stereotype.Component;
 
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeParseException;
+import java.time.temporal.TemporalAccessor;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -29,7 +32,9 @@ import static com.jaypi4c.ba.pipeline.medicationplan.utils.WordUtils.*;
 @Component
 public class NephroMedikationCompositionFactory implements ICompositionFactory<NephroMedikationComposition> {
 
-    public NephroMedikationComposition createComposition(String[][] medicationMatrix) {
+    private final DateTimeFormatter dateFormatter = DateTimeFormatter.ofPattern("dd.MM.yyyy");
+
+    public NephroMedikationComposition createComposition(String[][] medicationMatrix, String date) {
         NephroMedikationComposition composition = prepareComposition(new NephroMedikationComposition());
 
         // setting Fallidentifikation
@@ -49,12 +54,13 @@ public class NephroMedikationCompositionFactory implements ICompositionFactory<N
             String handelsname = row[1].trim();
             String staerke = row[2].trim();
             String form = row[3].trim();
+            String einheit = row[8].trim();
+            String hinweise = row[9].trim();
+            String grund = row[10].trim();
             LDResult result = findClosestWord(form, formDict);
             form = result.closestWord();
             log.info("Found {} for {}", form, result.targetWord());
 
-
-            // TODO: extract information from matrix and put into composition
             VerordnungVonArzneimittelInstruction arzneimittel = prepareInstruction(new VerordnungVonArzneimittelInstruction());
 
 
@@ -74,6 +80,13 @@ public class NephroMedikationCompositionFactory implements ICompositionFactory<N
 
             verordnung.setArzneimittel(arzneimittelCluster);
 
+
+            try {
+                TemporalAccessor datumDerVerordnungValue = dateFormatter.parse(date);
+                verordnung.setDatumDerVerordnungValue(datumDerVerordnungValue);
+            } catch (DateTimeParseException e) {
+                log.error("Error while parsing date", e);
+            }
 
             arzneimittel.setVerordnung(List.of(verordnung));
             list.add(arzneimittel);

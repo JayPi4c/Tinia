@@ -3,6 +3,7 @@ package com.jaypi4c.ba.pipeline.medicationplan.openehr;
 
 import com.jaypi4c.ba.pipeline.medicationplan.openehr.compositions.nephromedikationcomposition.NephroMedikationComposition;
 import com.jaypi4c.ba.pipeline.medicationplan.openehr.compositions.nephromedikationcomposition.NephroMedikationCompositionFactory;
+import com.jaypi4c.ba.pipeline.medicationplan.recognition.CellReader;
 import com.nedap.archie.rm.datavalues.DvText;
 import com.nedap.archie.rm.ehr.EhrStatus;
 import com.nedap.archie.rm.generic.PartySelf;
@@ -127,11 +128,15 @@ public class OpenEhrManager {
         ehrID = ehrEndpoint.createEhr(createEhrStatus(applicationUserID));
     }
 
-    public boolean sendNephroMedikationData(String[][] medicationMatrix) {
+    public boolean sendNephroMedikationData(CellReader.ReadingResult medication) {
         if (applicationUserID == null || ehrID == null) {
             updateIDs();
         }
-        NephroMedikationComposition composition = nephroMedikationCompositionFactory.createComposition(medicationMatrix);
+
+        String[][] medicationMatrix = medication.table();
+        String date = medication.date();
+
+        NephroMedikationComposition composition = nephroMedikationCompositionFactory.createComposition(medicationMatrix, date);
 
         CompositionEndpoint compositionEndpoint = openEhrClient.compositionEndpoint(ehrID);
         compositionEndpoint.mergeCompositionEntity(composition);
