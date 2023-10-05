@@ -14,7 +14,6 @@ import java.awt.geom.Rectangle2D;
 import java.io.File;
 import java.io.IOException;
 import java.util.Arrays;
-import java.util.Optional;
 
 @Slf4j
 @Component
@@ -59,11 +58,10 @@ public class Pipeline {
                     Rectangle2D[][] table = tableExtractor.getTable();
 
 
-                    Optional<String[][]> resultsOpt = cellReader.processPage(page, table);
-                    if (resultsOpt.isPresent()) {
-                        String[][] results = resultsOpt.get();
-                        print2D(results);
-                        openEhrManager.sendNephroMedikationData(results);
+                    CellReader.ReadingResult result = cellReader.processPage(page, table);
+                    if (result.hasTable()) {
+                        print2D(result.table());
+                        openEhrManager.sendNephroMedikationData(result);
                     }
                 } else {
                     log.info("No medication table found");
