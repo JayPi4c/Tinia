@@ -1,7 +1,9 @@
 package com.jaypi4c.ba.pipeline.medicationplan.openehr.compositions.nephromedikationcomposition;
 
+import com.google.gson.Gson;
 import com.jaypi4c.ba.pipeline.medicationplan.openehr.compositions.ICompositionFactory;
 import com.jaypi4c.ba.pipeline.medicationplan.openehr.compositions.nephromedikationcomposition.definition.*;
+import com.jaypi4c.ba.pipeline.medicationplan.utils.WordUtils;
 import com.nedap.archie.rm.generic.PartyIdentified;
 import com.nedap.archie.rm.generic.PartySelf;
 import lombok.extern.slf4j.Slf4j;
@@ -10,12 +12,18 @@ import org.ehrbase.client.classgenerator.shareddefinition.Setting;
 import org.ehrbase.client.classgenerator.shareddefinition.Territory;
 import org.springframework.stereotype.Component;
 
+import java.io.BufferedReader;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.nio.charset.StandardCharsets;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
 import java.time.temporal.TemporalAccessor;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import static com.jaypi4c.ba.pipeline.medicationplan.utils.WordUtils.*;
 
@@ -43,6 +51,7 @@ public class NephroMedikationCompositionFactory implements ICompositionFactory<N
         composition.setFallidentifikation(fallidentifikation);
 
         String[] formDict = loadDictionary("/dictionaries/DarreichungsformAllowlist.txt");
+        Map<String, String> aliases = loadAliases("/aliases/alias.json");
 
 
         // jede Zeile in der Tabelle ist eine Verordnung. So kann eine ganze Tabelle in einer composition gespeichert werden.
@@ -57,9 +66,16 @@ public class NephroMedikationCompositionFactory implements ICompositionFactory<N
             String einheit = row[8].trim();
             String hinweise = row[9].trim();
             String grund = row[10].trim();
-            LDResult result = findClosestWord(form, formDict);
-            form = result.closestWord();
-            log.info("Found {} for {}", form, result.targetWord());
+
+            if (aliases.containsKey(form)) {
+                String oldForm = form;
+                form = aliases.get(form);
+                log.info("Changed {} to {} via alias ", oldForm, form);
+            } else {
+                LDResult result = findClosestWord(form, formDict);
+                form = result.closestWord();
+                log.info("Found {} for {}", form, result.targetWord());
+            }
 
             VerordnungVonArzneimittelInstruction arzneimittel = prepareInstruction(new VerordnungVonArzneimittelInstruction());
 
@@ -114,7 +130,7 @@ public class NephroMedikationCompositionFactory implements ICompositionFactory<N
     private static NephroMedikationComposition prepareComposition(NephroMedikationComposition composition) {
         composition.setLanguage(Language.DE);
         PartyIdentified composer = new PartyIdentified();
-        composer.setName("Max Mustermann");
+        composer.setName("Medication Plan Pipeline (automated)");
         composition.setComposer(composer);
         composition.setTerritory(Territory.DE);
 
@@ -130,5 +146,34 @@ public class NephroMedikationCompositionFactory implements ICompositionFactory<N
         return composition;
     }
 
+    public static Map<String, String> loadAliases(String path) {
+        try (InputStream is = WordUtils.class.getResourceAsStream(path);
+             BufferedReader br = new BufferedReader(new InputStreamReader(is, StandardCharsets.UTF_8))) {
+            StringBuilder json = new StringBuilder();
+            String line;
+            while ((line = br.readLine()) != null) {
+                json.append(line);
+            }
+            Gson gson = new Gson();
+            Aliases[] aliases = gson.fromJson(json.toString(), Aliases[].class);
+            Map<String, String> map = new HashMap<>();
+            for (Aliases a : aliases) {
+                map.putAll(a.toMap());
+            }
+            return map;
+        } catch (Exception e) {
+            log.error("Error while loading aliases", e);
+        }
+        return new HashMap<>();
+    }
 
+    private record Aliases(String real, String[] aliases) {
+        Map<String, String> toMap() {
+            Map<String, String> map = new HashMap<>();
+            for (String alias : aliases) {
+                map.put(alias, real);
+            }
+            return map;
+        }
+    }
 }

@@ -176,7 +176,7 @@ public class CellReader {
         return new Rectangle2D.Double(x, y, width, height);
     }
 
-    public static record ReadingResult(String[][] table, String date) {
+    public record ReadingResult(String[][] table, String date) {
 
         public boolean hasTable() {
             return table != null;
