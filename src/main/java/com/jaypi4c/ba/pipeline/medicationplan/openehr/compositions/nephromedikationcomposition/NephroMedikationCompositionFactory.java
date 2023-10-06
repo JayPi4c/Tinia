@@ -130,7 +130,7 @@ public class NephroMedikationCompositionFactory implements ICompositionFactory<N
     private static NephroMedikationComposition prepareComposition(NephroMedikationComposition composition) {
         composition.setLanguage(Language.DE);
         PartyIdentified composer = new PartyIdentified();
-        composer.setName("Max Mustermann");
+        composer.setName("Medication Plan Pipeline (automated)");
         composition.setComposer(composer);
         composition.setTerritory(Territory.DE);
 
