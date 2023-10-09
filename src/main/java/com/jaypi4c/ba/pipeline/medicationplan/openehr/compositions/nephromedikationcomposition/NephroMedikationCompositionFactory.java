@@ -68,7 +68,11 @@ public class NephroMedikationCompositionFactory implements ICompositionFactory<N
             String[] row = medicationMatrix[i];
             String wirkstoff = row[0].trim();
 
-            validator.validate(wirkstoff);
+            if (validator.validate(wirkstoff)) {
+                log.info("Validated {}", wirkstoff);
+            } else {
+                log.warn("Could not validate {}", wirkstoff);
+            }
 
             String handelsname = row[1].trim();
             String staerke = row[2].trim();
