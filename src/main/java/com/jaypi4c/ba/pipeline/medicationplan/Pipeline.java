@@ -37,7 +37,7 @@ public class Pipeline {
 
     public void start() {
 
-        openEhrManager.checkForTemplate("Nephro_Medikation");
+        openEhrManager.checkForTemplate();
 
         File[] files = getFiles(ioFolder);
         for (int i = 0; i < files.length; i++) {

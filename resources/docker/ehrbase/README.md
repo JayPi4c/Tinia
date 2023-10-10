@@ -1,8 +1,10 @@
 # EhrBase query Beispiele
 
 ## Anzeigen von EHR_ID, subject_id und type & namespace
+
 **Adresse:** http://localhost:8080/ehrbase/rest/openehr/v1/query/aql?q= <br>
-**Query:** 
+**Query:**
+
 ```aql
 SELECT 
     e/ehr_id/value, 
@@ -13,11 +15,11 @@ FROM
     EHR e
 ```
 
-
 ## Anzeigen von EHR_ID und composition_id
 
 **Adresse:** http://localhost:8080/ehrbase/rest/openehr/v1/query/aql?q= <br>
-**Query:** 
+**Query:**
+
 ```aql
 SELECT 
     e/ehr_id/value, 
