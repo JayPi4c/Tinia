@@ -3,9 +3,9 @@ package com.jaypi4c.ba.pipeline.medicationplan.openehr.compositions.nephromedika
 import javax.annotation.processing.Generated;
 
 @Generated(
-    value = "org.ehrbase.client.classgenerator.ClassGenerator",
-    date = "2023-09-13T13:58:55.865715598+02:00",
-    comments = "https://github.com/ehrbase/openEHR_SDK Version: 1.29.0"
+        value = "org.ehrbase.openehr.sdk.generator.ClassGenerator",
+        date = "2023-10-10T14:34:10.860788611+02:00",
+        comments = "https://github.com/ehrbase/openEHR_SDK Version: 2.4.0"
 )
 public interface DosierungNichtTaeglichFrequenzChoice {
 }

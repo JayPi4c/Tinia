@@ -4,12 +4,13 @@ import com.google.gson.Gson;
 import com.jaypi4c.ba.pipeline.medicationplan.openehr.compositions.ICompositionFactory;
 import com.jaypi4c.ba.pipeline.medicationplan.openehr.compositions.nephromedikationcomposition.definition.*;
 import com.jaypi4c.ba.pipeline.medicationplan.utils.WordUtils;
+import com.jaypi4c.ba.pipeline.medicationplan.validation.IActiveIngredientValidator;
 import com.nedap.archie.rm.generic.PartyIdentified;
 import com.nedap.archie.rm.generic.PartySelf;
 import lombok.extern.slf4j.Slf4j;
-import org.ehrbase.client.classgenerator.shareddefinition.Language;
-import org.ehrbase.client.classgenerator.shareddefinition.Setting;
-import org.ehrbase.client.classgenerator.shareddefinition.Territory;
+import org.ehrbase.openehr.sdk.generator.commons.shareddefinition.Language;
+import org.ehrbase.openehr.sdk.generator.commons.shareddefinition.Setting;
+import org.ehrbase.openehr.sdk.generator.commons.shareddefinition.Territory;
 import org.springframework.stereotype.Component;
 
 import java.io.BufferedReader;
@@ -42,6 +43,13 @@ public class NephroMedikationCompositionFactory implements ICompositionFactory<N
 
     private final DateTimeFormatter dateFormatter = DateTimeFormatter.ofPattern("dd.MM.yyyy");
 
+    private final IActiveIngredientValidator validator;
+
+    public NephroMedikationCompositionFactory(IActiveIngredientValidator validator) {
+        this.validator = validator;
+    }
+
+    @Override
     public NephroMedikationComposition createComposition(String[][] medicationMatrix, String date) {
         NephroMedikationComposition composition = prepareComposition(new NephroMedikationComposition());
 
@@ -60,6 +68,13 @@ public class NephroMedikationCompositionFactory implements ICompositionFactory<N
         for (int i = 1; i < medicationMatrix.length; i++) {
             String[] row = medicationMatrix[i];
             String wirkstoff = row[0].trim();
+
+            if (validator.validate(wirkstoff)) {
+                log.info("Validated {}", wirkstoff);
+            } else {
+                log.warn("Could not validate {}", wirkstoff);
+            }
+
             String handelsname = row[1].trim();
             String staerke = row[2].trim();
             String form = row[3].trim();
