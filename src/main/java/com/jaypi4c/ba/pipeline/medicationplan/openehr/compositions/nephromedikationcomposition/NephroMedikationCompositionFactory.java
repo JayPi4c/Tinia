@@ -158,8 +158,8 @@ public class NephroMedikationCompositionFactory implements ICompositionFactory<N
 
     private static DosierungCluster getDosierungCluster(double dosismenge, String dosisEinheit, String dosierungFreitext, String ereignis) {
         DosierungCluster dosierungCluster = new DosierungCluster();
-        // dosierungCluster.setDosismengeMagnitude(dosismenge);
-        // dosierungCluster.setDosismengeUnits("1");
+        dosierungCluster.setDosismengeMagnitude(dosismenge);
+        dosierungCluster.setDosismengeUnits("1");// dosisEinheit);
         dosierungCluster.setDosiseinheitValue(dosisEinheit);
         dosierungCluster.setDosierungFreitextValue(dosierungFreitext);
 
