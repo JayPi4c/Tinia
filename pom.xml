@@ -20,12 +20,6 @@
         <java.version>17</java.version>
     </properties>
 
-    <repositories>
-        <repository>
-            <id>jitpack.io</id>
-            <url>https://jitpack.io</url>
-        </repository>
-    </repositories>
 
     <dependencies>
         <dependency>
@@ -34,15 +28,9 @@
             <version>2.0.29</version>
         </dependency>
         <dependency>
-            <groupId>com.github.ehrbase</groupId>
-            <artifactId>openEHR_SDK</artifactId>
-            <version>v1.29.0</version>
-            <exclusions>
-                <exclusion>
-                    <groupId>org.slf4j</groupId>
-                    <artifactId>slf4j-simple</artifactId>
-                </exclusion>
-            </exclusions>
+            <groupId>org.ehrbase.openehr.sdk</groupId>
+            <artifactId>client</artifactId>
+            <version>2.4.0</version>
         </dependency>
 
         <dependency>

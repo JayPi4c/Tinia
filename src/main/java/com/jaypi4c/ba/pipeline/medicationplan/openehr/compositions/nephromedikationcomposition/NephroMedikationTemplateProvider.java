@@ -2,7 +2,7 @@ package com.jaypi4c.ba.pipeline.medicationplan.openehr.compositions.nephromedika
 
 import lombok.extern.slf4j.Slf4j;
 import org.apache.xmlbeans.XmlException;
-import org.ehrbase.webtemplate.templateprovider.TemplateProvider;
+import org.ehrbase.openehr.sdk.webtemplate.templateprovider.TemplateProvider;
 import org.openehr.schemas.v1.OPERATIONALTEMPLATE;
 import org.openehr.schemas.v1.TemplateDocument;
 
@@ -15,8 +15,9 @@ public class NephroMedikationTemplateProvider implements TemplateProvider {
 
     @Override
     public Optional<OPERATIONALTEMPLATE> find(String templateId) {
-        InputStream stream = getClass().getResourceAsStream("/templates/Nephro_Medikation.opt");
-        try {
+        if (!templateId.equals("Nephro_Medikation"))
+            return Optional.empty();
+        try (InputStream stream = getClass().getResourceAsStream("/templates/Nephro_Medikation.opt")) {
             TemplateDocument template = TemplateDocument.Factory.parse(stream);
             return Optional.ofNullable(template.getTemplate());
         } catch (XmlException | IOException e) {

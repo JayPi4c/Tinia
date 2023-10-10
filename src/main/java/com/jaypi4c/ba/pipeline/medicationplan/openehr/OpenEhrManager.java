@@ -10,9 +10,9 @@ import com.nedap.archie.rm.generic.PartySelf;
 import com.nedap.archie.rm.support.identification.GenericId;
 import com.nedap.archie.rm.support.identification.PartyRef;
 import lombok.extern.slf4j.Slf4j;
-import org.ehrbase.client.openehrclient.CompositionEndpoint;
-import org.ehrbase.client.openehrclient.EhrEndpoint;
-import org.ehrbase.client.openehrclient.OpenEhrClient;
+import org.ehrbase.openehr.sdk.client.openehrclient.CompositionEndpoint;
+import org.ehrbase.openehr.sdk.client.openehrclient.EhrEndpoint;
+import org.ehrbase.openehr.sdk.client.openehrclient.OpenEhrClient;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
@@ -55,12 +55,12 @@ public class OpenEhrManager {
      */
     private UUID ehrID;
 
+    private final String NEPHRO_TEMPLATE_ID = "Nephro_Medikation";
 
     @Autowired
     public OpenEhrManager(OpenEhrClient openEhrClient, NephroMedikationCompositionFactory factory) {
         this.openEhrClient = openEhrClient;
         this.ehrEndpoint = openEhrClient.ehrEndpoint();
-
         nephroMedikationCompositionFactory = factory;
     }
 

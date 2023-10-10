@@ -1,10 +1,10 @@
 package com.jaypi4c.ba.pipeline.medicationplan.openehr;
 
 import com.nedap.archie.rm.RMObject;
-import org.ehrbase.client.openehrclient.OpenEhrClientConfig;
-import org.ehrbase.client.openehrclient.VersionUid;
-import org.ehrbase.client.openehrclient.defaultrestclient.DefaultRestClient;
-import org.ehrbase.webtemplate.templateprovider.TemplateProvider;
+import com.nedap.archie.rm.support.identification.ObjectVersionId;
+import org.ehrbase.openehr.sdk.client.openehrclient.OpenEhrClientConfig;
+import org.ehrbase.openehr.sdk.client.openehrclient.defaultrestclient.DefaultRestClient;
+import org.ehrbase.openehr.sdk.webtemplate.templateprovider.TemplateProvider;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
@@ -31,7 +31,7 @@ public class MyRestClient extends DefaultRestClient {
     }
 
     @Override
-    protected VersionUid httpPost(URI uri, RMObject body) {
+    protected ObjectVersionId httpPost(URI uri, RMObject body) {
         String auth = username + ":" + password;
         String encodedAuth = "Basic " + java.util.Base64.getEncoder().encodeToString(auth.getBytes());
         Map<String, String> headers = Map.of("Authorization", encodedAuth);

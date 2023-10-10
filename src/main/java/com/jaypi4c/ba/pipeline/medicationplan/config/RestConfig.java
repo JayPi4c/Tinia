@@ -1,8 +1,8 @@
 package com.jaypi4c.ba.pipeline.medicationplan.config;
 
 import com.jaypi4c.ba.pipeline.medicationplan.openehr.compositions.nephromedikationcomposition.NephroMedikationTemplateProvider;
-import org.ehrbase.client.openehrclient.OpenEhrClientConfig;
-import org.ehrbase.webtemplate.templateprovider.TemplateProvider;
+import org.ehrbase.openehr.sdk.client.openehrclient.OpenEhrClientConfig;
+import org.ehrbase.openehr.sdk.webtemplate.templateprovider.TemplateProvider;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

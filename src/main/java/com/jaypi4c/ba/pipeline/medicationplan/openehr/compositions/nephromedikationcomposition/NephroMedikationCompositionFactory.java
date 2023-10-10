@@ -8,9 +8,9 @@ import com.jaypi4c.ba.pipeline.medicationplan.validation.IActiveIngredientValida
 import com.nedap.archie.rm.generic.PartyIdentified;
 import com.nedap.archie.rm.generic.PartySelf;
 import lombok.extern.slf4j.Slf4j;
-import org.ehrbase.client.classgenerator.shareddefinition.Language;
-import org.ehrbase.client.classgenerator.shareddefinition.Setting;
-import org.ehrbase.client.classgenerator.shareddefinition.Territory;
+import org.ehrbase.openehr.sdk.generator.commons.shareddefinition.Language;
+import org.ehrbase.openehr.sdk.generator.commons.shareddefinition.Setting;
+import org.ehrbase.openehr.sdk.generator.commons.shareddefinition.Territory;
 import org.springframework.stereotype.Component;
 
 import java.io.BufferedReader;
