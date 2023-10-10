@@ -4,7 +4,7 @@ import com.google.gson.Gson;
 import com.jaypi4c.ba.pipeline.medicationplan.openehr.compositions.ICompositionFactory;
 import com.jaypi4c.ba.pipeline.medicationplan.openehr.compositions.nephromedikationcomposition.definition.*;
 import com.jaypi4c.ba.pipeline.medicationplan.utils.WordUtils;
-import com.jaypi4c.ba.pipeline.medicationplan.validation.ActiveIngredientValidator;
+import com.jaypi4c.ba.pipeline.medicationplan.validation.IActiveIngredientValidator;
 import com.nedap.archie.rm.generic.PartyIdentified;
 import com.nedap.archie.rm.generic.PartySelf;
 import lombok.extern.slf4j.Slf4j;
@@ -43,12 +43,13 @@ public class NephroMedikationCompositionFactory implements ICompositionFactory<N
 
     private final DateTimeFormatter dateFormatter = DateTimeFormatter.ofPattern("dd.MM.yyyy");
 
-    private final ActiveIngredientValidator validator;
+    private final IActiveIngredientValidator validator;
 
-    public NephroMedikationCompositionFactory(ActiveIngredientValidator validator) {
+    public NephroMedikationCompositionFactory(IActiveIngredientValidator validator) {
         this.validator = validator;
     }
 
+    @Override
     public NephroMedikationComposition createComposition(String[][] medicationMatrix, String date) {
         NephroMedikationComposition composition = prepareComposition(new NephroMedikationComposition());
 

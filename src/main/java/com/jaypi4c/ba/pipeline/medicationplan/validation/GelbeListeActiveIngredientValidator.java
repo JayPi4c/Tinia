@@ -10,9 +10,12 @@ import org.springframework.stereotype.Component;
 import java.io.IOException;
 import java.util.List;
 
+/**
+ * Uses the website gelbe-liste.de to validate active ingredients.
+ */
 @Slf4j
 @Component
-public class GelbeListeActiveIngredientValidator implements ActiveIngredientValidator {
+public class GelbeListeActiveIngredientValidator implements IActiveIngredientValidator {
 
     @Override
     public boolean validate(String activeIngredient) {
