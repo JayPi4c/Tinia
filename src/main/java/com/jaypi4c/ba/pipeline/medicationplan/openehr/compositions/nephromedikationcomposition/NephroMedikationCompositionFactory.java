@@ -5,6 +5,10 @@ import com.jaypi4c.ba.pipeline.medicationplan.openehr.compositions.ICompositionF
 import com.jaypi4c.ba.pipeline.medicationplan.openehr.compositions.nephromedikationcomposition.definition.*;
 import com.jaypi4c.ba.pipeline.medicationplan.utils.WordUtils;
 import com.jaypi4c.ba.pipeline.medicationplan.validation.IActiveIngredientValidator;
+import com.nedap.archie.rm.archetyped.FeederAudit;
+import com.nedap.archie.rm.archetyped.FeederAuditDetails;
+import com.nedap.archie.rm.datavalues.encapsulated.DvEncapsulated;
+import com.nedap.archie.rm.datavalues.encapsulated.DvParsable;
 import com.nedap.archie.rm.generic.PartyIdentified;
 import com.nedap.archie.rm.generic.PartySelf;
 import lombok.extern.slf4j.Slf4j;
@@ -50,8 +54,11 @@ public class NephroMedikationCompositionFactory implements ICompositionFactory<N
     }
 
     @Override
-    public NephroMedikationComposition createComposition(String[][] medicationMatrix, String date) {
+    public NephroMedikationComposition createComposition(String[][] medicationMatrix, String date, String metadataJson) {
         NephroMedikationComposition composition = prepareComposition(new NephroMedikationComposition());
+
+        FeederAudit feederAudit = createFeederAudit(metadataJson);
+        composition.setFeederAudit(feederAudit);
 
         // setting Fallidentifikation
         FallidentifikationCluster fallidentifikation = new FallidentifikationCluster();
@@ -159,6 +166,24 @@ public class NephroMedikationCompositionFactory implements ICompositionFactory<N
         composition.setHealthCareFacility(healthCareFacility);
 
         return composition;
+    }
+
+    /**
+     * Create FeederAudit object with metadata.
+     *
+     * @param metadataJson json string with pdf metadata
+     * @return FeederAudit object
+     * @see <a href="https://specifications.openehr.org/releases/RM/latest/data_types.html#_examples">OpenEHR Examples</a>
+     */
+    private static FeederAudit createFeederAudit(String metadataJson) {
+        FeederAudit feederAudit = new FeederAudit();
+        FeederAuditDetails feederAuditDetails = new FeederAuditDetails();
+        feederAuditDetails.setSystemId("Medication Plan Pipeline (automated)");
+        feederAudit.setOriginatingSystemAudit(feederAuditDetails);
+        DvEncapsulated originalContent = new DvParsable(metadataJson, "json");
+        feederAudit.setOriginalContent(originalContent);
+
+        return feederAudit;
     }
 
     public static Map<String, String> loadAliases(String path) {

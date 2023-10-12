@@ -60,8 +60,9 @@ public class OpenEhrManager {
 
         String[][] medicationMatrix = medication.table();
         String date = medication.date();
+        String metadataJson = medication.metadata();
 
-        NephroMedikationComposition composition = nephroMedikationCompositionFactory.createComposition(medicationMatrix, date);
+        NephroMedikationComposition composition = nephroMedikationCompositionFactory.createComposition(medicationMatrix, date, metadataJson);
 
         try {
             CompositionEndpoint compositionEndpoint = openEhrClient.compositionEndpoint(ehrID);

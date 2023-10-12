@@ -1,8 +1,10 @@
 package com.jaypi4c.ba.pipeline.medicationplan.recognition;
 
+import com.google.gson.JsonObject;
 import com.jaypi4c.ba.pipeline.medicationplan.utils.WordUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.pdfbox.pdmodel.PDDocument;
+import org.apache.pdfbox.pdmodel.PDDocumentInformation;
 import org.apache.pdfbox.pdmodel.PDPage;
 import org.apache.pdfbox.text.PDFTextStripperByArea;
 import org.springframework.beans.factory.annotation.Value;
@@ -13,6 +15,7 @@ import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 
 @Slf4j
 @Component
@@ -60,7 +63,7 @@ public class CellReader {
     public ReadingResult processPage(int page, String date, Rectangle2D[][] table) {
         if (documentClosed) {
             log.error("Document is closed. Probably the file was not set.");
-            return new ReadingResult(null, null);
+            return new ReadingResult(null, null, null);
         }
 
         String[][] results = new String[table.length][table[0].length];
@@ -90,7 +93,12 @@ public class CellReader {
             log.error("Error while reading pdf", e);
         }
         results = verifyTable(results);
-        return new ReadingResult(results, date);
+
+        // read pdf meta data
+        String metadata = collectMetadata(document);
+        log.debug("got metadata: {}", metadata);
+
+        return new ReadingResult(results, date, metadata);
     }
 
     private String[][] verifyTable(String[][] table) {
@@ -155,14 +163,20 @@ public class CellReader {
         return new Rectangle2D.Double(x, y, width, height);
     }
 
-    public record ReadingResult(String[][] table, String date) {
+    private String collectMetadata(PDDocument doc) {
+        PDDocumentInformation info = doc.getDocumentInformation();
+        Set<String> keys = info.getMetadataKeys();
+        JsonObject metadata = new JsonObject();
+        for (String key : keys) {
+            metadata.addProperty(key, info.getCustomMetadataValue(key));
+        }
+        return metadata.toString();
+    }
+
+    public record ReadingResult(String[][] table, String date, String metadata) {
 
         public boolean hasTable() {
             return table != null;
-        }
-
-        public boolean hasDate() {
-            return date != null;
         }
 
     }

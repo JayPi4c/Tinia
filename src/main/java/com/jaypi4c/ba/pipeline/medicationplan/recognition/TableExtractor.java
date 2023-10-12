@@ -108,7 +108,7 @@ public class TableExtractor {
             if (!rawPageText.contains(TITLE)) {
                 log.debug("No title found.");
                 if (skipWhenNoHeaderFound) {
-                    log.debug("Skipping page because header was found.");
+                    log.debug("Skipping page because no header was found.");
                     return;
                 }
             }
