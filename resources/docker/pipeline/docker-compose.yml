@@ -8,5 +8,5 @@ services:
       - /home/jonas/Studium/Programming/BA/Medikations-Pipeline/debug:/io/debug
       - /home/jonas/Studium/Programming/BA/Medikations-Pipeline/logs:/io/logs
     environment:
-      OPENEHR_URL: http://10.17.2.25:8080/ehrbase/
+      OPENEHR_URL: http://10.17.15.239:8080/ehrbase/
       DEBUG_DRAWIMAGES: false

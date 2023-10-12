@@ -7,6 +7,7 @@ import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.pdfbox.pdmodel.PDDocument;
 import org.apache.pdfbox.rendering.PDFRenderer;
+import org.apache.pdfbox.text.PDFTextStripper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
@@ -18,6 +19,8 @@ import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 @Slf4j
 @Component
@@ -37,11 +40,20 @@ public class TableExtractor {
     private PDFRenderer pdfRenderer;
     private BufferedImage originalImage;
 
+    private static final Pattern DATE_PATTERN = Pattern.compile("\\d{1,2}[.,]\\d{1,2}[.,]\\d{2,4}");
+    private static final String TITLE = "Medikationsplan";
+
+
     @Value("${pdf.dpi}")
     private int DPI;
 
+    @Value("${skipWhenNoHeaderFound}")
+    private boolean skipWhenNoHeaderFound;
+
     @Getter
     private Rectangle2D[][] table;
+    @Getter
+    private String date;
 
     private final LineExtractor le;
     private final CellIdentifier ci;
@@ -81,6 +93,39 @@ public class TableExtractor {
             log.error("Document is closed. Probably the file was not set.");
             return;
         }
+        date = null;
+        table = null;
+        try {
+
+            // extract print date from page
+            PDFTextStripper stripper = new PDFTextStripper();
+
+            stripper.setStartPage(page + 1);
+            stripper.setEndPage(page + 1);
+            String rawPageText = stripper.getText(document);
+
+            // Check if title is present
+            if (!rawPageText.contains(TITLE)) {
+                log.debug("No title found.");
+                if (skipWhenNoHeaderFound) {
+                    log.debug("Skipping page because header was found.");
+                    return;
+                }
+            }
+
+            Matcher matcher = DATE_PATTERN.matcher(rawPageText);
+
+            if (matcher.find()) {
+                date = matcher.group(0);
+                date = date.replaceAll(",", ".");
+                log.debug("Found date: {}", date);
+            } else {
+                log.debug("No date found.");
+            }
+        } catch (IOException ex) {
+            log.debug("Error while reading pdf", ex);
+        }
+
         // https://stackoverflow.com/a/57724726
         // read pdf
         try {
@@ -143,7 +188,7 @@ public class TableExtractor {
     }
 
     public boolean wasSuccessful() {
-        return table.length > 0;
+        return table != null && table.length > 0;
     }
 
     /**
