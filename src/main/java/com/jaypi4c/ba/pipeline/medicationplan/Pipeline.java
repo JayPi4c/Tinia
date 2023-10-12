@@ -56,17 +56,22 @@ public class Pipeline {
 
                 if (tableExtractor.wasSuccessful()) {
                     Rectangle2D[][] table = tableExtractor.getTable();
+                    String date = tableExtractor.getDate();
 
 
-                    CellReader.ReadingResult result = cellReader.processPage(page, table);
+                    CellReader.ReadingResult result = cellReader.processPage(page, date, table);
                     if (result.hasTable()) {
                         print2D(result.table());
-                        openEhrManager.sendNephroMedikationData(result);
+                        boolean success = openEhrManager.sendNephroMedikationData(result);
+                        if (success)
+                            log.info("Successfully sent data to EHRBase");
+                        else
+                            log.error("Failed to send data to EHRBase");
                     }
                 } else {
                     log.info("No medication table found");
                 }
-                log.info("Finished page {}, {}%", page, (page + 1) * 100 / numberOfPages);
+                log.info("Finished page {}, {}%", page + 1, (page + 1) * 100 / numberOfPages);
             }
             cellReader.finish();
             tableExtractor.finish();

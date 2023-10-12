@@ -13,6 +13,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.ehrbase.openehr.sdk.client.openehrclient.CompositionEndpoint;
 import org.ehrbase.openehr.sdk.client.openehrclient.EhrEndpoint;
 import org.ehrbase.openehr.sdk.client.openehrclient.OpenEhrClient;
+import org.ehrbase.openehr.sdk.util.exception.WrongStatusCodeException;
 import org.springframework.stereotype.Component;
 
 import java.util.UUID;
@@ -62,8 +63,13 @@ public class OpenEhrManager {
 
         NephroMedikationComposition composition = nephroMedikationCompositionFactory.createComposition(medicationMatrix, date);
 
-        CompositionEndpoint compositionEndpoint = openEhrClient.compositionEndpoint(ehrID);
-        compositionEndpoint.mergeCompositionEntity(composition);
+        try {
+            CompositionEndpoint compositionEndpoint = openEhrClient.compositionEndpoint(ehrID);
+            compositionEndpoint.mergeCompositionEntity(composition);
+        } catch (WrongStatusCodeException wsce) {
+            log.error("Error while sending composition to EHRBase", wsce);
+            return false;
+        }
         return true;
     }
 

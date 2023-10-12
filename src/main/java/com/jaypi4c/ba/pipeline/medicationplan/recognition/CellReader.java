@@ -4,7 +4,6 @@ import com.jaypi4c.ba.pipeline.medicationplan.utils.WordUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.pdfbox.pdmodel.PDDocument;
 import org.apache.pdfbox.pdmodel.PDPage;
-import org.apache.pdfbox.text.PDFTextStripper;
 import org.apache.pdfbox.text.PDFTextStripperByArea;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
@@ -14,8 +13,6 @@ import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 @Slf4j
 @Component
@@ -24,7 +21,6 @@ public class CellReader {
     @Value("${pdf.dpi}")
     private int DPI;
     private static final String[] DEFAULT_HEADER = WordUtils.loadDictionary("/dictionaries/HeaderAllowlist.txt");
-    private static final Pattern DATE_PATTERN = Pattern.compile("\\d{1,2}\\.\\d{1,2}\\.\\d{2,4}");
 
     private boolean documentClosed = true;
     private PDDocument document;
@@ -61,33 +57,16 @@ public class CellReader {
         return pixelVal * 72 / dpi;
     }
 
-    public ReadingResult processPage(int page, Rectangle2D[][] table) {
+    public ReadingResult processPage(int page, String date, Rectangle2D[][] table) {
         if (documentClosed) {
             log.error("Document is closed. Probably the file was not set.");
             return new ReadingResult(null, null);
         }
-        String date = null;
+
         String[][] results = new String[table.length][table[0].length];
         PDPage docPage = document.getPage(page);
 
         try {
-
-            // extract print date from page
-            PDFTextStripper stripper = new PDFTextStripper();
-
-            stripper.setStartPage(page + 1);
-            stripper.setEndPage(page + 1);
-            String text = stripper.getText(document);
-            Matcher matcher = DATE_PATTERN.matcher(text);
-
-            if (matcher.find()) {
-                date = matcher.group(0);
-                log.debug("Found date: {}", date);
-            } else {
-                log.debug("No date found.");
-            }
-
-
             PDFTextStripperByArea textStripper = new PDFTextStripperByArea();
             for (int i = 0; i < table.length; i++) {
                 for (int j = 0; j < table[i].length; j++) {
