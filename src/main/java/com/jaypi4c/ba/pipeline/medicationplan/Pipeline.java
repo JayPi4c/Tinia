@@ -4,9 +4,11 @@ import com.jaypi4c.ba.pipeline.medicationplan.openehr.OpenEhrManager;
 import com.jaypi4c.ba.pipeline.medicationplan.recognition.CellReader;
 import com.jaypi4c.ba.pipeline.medicationplan.recognition.TableExtractor;
 import com.jaypi4c.ba.pipeline.medicationplan.utils.DebugDrawer;
+import com.jaypi4c.ba.pipeline.medicationplan.utils.OutputSaver;
+import com.jaypi4c.ba.pipeline.medicationplan.validation.IActiveIngredientValidator;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.pdfbox.pdmodel.PDDocument;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
@@ -17,6 +19,7 @@ import java.util.Arrays;
 
 @Slf4j
 @Component
+@RequiredArgsConstructor
 public class Pipeline {
 
     @Value("${io.dataFolder}")
@@ -26,14 +29,9 @@ public class Pipeline {
     private final TableExtractor tableExtractor;
     private final CellReader cellReader;
     private final DebugDrawer debugDrawer;
+    private final OutputSaver outputSaver;
+    private final IActiveIngredientValidator validator;
 
-    @Autowired
-    Pipeline(OpenEhrManager openEhrManager, TableExtractor tableExtractor, CellReader cellReader, DebugDrawer debugDrawer) {
-        this.openEhrManager = openEhrManager;
-        this.tableExtractor = tableExtractor;
-        this.cellReader = cellReader;
-        this.debugDrawer = debugDrawer;
-    }
 
     public void start() {
 
@@ -62,6 +60,7 @@ public class Pipeline {
                     CellReader.ReadingResult result = cellReader.processPage(page, date, table);
                     if (result.hasTable()) {
                         print2D(result.table());
+                        outputSaver.saveTable(file.getName(), result.table(), page, date);
                         boolean success = openEhrManager.sendNephroMedikationData(result);
                         if (success)
                             log.info("Successfully sent data to EHRBase");
@@ -73,10 +72,13 @@ public class Pipeline {
                 }
                 log.info("Finished page {}, {}%", page + 1, (page + 1) * 100 / numberOfPages);
             }
+
             cellReader.finish();
             tableExtractor.finish();
             log.info("Finished file {}, {}%", file.getName(), (i + 1) * 100 / files.length);
         }
+        validator.finish();
+        outputSaver.save("output");
     }
 
     private static File[] getFiles(String path) {

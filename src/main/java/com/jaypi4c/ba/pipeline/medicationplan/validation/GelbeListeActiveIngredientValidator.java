@@ -1,5 +1,6 @@
 package com.jaypi4c.ba.pipeline.medicationplan.validation;
 
+import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
@@ -15,7 +16,11 @@ import java.util.List;
  */
 @Slf4j
 @Component
+@Getter
 public class GelbeListeActiveIngredientValidator implements IActiveIngredientValidator {
+
+    private int validationCount = 0;
+    private int validationFailureCount = 0;
 
     @Override
     public boolean validate(String activeIngredient) {
@@ -26,6 +31,13 @@ public class GelbeListeActiveIngredientValidator implements IActiveIngredientVal
         return request(activeIngredient);
     }
 
+    @Override
+    public void finish() {
+        log.info("Validation count: {}", validationCount);
+        log.info("Validation failure count: {}", validationFailureCount);
+        log.info("Validation success rate: {}", (double) (validationCount - validationFailureCount) / validationCount);
+    }
+
     private boolean request(String searchString) {
         final String[] parts = searchString.split(" ");
 
@@ -34,10 +46,12 @@ public class GelbeListeActiveIngredientValidator implements IActiveIngredientVal
         // dailymed for english active ingredients
         final String url = "https://www.gelbe-liste.de/suche?term=" + query;
         try {
+            validationCount++;
             Document doc = Jsoup.connect(url).get();
             return checkBody(doc, parts);
         } catch (IOException ex) {
-            log.error("Failed to request data: ", ex);
+            validationFailureCount++;
+            log.error("Failed to request data. Probably a connection error.");
         }
         return false;
     }

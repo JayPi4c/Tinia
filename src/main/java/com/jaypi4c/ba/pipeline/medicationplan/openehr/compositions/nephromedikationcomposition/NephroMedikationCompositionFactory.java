@@ -123,7 +123,7 @@ public class NephroMedikationCompositionFactory implements ICompositionFactory<N
                 TemporalAccessor datumDerVerordnungValue = dateFormatter.parse(date);
                 verordnung.setDatumDerVerordnungValue(datumDerVerordnungValue);
             } catch (DateTimeParseException | NullPointerException e) {
-                log.error("Error while parsing date", e);
+                log.error("Error while parsing date; Maybe it's blacked out or not found in the pdf");
             }
 
             arzneimittel.setVerordnung(List.of(verordnung));
