@@ -11,10 +11,12 @@ import com.nedap.archie.rm.datavalues.encapsulated.DvEncapsulated;
 import com.nedap.archie.rm.datavalues.encapsulated.DvParsable;
 import com.nedap.archie.rm.generic.PartyIdentified;
 import com.nedap.archie.rm.generic.PartySelf;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.ehrbase.openehr.sdk.generator.commons.shareddefinition.Language;
 import org.ehrbase.openehr.sdk.generator.commons.shareddefinition.Setting;
 import org.ehrbase.openehr.sdk.generator.commons.shareddefinition.Territory;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
 import java.io.BufferedReader;
@@ -43,15 +45,15 @@ import static com.jaypi4c.ba.pipeline.medicationplan.utils.WordUtils.*;
  */
 @Slf4j
 @Component
+@RequiredArgsConstructor
 public class NephroMedikationCompositionFactory implements ICompositionFactory<NephroMedikationComposition> {
+
+    @Value("${validation.active}")
+    private boolean validationActive;
 
     private final DateTimeFormatter dateFormatter = DateTimeFormatter.ofPattern("dd.MM.yyyy");
 
     private final IActiveIngredientValidator validator;
-
-    public NephroMedikationCompositionFactory(IActiveIngredientValidator validator) {
-        this.validator = validator;
-    }
 
     @Override
     public NephroMedikationComposition createComposition(String[][] medicationMatrix, String date, String metadataJson) {
@@ -75,11 +77,14 @@ public class NephroMedikationCompositionFactory implements ICompositionFactory<N
         for (int i = 1; i < medicationMatrix.length; i++) {
             String[] row = medicationMatrix[i];
             String wirkstoff = row[0].trim();
-
-            if (validator.validate(wirkstoff)) {
-                log.info("Validated {}", wirkstoff);
+            if (validationActive) {
+                if (validator.validate(wirkstoff)) {
+                    log.info("Validated {}", wirkstoff);
+                } else {
+                    log.warn("Could not validate {}", wirkstoff);
+                }
             } else {
-                log.warn("Could not validate {}", wirkstoff);
+                log.info("Validation deactivated");
             }
 
             String handelsname = row[1].trim();

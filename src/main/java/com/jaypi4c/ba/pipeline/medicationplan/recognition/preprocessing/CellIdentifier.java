@@ -2,8 +2,8 @@ package com.jaypi4c.ba.pipeline.medicationplan.recognition.preprocessing;
 
 import com.jaypi4c.ba.pipeline.medicationplan.utils.DebugDrawer;
 import lombok.Getter;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.awt.*;
@@ -17,6 +17,7 @@ import java.util.Optional;
 
 @Slf4j
 @Component
+@RequiredArgsConstructor
 public class CellIdentifier {
 
     private BufferedImage image;
@@ -30,12 +31,6 @@ public class CellIdentifier {
 
     @Getter
     private List<Rectangle2D> cells;
-
-
-    @Autowired
-    public CellIdentifier(DebugDrawer debugDrawer) {
-        this.debugDrawer = debugDrawer;
-    }
 
     public void execute(BufferedImage img, List<Line2D> ls) {
         log.info("Starting CellIdentifier");

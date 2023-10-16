@@ -15,8 +15,8 @@ import java.util.List;
  * Uses the website gelbe-liste.de to validate active ingredients.
  */
 @Slf4j
-@Component
 @Getter
+@Component
 public class GelbeListeActiveIngredientValidator implements IActiveIngredientValidator {
 
     private int validationCount = 0;

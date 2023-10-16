@@ -4,11 +4,11 @@ import com.jaypi4c.ba.pipeline.medicationplan.recognition.preprocessing.CellIden
 import com.jaypi4c.ba.pipeline.medicationplan.recognition.preprocessing.ImageUtils;
 import com.jaypi4c.ba.pipeline.medicationplan.recognition.preprocessing.LineExtractor;
 import lombok.Getter;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.pdfbox.pdmodel.PDDocument;
 import org.apache.pdfbox.rendering.PDFRenderer;
 import org.apache.pdfbox.text.PDFTextStripper;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
@@ -24,6 +24,7 @@ import java.util.regex.Pattern;
 
 @Slf4j
 @Component
+@RequiredArgsConstructor
 public class TableExtractor {
 
     /*
@@ -57,13 +58,6 @@ public class TableExtractor {
 
     private final LineExtractor le;
     private final CellIdentifier ci;
-
-    @Autowired
-    public TableExtractor(LineExtractor le, CellIdentifier ci) {
-        this.le = le;
-        this.ci = ci;
-    }
-
 
     private boolean documentClosed = true;
 
