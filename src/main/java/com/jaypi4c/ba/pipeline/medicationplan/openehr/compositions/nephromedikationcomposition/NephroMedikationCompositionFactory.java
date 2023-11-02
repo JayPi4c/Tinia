@@ -4,6 +4,7 @@ import com.google.gson.Gson;
 import com.jaypi4c.ba.pipeline.medicationplan.openehr.compositions.ICompositionFactory;
 import com.jaypi4c.ba.pipeline.medicationplan.openehr.compositions.nephromedikationcomposition.definition.*;
 import com.jaypi4c.ba.pipeline.medicationplan.utils.DarreichungsformHelper;
+import com.jaypi4c.ba.pipeline.medicationplan.utils.EinheitenHelper;
 import com.jaypi4c.ba.pipeline.medicationplan.utils.WordUtils;
 import com.jaypi4c.ba.pipeline.medicationplan.validation.IActiveIngredientValidator;
 import com.nedap.archie.rm.archetyped.FeederAudit;
@@ -56,13 +57,16 @@ public class NephroMedikationCompositionFactory implements ICompositionFactory<N
     private final IActiveIngredientValidator validator;
 
     private final String[] formDict;
-    private final Map<String, String> aliases;
+    private final Map<String, String> formAliases;
+
+    private final String[] einheitDict;
 
     @Autowired
-    public NephroMedikationCompositionFactory(IActiveIngredientValidator validator, DarreichungsformHelper darreichungsformHelper) {
+    public NephroMedikationCompositionFactory(IActiveIngredientValidator validator, DarreichungsformHelper darreichungsformHelper, EinheitenHelper einheitenHelper) {
         this.validator = validator;
         formDict = darreichungsformHelper.getDictionary(); //loadDictionary("/dictionaries/DarreichungsformAllowlist.txt");
-        aliases = darreichungsformHelper.getAliases();//loadAliases("/aliases/alias.json");
+        formAliases = darreichungsformHelper.getAliases();//loadAliases("/aliases/alias.json");
+        einheitDict = einheitenHelper.getDictionary();
     }
 
 
@@ -145,19 +149,26 @@ public class NephroMedikationCompositionFactory implements ICompositionFactory<N
 
 
     private String checkForm(String form) {
-        if (aliases.containsKey(form)) {
+        if (formAliases.containsKey(form)) {
             String oldForm = form;
-            form = aliases.get(form);
-            log.info("Changed {} to {} via alias ", oldForm, form);
+            form = formAliases.get(form);
+            log.info("[FORM]: Changed {} to {} via alias ", oldForm, form);
         } else {
             LDResult result = findClosestWord(form, formDict);
             form = result.closestWord();
-            log.info("Found {} for {}", form, result.targetWord());
+            log.info("[FORM]: Found {} for {}", form, result.targetWord());
         }
         return form;
     }
 
     private String checkEinheit(String einheit) {
+        if (einheit.isEmpty()) {
+            log.info("[EINHEIT]: Einheit is empty");
+            return einheit;
+        }
+        LDResult result = findClosestWord(einheit, einheitDict);
+        einheit = result.closestWord();
+        log.info("[EINHEIT]: Found {} for {}", einheit, result.targetWord());
         return einheit;
     }
 
