@@ -3,10 +3,10 @@ package com.jaypi4c.ba.pipeline.medicationplan.openehr.compositions.nephromedika
 import com.google.gson.Gson;
 import com.jaypi4c.ba.pipeline.medicationplan.openehr.compositions.ICompositionFactory;
 import com.jaypi4c.ba.pipeline.medicationplan.openehr.compositions.nephromedikationcomposition.definition.*;
-import com.jaypi4c.ba.pipeline.medicationplan.utils.DarreichungsformHelper;
-import com.jaypi4c.ba.pipeline.medicationplan.utils.EinheitenHelper;
 import com.jaypi4c.ba.pipeline.medicationplan.utils.WordUtils;
 import com.jaypi4c.ba.pipeline.medicationplan.validation.IActiveIngredientValidator;
+import com.jaypi4c.ba.pipeline.medicationplan.validation.helpers.DarreichungsformHelper;
+import com.jaypi4c.ba.pipeline.medicationplan.validation.helpers.EinheitenHelper;
 import com.nedap.archie.rm.archetyped.FeederAudit;
 import com.nedap.archie.rm.archetyped.FeederAuditDetails;
 import com.nedap.archie.rm.datavalues.encapsulated.DvEncapsulated;
