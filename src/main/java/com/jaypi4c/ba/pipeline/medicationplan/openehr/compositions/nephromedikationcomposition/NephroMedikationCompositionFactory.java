@@ -17,6 +17,8 @@ import lombok.extern.slf4j.Slf4j;
 import org.ehrbase.openehr.sdk.generator.commons.shareddefinition.Language;
 import org.ehrbase.openehr.sdk.generator.commons.shareddefinition.Setting;
 import org.ehrbase.openehr.sdk.generator.commons.shareddefinition.Territory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
@@ -61,6 +63,8 @@ public class NephroMedikationCompositionFactory implements ICompositionFactory<N
 
     private final String[] einheitDict;
 
+    private static final Logger validationLogger = LoggerFactory.getLogger(NephroMedikationCompositionFactory.class.getName() + ".validationlogger");
+
     @Autowired
     public NephroMedikationCompositionFactory(IActiveIngredientValidator validator, DarreichungsformHelper darreichungsformHelper, EinheitenHelper einheitenHelper) {
         this.validator = validator;
@@ -91,12 +95,15 @@ public class NephroMedikationCompositionFactory implements ICompositionFactory<N
             String wirkstoff = row[0].trim();
             if (validationActive) {
                 if (validator.validate(wirkstoff)) {
-                    log.info("Validated {}", wirkstoff);
+                    validationLogger.info("[WIRKSTOFF]: Validated {}", wirkstoff);
+                    log.info("[WIRKSTOFF]: Validated {}", wirkstoff);
                 } else {
-                    log.warn("Could not validate {}", wirkstoff);
+                    validationLogger.warn("[WIRKSTOFF]: Could not validate {}", wirkstoff);
+                    log.warn("[WIRKSTOFF]: Could not validate {}", wirkstoff);
                 }
             } else {
-                log.info("Validation deactivated");
+                validationLogger.info("[WIRKSTOFF]: Validation deactivated");
+                log.info("[WIRKSTOFF]: Validation deactivated");
             }
 
             String handelsname = row[1].trim();
@@ -153,10 +160,12 @@ public class NephroMedikationCompositionFactory implements ICompositionFactory<N
             String oldForm = form;
             form = formAliases.get(form);
             log.info("[FORM]: Changed {} to {} via alias ", oldForm, form);
+            validationLogger.info("[FORM]: Changed {} to {} via alias ", oldForm, form);
         } else {
             LDResult result = findClosestWord(form, formDict);
             form = result.closestWord();
             log.info("[FORM]: Found {} for {}", form, result.targetWord());
+            validationLogger.info("[FORM]: Found {} for {}", form, result.targetWord());
         }
         return form;
     }
@@ -164,11 +173,13 @@ public class NephroMedikationCompositionFactory implements ICompositionFactory<N
     private String checkEinheit(String einheit) {
         if (einheit.isEmpty()) {
             log.info("[EINHEIT]: Einheit is empty");
+            validationLogger.info("[EINHEIT]: Einheit is empty");
             return einheit;
         }
         LDResult result = findClosestWord(einheit, einheitDict);
         einheit = result.closestWord();
         log.info("[EINHEIT]: Found {} for {}", einheit, result.targetWord());
+        validationLogger.info("[EINHEIT]: Found {} for {}", einheit, result.targetWord());
         return einheit;
     }
 
