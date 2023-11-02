@@ -8,7 +8,8 @@
   {
     "real": "Ampullen",
     "aliases": [
-      "AMP"
+      "AMP",
+      "Amp"
     ]
   },
   {
@@ -62,7 +63,8 @@
   {
     "real": "Augentropfen",
     "aliases": [
-      "ATR"
+      "ATR",
+      "AuTropf"
     ]
   },
   {
@@ -300,9 +302,11 @@
     ]
   },
   {
-    "real": "Flüssig",
+    "real": "Flüssigigkeit",
     "aliases": [
-      "FLU"
+      "FLU",
+      "Fluess",
+      "Flüss"
     ]
   },
   {
@@ -488,19 +492,23 @@
   {
     "real": "Inhalationskapseln",
     "aliases": [
-      "IKA"
+      "IKA",
+      "InhKaps"
     ]
   },
   {
     "real": "Inhalationslösung",
     "aliases": [
-      "INL"
+      "INL",
+      "Inhlös"
     ]
   },
   {
     "real": "Inhalationspulver",
     "aliases": [
-      "IHP"
+      "IHP",
+      "InhPulv",
+      "Inhalie"
     ]
   },
   {
@@ -536,7 +544,8 @@
   {
     "real": "Injektionslösung in einem Fertigpen",
     "aliases": [
-      "PEN"
+      "PEN",
+      "Pen"
     ]
   },
   {
@@ -589,13 +598,7 @@
     ]
   },
   {
-    "real": "Kapseln magensaftresistent",
-    "aliases": [
-      "KMR"
-    ]
-  },
-  {
-    "real": "Kapseln magensaftresistent",
+    "real": "Hartkapsel magensaftresistent",
     "aliases": [
       "KMR"
     ]
@@ -621,7 +624,8 @@
   {
     "real": "Kautabletten",
     "aliases": [
-      "KTA"
+      "KTA",
+      "KauTabl"
     ]
   },
   {
@@ -675,7 +679,8 @@
   {
     "real": "Kombipackung",
     "aliases": [
-      "KPG"
+      "KPG",
+      "KombiPg"
     ]
   },
   {
@@ -861,7 +866,8 @@
   {
     "real": "Nasenspray",
     "aliases": [
-      "NAS"
+      "NAS",
+      "NasSpr"
     ]
   },
   {
@@ -1107,7 +1113,8 @@
   {
     "real": "Retard-Kapseln",
     "aliases": [
-      "REK"
+      "REK",
+      "RetKaps"
     ]
   },
   {
@@ -1276,7 +1283,8 @@
   {
     "real": "Suppositorien",
     "aliases": [
-      "SUP"
+      "SUP",
+      "Supp"
     ]
   },
   {
@@ -1309,7 +1317,9 @@
       "TAB",
       "Tablett",
       "Tbl",
-      "Tabl"
+      "Tbl.",
+      "Tabl",
+      "Tab!"
     ]
   },
   {
@@ -1321,7 +1331,8 @@
   {
     "real": "Tabletten magensaftresistent",
     "aliases": [
-      "TMR"
+      "TMR",
+      "Tabl ma"
     ]
   },
   {
@@ -1465,7 +1476,8 @@
   {
     "real": "Tropfen",
     "aliases": [
-      "TRO"
+      "TRO",
+      "Tropfen"
     ]
   },
   {

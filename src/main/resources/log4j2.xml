@@ -11,10 +11,20 @@
             <ThresholdFilter level="${sys:logging.level:-info}" onMatch="ACCEPT" onMismatch="DENY"/>
             <PatternLayout pattern="${appenderPatternLayout}"/>
         </File>
+
+        <File name="LogValidation" fileName="/io/logs/validation.log" immediateFlush="false" append="false">
+            <ThresholdFilter level="${sys:logging.level:-info}" onMatch="ACCEPT" onMismatch="DENY"/>
+            <PatternLayout pattern="%d{HH:mm:ss.SSS} - %msg%n}"/>
+        </File>
     </Appenders>
 
     <Loggers>
         <Logger name="com.jaypi4c" level="debug"/>
+
+        <Logger name="com.jaypi4c.ba.pipeline.medicationplan.openehr.compositions.nephromedikationcomposition.NephroMedikationCompositionFactory.validationlogger"
+                level="debug">
+            <AppenderRef ref="LogValidation"/>
+        </Logger>
 
         <Root level="${sys:logging.level:-info}">
             <AppenderRef ref="LogToFile"/>

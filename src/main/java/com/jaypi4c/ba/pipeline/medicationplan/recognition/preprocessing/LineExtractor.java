@@ -2,8 +2,8 @@ package com.jaypi4c.ba.pipeline.medicationplan.recognition.preprocessing;
 
 import com.jaypi4c.ba.pipeline.medicationplan.utils.DebugDrawer;
 import lombok.Getter;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.awt.*;
@@ -16,6 +16,7 @@ import java.util.List;
 
 @Slf4j
 @Component
+@RequiredArgsConstructor
 public class LineExtractor {
 
     @Getter
@@ -25,12 +26,6 @@ public class LineExtractor {
     private BufferedImage image;
 
     private final DebugDrawer debugDrawer;
-
-    @Autowired
-    public LineExtractor(DebugDrawer debugDrawer) {
-        this.debugDrawer = debugDrawer;
-    }
-
 
     public void execute(BufferedImage img) {
         log.info("Starting line extraction");
