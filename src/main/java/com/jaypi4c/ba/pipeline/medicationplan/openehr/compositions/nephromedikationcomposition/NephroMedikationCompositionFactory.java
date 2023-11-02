@@ -3,6 +3,7 @@ package com.jaypi4c.ba.pipeline.medicationplan.openehr.compositions.nephromedika
 import com.google.gson.Gson;
 import com.jaypi4c.ba.pipeline.medicationplan.openehr.compositions.ICompositionFactory;
 import com.jaypi4c.ba.pipeline.medicationplan.openehr.compositions.nephromedikationcomposition.definition.*;
+import com.jaypi4c.ba.pipeline.medicationplan.utils.DarreichungsformHelper;
 import com.jaypi4c.ba.pipeline.medicationplan.utils.WordUtils;
 import com.jaypi4c.ba.pipeline.medicationplan.validation.IActiveIngredientValidator;
 import com.nedap.archie.rm.archetyped.FeederAudit;
@@ -11,6 +12,7 @@ import com.nedap.archie.rm.datavalues.encapsulated.DvEncapsulated;
 import com.nedap.archie.rm.datavalues.encapsulated.DvParsable;
 import com.nedap.archie.rm.generic.PartyIdentified;
 import com.nedap.archie.rm.generic.PartySelf;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.ehrbase.openehr.sdk.generator.commons.shareddefinition.Language;
 import org.ehrbase.openehr.sdk.generator.commons.shareddefinition.Setting;
@@ -25,10 +27,7 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
 import java.time.temporal.TemporalAccessor;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 import static com.jaypi4c.ba.pipeline.medicationplan.utils.WordUtils.*;
 
@@ -43,15 +42,14 @@ import static com.jaypi4c.ba.pipeline.medicationplan.utils.WordUtils.*;
  */
 @Slf4j
 @Component
+@RequiredArgsConstructor
 public class NephroMedikationCompositionFactory implements ICompositionFactory<NephroMedikationComposition> {
 
     private final DateTimeFormatter dateFormatter = DateTimeFormatter.ofPattern("dd.MM.yyyy");
 
     private final IActiveIngredientValidator validator;
 
-    public NephroMedikationCompositionFactory(IActiveIngredientValidator validator) {
-        this.validator = validator;
-    }
+    private final DarreichungsformHelper darreichungsformHelper;
 
     @Override
     public NephroMedikationComposition createComposition(String[][] medicationMatrix, String date, String metadataJson) {
@@ -88,6 +86,19 @@ public class NephroMedikationCompositionFactory implements ICompositionFactory<N
             String einheit = row[8].trim();
             String hinweise = row[9].trim();
             String grund = row[10].trim();
+
+
+            Optional<String> newForm = darreichungsformHelper.getBezeichnungIFAByV(form);
+            if (newForm.isEmpty()) {
+                newForm = darreichungsformHelper.getBezeichnungIFAByDN(form);
+                if (newForm.isEmpty()) {
+                    log.warn("Could not find form {} in dictionary", form);
+                } else {
+                    log.info("Found {} for {}", newForm.get(), form);
+                }
+            } else {
+                log.info("Found {} for {}", newForm.get(), form);
+            }
 
             if (aliases.containsKey(form)) {
                 String oldForm = form;
@@ -136,7 +147,8 @@ public class NephroMedikationCompositionFactory implements ICompositionFactory<N
     }
 
 
-    private static VerordnungVonArzneimittelInstruction prepareInstruction(VerordnungVonArzneimittelInstruction instruction) {
+    private static VerordnungVonArzneimittelInstruction prepareInstruction(VerordnungVonArzneimittelInstruction
+                                                                                   instruction) {
         instruction.setLanguage(Language.DE);
         instruction.setNarrativeValue("Lorem ispum");
         instruction.setSubject(new PartySelf());
