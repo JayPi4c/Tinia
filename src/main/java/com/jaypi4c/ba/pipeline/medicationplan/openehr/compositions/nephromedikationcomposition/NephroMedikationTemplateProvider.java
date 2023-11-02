@@ -10,6 +10,9 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.Optional;
 
+/**
+ * @see <a href="https://www.youtube.com/watch?v=3SykJkbnT34">Generating openEHR Compositions using EHRbase SDK | openEHR Series - Part 4-2</a> YouTube video for more information.
+ */
 @Slf4j
 public class NephroMedikationTemplateProvider implements TemplateProvider {
 

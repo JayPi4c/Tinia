@@ -17,6 +17,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.ehrbase.openehr.sdk.generator.commons.shareddefinition.Language;
 import org.ehrbase.openehr.sdk.generator.commons.shareddefinition.Setting;
 import org.ehrbase.openehr.sdk.generator.commons.shareddefinition.Territory;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
 import java.io.BufferedReader;
@@ -44,6 +45,9 @@ import static com.jaypi4c.ba.pipeline.medicationplan.utils.WordUtils.*;
 @Component
 @RequiredArgsConstructor
 public class NephroMedikationCompositionFactory implements ICompositionFactory<NephroMedikationComposition> {
+
+    @Value("${validation.active}")
+    private boolean validationActive;
 
     private final DateTimeFormatter dateFormatter = DateTimeFormatter.ofPattern("dd.MM.yyyy");
 
@@ -73,11 +77,14 @@ public class NephroMedikationCompositionFactory implements ICompositionFactory<N
         for (int i = 1; i < medicationMatrix.length; i++) {
             String[] row = medicationMatrix[i];
             String wirkstoff = row[0].trim();
-
-            if (validator.validate(wirkstoff)) {
-                log.info("Validated {}", wirkstoff);
+            if (validationActive) {
+                if (validator.validate(wirkstoff)) {
+                    log.info("Validated {}", wirkstoff);
+                } else {
+                    log.warn("Could not validate {}", wirkstoff);
+                }
             } else {
-                log.warn("Could not validate {}", wirkstoff);
+                log.info("Validation deactivated");
             }
 
             String handelsname = row[1].trim();
@@ -134,7 +141,7 @@ public class NephroMedikationCompositionFactory implements ICompositionFactory<N
                 TemporalAccessor datumDerVerordnungValue = dateFormatter.parse(date);
                 verordnung.setDatumDerVerordnungValue(datumDerVerordnungValue);
             } catch (DateTimeParseException | NullPointerException e) {
-                log.error("Error while parsing date", e);
+                log.error("Error while parsing date; Maybe it's blacked out or not found in the pdf");
             }
 
             arzneimittel.setVerordnung(List.of(verordnung));

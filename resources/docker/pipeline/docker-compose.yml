@@ -4,9 +4,10 @@ services:
   pipeline:
     image: registry.gitlab.uni-oldenburg.de/ebki3136/mediaktionsplan-pipeline
     volumes:
-      - /home/jonas/Studium/cloud/BA/TestPDF:/io/data
-      - /home/jonas/Studium/Programming/BA/Medikations-Pipeline/debug:/io/debug
-      - /home/jonas/Studium/Programming/BA/Medikations-Pipeline/logs:/io/logs
+      - /home/jonas/Studium/Arztbriefe/:/io/data
+      - ./debug:/io/debug
+      - ./logs:/io/logs
     environment:
       OPENEHR_URL: http://10.17.15.239:8080/ehrbase/
       DEBUG_DRAWIMAGES: false
+      LOGGING_LEVEL_COM_JAYPI4C_BA_PIPELINE_MEDICATIONPLAN: INFO

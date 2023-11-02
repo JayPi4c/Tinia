@@ -4,9 +4,9 @@ target/
 !**/src/test/**/target/
 
 # project specific files
-/logs/
+logs/
 .pgdata/
-/debug/
+debug/
 application-dev.properties
 log4j2-dev.xml
 
