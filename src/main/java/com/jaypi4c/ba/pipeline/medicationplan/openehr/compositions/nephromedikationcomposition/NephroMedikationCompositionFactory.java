@@ -140,22 +140,22 @@ public class NephroMedikationCompositionFactory implements ICompositionFactory<N
             // morgens
             if (!morgens.isBlank()) {
                 double dosismenge = parseDosisMenge(morgens);
-                DosierungCluster dosierungCluster = getDosierungCluster(dosismenge, "Stück", "Lorem Ipsum", "morgens");
+                DosierungCluster dosierungCluster = getDosierungCluster(dosismenge, einheit, "Lorem Ipsum", "morgens");
                 dosierungen.add(dosierungCluster);
             }
             if (!mittags.isBlank()) {
                 double dosismenge = parseDosisMenge(mittags);
-                DosierungCluster dosierungCluster = getDosierungCluster(dosismenge, "Stück", "Lorem Ipsum", "mittags");
+                DosierungCluster dosierungCluster = getDosierungCluster(dosismenge, einheit, "Lorem Ipsum", "mittags");
                 dosierungen.add(dosierungCluster);
             }
             if (!abends.isBlank()) {
                 double dosismenge = parseDosisMenge(abends);
-                DosierungCluster dosierungCluster = getDosierungCluster(dosismenge, "Stück", "Lorem Ipsum", "abends");
+                DosierungCluster dosierungCluster = getDosierungCluster(dosismenge, einheit, "Lorem Ipsum", "abends");
                 dosierungen.add(dosierungCluster);
             }
             if (!nacht.isBlank()) {
                 double dosismenge = parseDosisMenge(nacht);
-                DosierungCluster dosierungCluster = getDosierungCluster(dosismenge, "Stück", "Lorem Ipsum", "nachts");
+                DosierungCluster dosierungCluster = getDosierungCluster(dosismenge, einheit, "Lorem Ipsum", "nachts");
                 dosierungen.add(dosierungCluster);
             }
             therapeutischeAnweisungCluster.setDosierung(dosierungen);
@@ -178,8 +178,12 @@ public class NephroMedikationCompositionFactory implements ICompositionFactory<N
         return composition;
     }
 
+    //https://stackoverflow.com/a/10372905/13670629
     private static double parseDosisMenge(String dosisMenge) {
-        return Double.parseDouble(dosisMenge);
+        String s = dosisMenge.replaceAll("[^\\d.]", "");
+        if (s.isEmpty())
+            return 0;
+        return Double.parseDouble(s);
     }
 
     private static DosierungCluster getDosierungCluster(double dosismenge, String dosisEinheit, String dosierungFreitext, String ereignis) {
@@ -232,9 +236,9 @@ public class NephroMedikationCompositionFactory implements ICompositionFactory<N
 
     private String checkEinheit(String einheit) {
         if (einheit.isEmpty()) {
-            log.info("[EINHEIT]: Einheit is empty");
-            validationLogger.info("[EINHEIT]: Einheit is empty");
-            return einheit;
+            log.info("[EINHEIT]: Einheit is empty, defaulting to 'E'");
+            validationLogger.info("[EINHEIT]: Einheit is empty, defaulting to 'E'");
+            return "E";
         }
         LDResult result = findClosestWord(einheit, einheitDict);
         einheit = result.closestWord();
