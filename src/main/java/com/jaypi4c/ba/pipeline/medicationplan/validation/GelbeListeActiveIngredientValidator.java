@@ -33,6 +33,10 @@ public class GelbeListeActiveIngredientValidator implements IActiveIngredientVal
 
     @Override
     public void finish() {
+        if (validationCount == 0) {
+            log.warn("No validation requests were made");
+            return;
+        }
         log.info("Validation count: {}", validationCount);
         log.info("Validation failure count: {}", validationFailureCount);
         log.info("Validation success rate: {}", (double) (validationCount - validationFailureCount) / validationCount);
