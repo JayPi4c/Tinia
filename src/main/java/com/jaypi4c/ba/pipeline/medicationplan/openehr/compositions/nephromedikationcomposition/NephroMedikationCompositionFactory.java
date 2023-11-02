@@ -12,11 +12,11 @@ import com.nedap.archie.rm.datavalues.encapsulated.DvEncapsulated;
 import com.nedap.archie.rm.datavalues.encapsulated.DvParsable;
 import com.nedap.archie.rm.generic.PartyIdentified;
 import com.nedap.archie.rm.generic.PartySelf;
-import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.ehrbase.openehr.sdk.generator.commons.shareddefinition.Language;
 import org.ehrbase.openehr.sdk.generator.commons.shareddefinition.Setting;
 import org.ehrbase.openehr.sdk.generator.commons.shareddefinition.Territory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
@@ -28,9 +28,13 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
 import java.time.temporal.TemporalAccessor;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
-import static com.jaypi4c.ba.pipeline.medicationplan.utils.WordUtils.*;
+import static com.jaypi4c.ba.pipeline.medicationplan.utils.WordUtils.LDResult;
+import static com.jaypi4c.ba.pipeline.medicationplan.utils.WordUtils.findClosestWord;
 
 
 /**
@@ -43,17 +47,24 @@ import static com.jaypi4c.ba.pipeline.medicationplan.utils.WordUtils.*;
  */
 @Slf4j
 @Component
-@RequiredArgsConstructor
 public class NephroMedikationCompositionFactory implements ICompositionFactory<NephroMedikationComposition> {
 
     @Value("${validation.active}")
     private boolean validationActive;
 
     private final DateTimeFormatter dateFormatter = DateTimeFormatter.ofPattern("dd.MM.yyyy");
-
     private final IActiveIngredientValidator validator;
 
-    private final DarreichungsformHelper darreichungsformHelper;
+    private final String[] formDict;
+    private final Map<String, String> aliases;
+
+    @Autowired
+    public NephroMedikationCompositionFactory(IActiveIngredientValidator validator, DarreichungsformHelper darreichungsformHelper) {
+        this.validator = validator;
+        formDict = darreichungsformHelper.getDictionary(); //loadDictionary("/dictionaries/DarreichungsformAllowlist.txt");
+        aliases = darreichungsformHelper.getAliases();//loadAliases("/aliases/alias.json");
+    }
+
 
     @Override
     public NephroMedikationComposition createComposition(String[][] medicationMatrix, String date, String metadataJson) {
@@ -66,9 +77,6 @@ public class NephroMedikationCompositionFactory implements ICompositionFactory<N
         FallidentifikationCluster fallidentifikation = new FallidentifikationCluster();
         fallidentifikation.setFallKennungValue("Medikationsplan 1");
         composition.setFallidentifikation(fallidentifikation);
-
-        String[] formDict = loadDictionary("/dictionaries/DarreichungsformAllowlist.txt");
-        Map<String, String> aliases = loadAliases("/aliases/alias.json");
 
 
         // jede Zeile in der Tabelle ist eine Verordnung. So kann eine ganze Tabelle in einer composition gespeichert werden.
@@ -95,27 +103,9 @@ public class NephroMedikationCompositionFactory implements ICompositionFactory<N
             String grund = row[10].trim();
 
 
-            Optional<String> newForm = darreichungsformHelper.getBezeichnungIFAByV(form);
-            if (newForm.isEmpty()) {
-                newForm = darreichungsformHelper.getBezeichnungIFAByDN(form);
-                if (newForm.isEmpty()) {
-                    log.warn("Could not find form {} in dictionary", form);
-                } else {
-                    log.info("Found {} for {}", newForm.get(), form);
-                }
-            } else {
-                log.info("Found {} for {}", newForm.get(), form);
-            }
+            form = checkForm(form);
 
-            if (aliases.containsKey(form)) {
-                String oldForm = form;
-                form = aliases.get(form);
-                log.info("Changed {} to {} via alias ", oldForm, form);
-            } else {
-                LDResult result = findClosestWord(form, formDict);
-                form = result.closestWord();
-                log.info("Found {} for {}", form, result.targetWord());
-            }
+            einheit = checkEinheit(einheit);
 
             VerordnungVonArzneimittelInstruction arzneimittel = prepareInstruction(new VerordnungVonArzneimittelInstruction());
 
@@ -153,6 +143,23 @@ public class NephroMedikationCompositionFactory implements ICompositionFactory<N
         return composition;
     }
 
+
+    private String checkForm(String form) {
+        if (aliases.containsKey(form)) {
+            String oldForm = form;
+            form = aliases.get(form);
+            log.info("Changed {} to {} via alias ", oldForm, form);
+        } else {
+            LDResult result = findClosestWord(form, formDict);
+            form = result.closestWord();
+            log.info("Found {} for {}", form, result.targetWord());
+        }
+        return form;
+    }
+
+    private String checkEinheit(String einheit) {
+        return einheit;
+    }
 
     private static VerordnungVonArzneimittelInstruction prepareInstruction(VerordnungVonArzneimittelInstruction
                                                                                    instruction) {
