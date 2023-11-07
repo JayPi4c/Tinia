@@ -1,0 +1,4031 @@
+{
+  "_type": "COMPOSITION",
+  "name": {
+    "_type": "DV_TEXT",
+    "value": "Medikamentenliste"
+  },
+  "archetype_details": {
+    "archetype_id": {
+      "value": "openEHR-EHR-COMPOSITION.medication_list.v1"
+    },
+    "template_id": {
+      "value": "Nephro_Medikation"
+    },
+    "rm_version": "1.0.4"
+  },
+  "feeder_audit": {
+    "_type": "FEEDER_AUDIT",
+    "original_content": {
+      "_type": "DV_PARSABLE",
+      "value": "{\"Author\":\"KBV\",\"CreationDate\":\"D:20230904181846+02'00'\",\"Creator\":\"ocrmypdf 14.0.1+dfsg1 / Tesseract OCR-PDF 5.3.0\",\"ModDate\":\"D:20231106133547+00'00'\",\"Producer\":\"pikepdf 8.3.2\",\"Subject\":\"Bundeseinheitlicher Medikationsplan\",\"Title\":\"Medikationsplan: Beispiel 2023\"}",
+      "formalism": "json"
+    },
+    "originating_system_audit": {
+      "_type": "FEEDER_AUDIT_DETAILS",
+      "system_id": "Medication Plan Pipeline (automated)"
+    }
+  },
+  "language": {
+    "_type": "CODE_PHRASE",
+    "terminology_id": {
+      "_type": "TERMINOLOGY_ID",
+      "value": "ISO_639-1"
+    },
+    "code_string": "de"
+  },
+  "territory": {
+    "_type": "CODE_PHRASE",
+    "terminology_id": {
+      "_type": "TERMINOLOGY_ID",
+      "value": "ISO_3166-1"
+    },
+    "code_string": "DE"
+  },
+  "category": {
+    "_type": "DV_CODED_TEXT",
+    "value": "event",
+    "defining_code": {
+      "_type": "CODE_PHRASE",
+      "terminology_id": {
+        "_type": "TERMINOLOGY_ID",
+        "value": "openehr"
+      },
+      "code_string": "433"
+    }
+  },
+  "composer": {
+    "_type": "PARTY_IDENTIFIED",
+    "name": "Medication Plan Pipeline (automated)"
+  },
+  "context": {
+    "_type": "EVENT_CONTEXT",
+    "start_time": {
+      "_type": "DV_DATE_TIME",
+      "value": "2023-11-06T14:37:22.840824"
+    },
+    "end_time": {
+      "_type": "DV_DATE_TIME",
+      "value": "2023-11-06T14:37:22.841592"
+    },
+    "setting": {
+      "_type": "DV_CODED_TEXT",
+      "value": "home",
+      "defining_code": {
+        "_type": "CODE_PHRASE",
+        "terminology_id": {
+          "_type": "TERMINOLOGY_ID",
+          "value": "openehr"
+        },
+        "code_string": "225"
+      }
+    },
+    "other_context": {
+      "_type": "ITEM_TREE",
+      "name": {
+        "_type": "DV_TEXT",
+        "value": "Tree"
+      },
+      "items": [
+        {
+          "_type": "CLUSTER",
+          "name": {
+            "_type": "DV_TEXT",
+            "value": "Fallidentifikation"
+          },
+          "items": [
+            {
+              "_type": "ELEMENT",
+              "name": {
+                "_type": "DV_TEXT",
+                "value": "Fall-Kennung"
+              },
+              "value": {
+                "_type": "DV_TEXT",
+                "value": "Medikationsplan 1"
+              },
+              "archetype_node_id": "at0001"
+            }
+          ],
+          "archetype_node_id": "openEHR-EHR-CLUSTER.case_identification.v0"
+        }
+      ],
+      "archetype_node_id": "at0005"
+    },
+    "health_care_facility": {
+      "_type": "PARTY_IDENTIFIED",
+      "name": "Krankenhaus"
+    }
+  },
+  "content": [
+    {
+      "_type": "INSTRUCTION",
+      "name": {
+        "_type": "DV_TEXT",
+        "value": "Verordnung von Arzneimittel"
+      },
+      "archetype_details": {
+        "archetype_id": {
+          "value": "openEHR-EHR-INSTRUCTION.medication_order.v2"
+        },
+        "rm_version": "1.0.4"
+      },
+      "language": {
+        "_type": "CODE_PHRASE",
+        "terminology_id": {
+          "_type": "TERMINOLOGY_ID",
+          "value": "ISO_639-1"
+        },
+        "code_string": "de"
+      },
+      "encoding": {
+        "_type": "CODE_PHRASE",
+        "terminology_id": {
+          "_type": "TERMINOLOGY_ID",
+          "value": "IANA_character-sets"
+        },
+        "code_string": "UTF-8"
+      },
+      "subject": {
+        "_type": "PARTY_SELF"
+      },
+      "narrative": {
+        "_type": "DV_TEXT",
+        "value": "Lorem ispum"
+      },
+      "activities": [
+        {
+          "_type": "ACTIVITY",
+          "name": {
+            "_type": "DV_TEXT",
+            "value": "Verordnung"
+          },
+          "description": {
+            "_type": "ITEM_TREE",
+            "name": {
+              "_type": "DV_TEXT",
+              "value": "Tree"
+            },
+            "items": [
+              {
+                "_type": "ELEMENT",
+                "name": {
+                  "_type": "DV_TEXT",
+                  "value": "Einnahmegrund"
+                },
+                "value": {
+                  "_type": "DV_TEXT",
+                  "value": "Bluthochdruck"
+                },
+                "archetype_node_id": "at0018"
+              },
+              {
+                "_type": "ELEMENT",
+                "name": {
+                  "_type": "DV_TEXT",
+                  "value": "Hinweise zur Einnahme"
+                },
+                "value": {
+                  "_type": "DV_TEXT",
+                  "value": "während der Mahlzeit"
+                },
+                "archetype_node_id": "at0044"
+              },
+              {
+                "_type": "ELEMENT",
+                "name": {
+                  "_type": "DV_TEXT",
+                  "value": "Handelsname"
+                },
+                "value": {
+                  "_type": "DV_TEXT",
+                  "value": ""
+                },
+                "archetype_node_id": "at0070"
+              },
+              {
+                "_type": "CLUSTER",
+                "name": {
+                  "_type": "DV_TEXT",
+                  "value": "Detaillierte Angaben zu der Verordnung"
+                },
+                "items": [
+                  {
+                    "_type": "ELEMENT",
+                    "name": {
+                      "_type": "DV_TEXT",
+                      "value": "Datum der Verordnung"
+                    },
+                    "value": {
+                      "_type": "DV_DATE_TIME",
+                      "value": "1936-12-13"
+                    },
+                    "archetype_node_id": "at0012"
+                  }
+                ],
+                "archetype_node_id": "at0113"
+              },
+              {
+                "_type": "ELEMENT",
+                "name": {
+                  "_type": "DV_TEXT",
+                  "value": "Kommentar"
+                },
+                "value": {
+                  "_type": "DV_TEXT",
+                  "value": "Entry generated by Medication Plan Pipeline (automated)"
+                },
+                "archetype_node_id": "at0167"
+              },
+              {
+                "_type": "CLUSTER",
+                "name": {
+                  "_type": "DV_TEXT",
+                  "value": "Arzneimittel"
+                },
+                "items": [
+                  {
+                    "_type": "ELEMENT",
+                    "name": {
+                      "_type": "DV_TEXT",
+                      "value": "Darreichungsform"
+                    },
+                    "value": {
+                      "_type": "DV_TEXT",
+                      "value": "überzogene Tabletten"
+                    },
+                    "archetype_node_id": "at0071"
+                  },
+                  {
+                    "_type": "CLUSTER",
+                    "name": {
+                      "_type": "DV_TEXT",
+                      "value": "Wirkstoff"
+                    },
+                    "items": [
+                      {
+                        "_type": "ELEMENT",
+                        "name": {
+                          "_type": "DV_TEXT",
+                          "value": "Wirkstoff"
+                        },
+                        "value": {
+                          "_type": "DV_TEXT",
+                          "value": "Ramipril"
+                        },
+                        "archetype_node_id": "at0132"
+                      }
+                    ],
+                    "archetype_node_id": "openEHR-EHR-CLUSTER.medication.v1"
+                  }
+                ],
+                "archetype_node_id": "openEHR-EHR-CLUSTER.medication.v1"
+              },
+              {
+                "_type": "CLUSTER",
+                "name": {
+                  "_type": "DV_TEXT",
+                  "value": "Therapeutische Anweisung"
+                },
+                "items": [
+                  {
+                    "_type": "CLUSTER",
+                    "name": {
+                      "_type": "DV_TEXT",
+                      "value": "Dosierung"
+                    },
+                    "items": [
+                      {
+                        "_type": "ELEMENT",
+                        "name": {
+                          "_type": "DV_TEXT",
+                          "value": "Dosismenge"
+                        },
+                        "value": {
+                          "_type": "DV_QUANTITY",
+                          "units": "1",
+                          "magnitude": 10
+                        },
+                        "archetype_node_id": "at0144"
+                      },
+                      {
+                        "_type": "ELEMENT",
+                        "name": {
+                          "_type": "DV_TEXT",
+                          "value": "Dosiseinheit"
+                        },
+                        "value": {
+                          "_type": "DV_TEXT",
+                          "value": "Stück"
+                        },
+                        "archetype_node_id": "at0145"
+                      },
+                      {
+                        "_type": "ELEMENT",
+                        "name": {
+                          "_type": "DV_TEXT",
+                          "value": "Dosierung Freitext"
+                        },
+                        "value": {
+                          "_type": "DV_TEXT",
+                          "value": "Lorem Ipsum"
+                        },
+                        "archetype_node_id": "at0178"
+                      },
+                      {
+                        "_type": "CLUSTER",
+                        "name": {
+                          "_type": "DV_TEXT",
+                          "value": "Tägliche Dosierung"
+                        },
+                        "items": [
+                          {
+                            "_type": "CLUSTER",
+                            "name": {
+                              "_type": "DV_TEXT",
+                              "value": "Bestimmtes Ereignis"
+                            },
+                            "items": [
+                              {
+                                "_type": "ELEMENT",
+                                "name": {
+                                  "_type": "DV_TEXT",
+                                  "value": "Ereignis"
+                                },
+                                "value": {
+                                  "_type": "DV_TEXT",
+                                  "value": "morgens"
+                                },
+                                "archetype_node_id": "at0026"
+                              }
+                            ],
+                            "archetype_node_id": "at0039"
+                          }
+                        ],
+                        "archetype_node_id": "openEHR-EHR-CLUSTER.timing_daily.v1"
+                      }
+                    ],
+                    "archetype_node_id": "openEHR-EHR-CLUSTER.dosage.v1"
+                  },
+                  {
+                    "_type": "CLUSTER",
+                    "name": {
+                      "_type": "DV_TEXT",
+                      "value": "Dosierung"
+                    },
+                    "items": [
+                      {
+                        "_type": "ELEMENT",
+                        "name": {
+                          "_type": "DV_TEXT",
+                          "value": "Dosismenge"
+                        },
+                        "value": {
+                          "_type": "DV_QUANTITY",
+                          "units": "1",
+                          "magnitude": 0
+                        },
+                        "archetype_node_id": "at0144"
+                      },
+                      {
+                        "_type": "ELEMENT",
+                        "name": {
+                          "_type": "DV_TEXT",
+                          "value": "Dosiseinheit"
+                        },
+                        "value": {
+                          "_type": "DV_TEXT",
+                          "value": "Stück"
+                        },
+                        "archetype_node_id": "at0145"
+                      },
+                      {
+                        "_type": "ELEMENT",
+                        "name": {
+                          "_type": "DV_TEXT",
+                          "value": "Dosierung Freitext"
+                        },
+                        "value": {
+                          "_type": "DV_TEXT",
+                          "value": "Lorem Ipsum"
+                        },
+                        "archetype_node_id": "at0178"
+                      },
+                      {
+                        "_type": "CLUSTER",
+                        "name": {
+                          "_type": "DV_TEXT",
+                          "value": "Tägliche Dosierung"
+                        },
+                        "items": [
+                          {
+                            "_type": "CLUSTER",
+                            "name": {
+                              "_type": "DV_TEXT",
+                              "value": "Bestimmtes Ereignis"
+                            },
+                            "items": [
+                              {
+                                "_type": "ELEMENT",
+                                "name": {
+                                  "_type": "DV_TEXT",
+                                  "value": "Ereignis"
+                                },
+                                "value": {
+                                  "_type": "DV_TEXT",
+                                  "value": "mittags"
+                                },
+                                "archetype_node_id": "at0026"
+                              }
+                            ],
+                            "archetype_node_id": "at0039"
+                          }
+                        ],
+                        "archetype_node_id": "openEHR-EHR-CLUSTER.timing_daily.v1"
+                      }
+                    ],
+                    "archetype_node_id": "openEHR-EHR-CLUSTER.dosage.v1"
+                  },
+                  {
+                    "_type": "CLUSTER",
+                    "name": {
+                      "_type": "DV_TEXT",
+                      "value": "Dosierung"
+                    },
+                    "items": [
+                      {
+                        "_type": "ELEMENT",
+                        "name": {
+                          "_type": "DV_TEXT",
+                          "value": "Dosismenge"
+                        },
+                        "value": {
+                          "_type": "DV_QUANTITY",
+                          "units": "1",
+                          "magnitude": 0
+                        },
+                        "archetype_node_id": "at0144"
+                      },
+                      {
+                        "_type": "ELEMENT",
+                        "name": {
+                          "_type": "DV_TEXT",
+                          "value": "Dosiseinheit"
+                        },
+                        "value": {
+                          "_type": "DV_TEXT",
+                          "value": "Stück"
+                        },
+                        "archetype_node_id": "at0145"
+                      },
+                      {
+                        "_type": "ELEMENT",
+                        "name": {
+                          "_type": "DV_TEXT",
+                          "value": "Dosierung Freitext"
+                        },
+                        "value": {
+                          "_type": "DV_TEXT",
+                          "value": "Lorem Ipsum"
+                        },
+                        "archetype_node_id": "at0178"
+                      },
+                      {
+                        "_type": "CLUSTER",
+                        "name": {
+                          "_type": "DV_TEXT",
+                          "value": "Tägliche Dosierung"
+                        },
+                        "items": [
+                          {
+                            "_type": "CLUSTER",
+                            "name": {
+                              "_type": "DV_TEXT",
+                              "value": "Bestimmtes Ereignis"
+                            },
+                            "items": [
+                              {
+                                "_type": "ELEMENT",
+                                "name": {
+                                  "_type": "DV_TEXT",
+                                  "value": "Ereignis"
+                                },
+                                "value": {
+                                  "_type": "DV_TEXT",
+                                  "value": "abends"
+                                },
+                                "archetype_node_id": "at0026"
+                              }
+                            ],
+                            "archetype_node_id": "at0039"
+                          }
+                        ],
+                        "archetype_node_id": "openEHR-EHR-CLUSTER.timing_daily.v1"
+                      }
+                    ],
+                    "archetype_node_id": "openEHR-EHR-CLUSTER.dosage.v1"
+                  },
+                  {
+                    "_type": "CLUSTER",
+                    "name": {
+                      "_type": "DV_TEXT",
+                      "value": "Dosierung"
+                    },
+                    "items": [
+                      {
+                        "_type": "ELEMENT",
+                        "name": {
+                          "_type": "DV_TEXT",
+                          "value": "Dosismenge"
+                        },
+                        "value": {
+                          "_type": "DV_QUANTITY",
+                          "units": "1",
+                          "magnitude": 0
+                        },
+                        "archetype_node_id": "at0144"
+                      },
+                      {
+                        "_type": "ELEMENT",
+                        "name": {
+                          "_type": "DV_TEXT",
+                          "value": "Dosiseinheit"
+                        },
+                        "value": {
+                          "_type": "DV_TEXT",
+                          "value": "Stück"
+                        },
+                        "archetype_node_id": "at0145"
+                      },
+                      {
+                        "_type": "ELEMENT",
+                        "name": {
+                          "_type": "DV_TEXT",
+                          "value": "Dosierung Freitext"
+                        },
+                        "value": {
+                          "_type": "DV_TEXT",
+                          "value": "Lorem Ipsum"
+                        },
+                        "archetype_node_id": "at0178"
+                      },
+                      {
+                        "_type": "CLUSTER",
+                        "name": {
+                          "_type": "DV_TEXT",
+                          "value": "Tägliche Dosierung"
+                        },
+                        "items": [
+                          {
+                            "_type": "CLUSTER",
+                            "name": {
+                              "_type": "DV_TEXT",
+                              "value": "Bestimmtes Ereignis"
+                            },
+                            "items": [
+                              {
+                                "_type": "ELEMENT",
+                                "name": {
+                                  "_type": "DV_TEXT",
+                                  "value": "Ereignis"
+                                },
+                                "value": {
+                                  "_type": "DV_TEXT",
+                                  "value": "nachts"
+                                },
+                                "archetype_node_id": "at0026"
+                              }
+                            ],
+                            "archetype_node_id": "at0039"
+                          }
+                        ],
+                        "archetype_node_id": "openEHR-EHR-CLUSTER.timing_daily.v1"
+                      }
+                    ],
+                    "archetype_node_id": "openEHR-EHR-CLUSTER.dosage.v1"
+                  }
+                ],
+                "archetype_node_id": "openEHR-EHR-CLUSTER.therapeutic_direction.v1"
+              }
+            ],
+            "archetype_node_id": "at0002"
+          },
+          "action_archetype_id": "/.*/",
+          "archetype_node_id": "at0001"
+        }
+      ],
+      "archetype_node_id": "openEHR-EHR-INSTRUCTION.medication_order.v2"
+    },
+    {
+      "_type": "INSTRUCTION",
+      "name": {
+        "_type": "DV_TEXT",
+        "value": "Verordnung von Arzneimittel"
+      },
+      "archetype_details": {
+        "archetype_id": {
+          "value": "openEHR-EHR-INSTRUCTION.medication_order.v2"
+        },
+        "rm_version": "1.0.4"
+      },
+      "language": {
+        "_type": "CODE_PHRASE",
+        "terminology_id": {
+          "_type": "TERMINOLOGY_ID",
+          "value": "ISO_639-1"
+        },
+        "code_string": "de"
+      },
+      "encoding": {
+        "_type": "CODE_PHRASE",
+        "terminology_id": {
+          "_type": "TERMINOLOGY_ID",
+          "value": "IANA_character-sets"
+        },
+        "code_string": "UTF-8"
+      },
+      "subject": {
+        "_type": "PARTY_SELF"
+      },
+      "narrative": {
+        "_type": "DV_TEXT",
+        "value": "Lorem ispum"
+      },
+      "activities": [
+        {
+          "_type": "ACTIVITY",
+          "name": {
+            "_type": "DV_TEXT",
+            "value": "Verordnung"
+          },
+          "description": {
+            "_type": "ITEM_TREE",
+            "name": {
+              "_type": "DV_TEXT",
+              "value": "Tree"
+            },
+            "items": [
+              {
+                "_type": "ELEMENT",
+                "name": {
+                  "_type": "DV_TEXT",
+                  "value": "Einnahmegrund"
+                },
+                "value": {
+                  "_type": "DV_TEXT",
+                  "value": "Bluthochdruck"
+                },
+                "archetype_node_id": "at0018"
+              },
+              {
+                "_type": "ELEMENT",
+                "name": {
+                  "_type": "DV_TEXT",
+                  "value": "Hinweise zur Einnahme"
+                },
+                "value": {
+                  "_type": "DV_TEXT",
+                  "value": "während der Mahlzeit"
+                },
+                "archetype_node_id": "at0044"
+              },
+              {
+                "_type": "ELEMENT",
+                "name": {
+                  "_type": "DV_TEXT",
+                  "value": "Handelsname"
+                },
+                "value": {
+                  "_type": "DV_TEXT",
+                  "value": "[ap RMASMG |"
+                },
+                "archetype_node_id": "at0070"
+              },
+              {
+                "_type": "CLUSTER",
+                "name": {
+                  "_type": "DV_TEXT",
+                  "value": "Detaillierte Angaben zu der Verordnung"
+                },
+                "items": [
+                  {
+                    "_type": "ELEMENT",
+                    "name": {
+                      "_type": "DV_TEXT",
+                      "value": "Datum der Verordnung"
+                    },
+                    "value": {
+                      "_type": "DV_DATE_TIME",
+                      "value": "1936-12-13"
+                    },
+                    "archetype_node_id": "at0012"
+                  }
+                ],
+                "archetype_node_id": "at0113"
+              },
+              {
+                "_type": "ELEMENT",
+                "name": {
+                  "_type": "DV_TEXT",
+                  "value": "Kommentar"
+                },
+                "value": {
+                  "_type": "DV_TEXT",
+                  "value": "Entry generated by Medication Plan Pipeline (automated)"
+                },
+                "archetype_node_id": "at0167"
+              },
+              {
+                "_type": "CLUSTER",
+                "name": {
+                  "_type": "DV_TEXT",
+                  "value": "Arzneimittel"
+                },
+                "items": [
+                  {
+                    "_type": "ELEMENT",
+                    "name": {
+                      "_type": "DV_TEXT",
+                      "value": "Darreichungsform"
+                    },
+                    "value": {
+                      "_type": "DV_TEXT",
+                      "value": "Bad"
+                    },
+                    "archetype_node_id": "at0071"
+                  },
+                  {
+                    "_type": "CLUSTER",
+                    "name": {
+                      "_type": "DV_TEXT",
+                      "value": "Wirkstoff"
+                    },
+                    "items": [
+                      {
+                        "_type": "ELEMENT",
+                        "name": {
+                          "_type": "DV_TEXT",
+                          "value": "Wirkstoff"
+                        },
+                        "value": {
+                          "_type": "DV_TEXT",
+                          "value": "Hydrochlorothiazid"
+                        },
+                        "archetype_node_id": "at0132"
+                      }
+                    ],
+                    "archetype_node_id": "openEHR-EHR-CLUSTER.medication.v1"
+                  }
+                ],
+                "archetype_node_id": "openEHR-EHR-CLUSTER.medication.v1"
+              },
+              {
+                "_type": "CLUSTER",
+                "name": {
+                  "_type": "DV_TEXT",
+                  "value": "Therapeutische Anweisung"
+                },
+                "items": [
+                  {
+                    "_type": "CLUSTER",
+                    "name": {
+                      "_type": "DV_TEXT",
+                      "value": "Dosierung"
+                    },
+                    "items": [
+                      {
+                        "_type": "ELEMENT",
+                        "name": {
+                          "_type": "DV_TEXT",
+                          "value": "Dosismenge"
+                        },
+                        "value": {
+                          "_type": "DV_QUANTITY",
+                          "units": "1",
+                          "magnitude": 1
+                        },
+                        "archetype_node_id": "at0144"
+                      },
+                      {
+                        "_type": "ELEMENT",
+                        "name": {
+                          "_type": "DV_TEXT",
+                          "value": "Dosiseinheit"
+                        },
+                        "value": {
+                          "_type": "DV_TEXT",
+                          "value": "Stück"
+                        },
+                        "archetype_node_id": "at0145"
+                      },
+                      {
+                        "_type": "ELEMENT",
+                        "name": {
+                          "_type": "DV_TEXT",
+                          "value": "Dosierung Freitext"
+                        },
+                        "value": {
+                          "_type": "DV_TEXT",
+                          "value": "Lorem Ipsum"
+                        },
+                        "archetype_node_id": "at0178"
+                      },
+                      {
+                        "_type": "CLUSTER",
+                        "name": {
+                          "_type": "DV_TEXT",
+                          "value": "Tägliche Dosierung"
+                        },
+                        "items": [
+                          {
+                            "_type": "CLUSTER",
+                            "name": {
+                              "_type": "DV_TEXT",
+                              "value": "Bestimmtes Ereignis"
+                            },
+                            "items": [
+                              {
+                                "_type": "ELEMENT",
+                                "name": {
+                                  "_type": "DV_TEXT",
+                                  "value": "Ereignis"
+                                },
+                                "value": {
+                                  "_type": "DV_TEXT",
+                                  "value": "morgens"
+                                },
+                                "archetype_node_id": "at0026"
+                              }
+                            ],
+                            "archetype_node_id": "at0039"
+                          }
+                        ],
+                        "archetype_node_id": "openEHR-EHR-CLUSTER.timing_daily.v1"
+                      }
+                    ],
+                    "archetype_node_id": "openEHR-EHR-CLUSTER.dosage.v1"
+                  },
+                  {
+                    "_type": "CLUSTER",
+                    "name": {
+                      "_type": "DV_TEXT",
+                      "value": "Dosierung"
+                    },
+                    "items": [
+                      {
+                        "_type": "ELEMENT",
+                        "name": {
+                          "_type": "DV_TEXT",
+                          "value": "Dosismenge"
+                        },
+                        "value": {
+                          "_type": "DV_QUANTITY",
+                          "units": "1",
+                          "magnitude": 0
+                        },
+                        "archetype_node_id": "at0144"
+                      },
+                      {
+                        "_type": "ELEMENT",
+                        "name": {
+                          "_type": "DV_TEXT",
+                          "value": "Dosiseinheit"
+                        },
+                        "value": {
+                          "_type": "DV_TEXT",
+                          "value": "Stück"
+                        },
+                        "archetype_node_id": "at0145"
+                      },
+                      {
+                        "_type": "ELEMENT",
+                        "name": {
+                          "_type": "DV_TEXT",
+                          "value": "Dosierung Freitext"
+                        },
+                        "value": {
+                          "_type": "DV_TEXT",
+                          "value": "Lorem Ipsum"
+                        },
+                        "archetype_node_id": "at0178"
+                      },
+                      {
+                        "_type": "CLUSTER",
+                        "name": {
+                          "_type": "DV_TEXT",
+                          "value": "Tägliche Dosierung"
+                        },
+                        "items": [
+                          {
+                            "_type": "CLUSTER",
+                            "name": {
+                              "_type": "DV_TEXT",
+                              "value": "Bestimmtes Ereignis"
+                            },
+                            "items": [
+                              {
+                                "_type": "ELEMENT",
+                                "name": {
+                                  "_type": "DV_TEXT",
+                                  "value": "Ereignis"
+                                },
+                                "value": {
+                                  "_type": "DV_TEXT",
+                                  "value": "mittags"
+                                },
+                                "archetype_node_id": "at0026"
+                              }
+                            ],
+                            "archetype_node_id": "at0039"
+                          }
+                        ],
+                        "archetype_node_id": "openEHR-EHR-CLUSTER.timing_daily.v1"
+                      }
+                    ],
+                    "archetype_node_id": "openEHR-EHR-CLUSTER.dosage.v1"
+                  },
+                  {
+                    "_type": "CLUSTER",
+                    "name": {
+                      "_type": "DV_TEXT",
+                      "value": "Dosierung"
+                    },
+                    "items": [
+                      {
+                        "_type": "ELEMENT",
+                        "name": {
+                          "_type": "DV_TEXT",
+                          "value": "Dosismenge"
+                        },
+                        "value": {
+                          "_type": "DV_QUANTITY",
+                          "units": "1",
+                          "magnitude": 0
+                        },
+                        "archetype_node_id": "at0144"
+                      },
+                      {
+                        "_type": "ELEMENT",
+                        "name": {
+                          "_type": "DV_TEXT",
+                          "value": "Dosiseinheit"
+                        },
+                        "value": {
+                          "_type": "DV_TEXT",
+                          "value": "Stück"
+                        },
+                        "archetype_node_id": "at0145"
+                      },
+                      {
+                        "_type": "ELEMENT",
+                        "name": {
+                          "_type": "DV_TEXT",
+                          "value": "Dosierung Freitext"
+                        },
+                        "value": {
+                          "_type": "DV_TEXT",
+                          "value": "Lorem Ipsum"
+                        },
+                        "archetype_node_id": "at0178"
+                      },
+                      {
+                        "_type": "CLUSTER",
+                        "name": {
+                          "_type": "DV_TEXT",
+                          "value": "Tägliche Dosierung"
+                        },
+                        "items": [
+                          {
+                            "_type": "CLUSTER",
+                            "name": {
+                              "_type": "DV_TEXT",
+                              "value": "Bestimmtes Ereignis"
+                            },
+                            "items": [
+                              {
+                                "_type": "ELEMENT",
+                                "name": {
+                                  "_type": "DV_TEXT",
+                                  "value": "Ereignis"
+                                },
+                                "value": {
+                                  "_type": "DV_TEXT",
+                                  "value": "abends"
+                                },
+                                "archetype_node_id": "at0026"
+                              }
+                            ],
+                            "archetype_node_id": "at0039"
+                          }
+                        ],
+                        "archetype_node_id": "openEHR-EHR-CLUSTER.timing_daily.v1"
+                      }
+                    ],
+                    "archetype_node_id": "openEHR-EHR-CLUSTER.dosage.v1"
+                  }
+                ],
+                "archetype_node_id": "openEHR-EHR-CLUSTER.therapeutic_direction.v1"
+              }
+            ],
+            "archetype_node_id": "at0002"
+          },
+          "action_archetype_id": "/.*/",
+          "archetype_node_id": "at0001"
+        }
+      ],
+      "archetype_node_id": "openEHR-EHR-INSTRUCTION.medication_order.v2"
+    },
+    {
+      "_type": "INSTRUCTION",
+      "name": {
+        "_type": "DV_TEXT",
+        "value": "Verordnung von Arzneimittel"
+      },
+      "archetype_details": {
+        "archetype_id": {
+          "value": "openEHR-EHR-INSTRUCTION.medication_order.v2"
+        },
+        "rm_version": "1.0.4"
+      },
+      "language": {
+        "_type": "CODE_PHRASE",
+        "terminology_id": {
+          "_type": "TERMINOLOGY_ID",
+          "value": "ISO_639-1"
+        },
+        "code_string": "de"
+      },
+      "encoding": {
+        "_type": "CODE_PHRASE",
+        "terminology_id": {
+          "_type": "TERMINOLOGY_ID",
+          "value": "IANA_character-sets"
+        },
+        "code_string": "UTF-8"
+      },
+      "subject": {
+        "_type": "PARTY_SELF"
+      },
+      "narrative": {
+        "_type": "DV_TEXT",
+        "value": "Lorem ispum"
+      },
+      "activities": [
+        {
+          "_type": "ACTIVITY",
+          "name": {
+            "_type": "DV_TEXT",
+            "value": "Verordnung"
+          },
+          "description": {
+            "_type": "ITEM_TREE",
+            "name": {
+              "_type": "DV_TEXT",
+              "value": "Tree"
+            },
+            "items": [
+              {
+                "_type": "ELEMENT",
+                "name": {
+                  "_type": "DV_TEXT",
+                  "value": "Einnahmegrund"
+                },
+                "value": {
+                  "_type": "DV_TEXT",
+                  "value": "art. Verschluss"
+                },
+                "archetype_node_id": "at0018"
+              },
+              {
+                "_type": "ELEMENT",
+                "name": {
+                  "_type": "DV_TEXT",
+                  "value": "Hinweise zur Einnahme"
+                },
+                "value": {
+                  "_type": "DV_TEXT",
+                  "value": "während der Mahlzeit"
+                },
+                "archetype_node_id": "at0044"
+              },
+              {
+                "_type": "ELEMENT",
+                "name": {
+                  "_type": "DV_TEXT",
+                  "value": "Handelsname"
+                },
+                "value": {
+                  "_type": "DV_TEXT",
+                  "value": "PLAVIX"
+                },
+                "archetype_node_id": "at0070"
+              },
+              {
+                "_type": "CLUSTER",
+                "name": {
+                  "_type": "DV_TEXT",
+                  "value": "Detaillierte Angaben zu der Verordnung"
+                },
+                "items": [
+                  {
+                    "_type": "ELEMENT",
+                    "name": {
+                      "_type": "DV_TEXT",
+                      "value": "Datum der Verordnung"
+                    },
+                    "value": {
+                      "_type": "DV_DATE_TIME",
+                      "value": "1936-12-13"
+                    },
+                    "archetype_node_id": "at0012"
+                  }
+                ],
+                "archetype_node_id": "at0113"
+              },
+              {
+                "_type": "ELEMENT",
+                "name": {
+                  "_type": "DV_TEXT",
+                  "value": "Kommentar"
+                },
+                "value": {
+                  "_type": "DV_TEXT",
+                  "value": "Entry generated by Medication Plan Pipeline (automated)"
+                },
+                "archetype_node_id": "at0167"
+              },
+              {
+                "_type": "CLUSTER",
+                "name": {
+                  "_type": "DV_TEXT",
+                  "value": "Arzneimittel"
+                },
+                "items": [
+                  {
+                    "_type": "ELEMENT",
+                    "name": {
+                      "_type": "DV_TEXT",
+                      "value": "Darreichungsform"
+                    },
+                    "value": {
+                      "_type": "DV_TEXT",
+                      "value": "überzogene Tabletten"
+                    },
+                    "archetype_node_id": "at0071"
+                  },
+                  {
+                    "_type": "CLUSTER",
+                    "name": {
+                      "_type": "DV_TEXT",
+                      "value": "Wirkstoff"
+                    },
+                    "items": [
+                      {
+                        "_type": "ELEMENT",
+                        "name": {
+                          "_type": "DV_TEXT",
+                          "value": "Wirkstoff"
+                        },
+                        "value": {
+                          "_type": "DV_TEXT",
+                          "value": "Clopidogrel"
+                        },
+                        "archetype_node_id": "at0132"
+                      }
+                    ],
+                    "archetype_node_id": "openEHR-EHR-CLUSTER.medication.v1"
+                  }
+                ],
+                "archetype_node_id": "openEHR-EHR-CLUSTER.medication.v1"
+              },
+              {
+                "_type": "CLUSTER",
+                "name": {
+                  "_type": "DV_TEXT",
+                  "value": "Therapeutische Anweisung"
+                },
+                "items": [
+                  {
+                    "_type": "CLUSTER",
+                    "name": {
+                      "_type": "DV_TEXT",
+                      "value": "Dosierung"
+                    },
+                    "items": [
+                      {
+                        "_type": "ELEMENT",
+                        "name": {
+                          "_type": "DV_TEXT",
+                          "value": "Dosismenge"
+                        },
+                        "value": {
+                          "_type": "DV_QUANTITY",
+                          "units": "1",
+                          "magnitude": 0
+                        },
+                        "archetype_node_id": "at0144"
+                      },
+                      {
+                        "_type": "ELEMENT",
+                        "name": {
+                          "_type": "DV_TEXT",
+                          "value": "Dosiseinheit"
+                        },
+                        "value": {
+                          "_type": "DV_TEXT",
+                          "value": "Stück"
+                        },
+                        "archetype_node_id": "at0145"
+                      },
+                      {
+                        "_type": "ELEMENT",
+                        "name": {
+                          "_type": "DV_TEXT",
+                          "value": "Dosierung Freitext"
+                        },
+                        "value": {
+                          "_type": "DV_TEXT",
+                          "value": "Lorem Ipsum"
+                        },
+                        "archetype_node_id": "at0178"
+                      },
+                      {
+                        "_type": "CLUSTER",
+                        "name": {
+                          "_type": "DV_TEXT",
+                          "value": "Tägliche Dosierung"
+                        },
+                        "items": [
+                          {
+                            "_type": "CLUSTER",
+                            "name": {
+                              "_type": "DV_TEXT",
+                              "value": "Bestimmtes Ereignis"
+                            },
+                            "items": [
+                              {
+                                "_type": "ELEMENT",
+                                "name": {
+                                  "_type": "DV_TEXT",
+                                  "value": "Ereignis"
+                                },
+                                "value": {
+                                  "_type": "DV_TEXT",
+                                  "value": "morgens"
+                                },
+                                "archetype_node_id": "at0026"
+                              }
+                            ],
+                            "archetype_node_id": "at0039"
+                          }
+                        ],
+                        "archetype_node_id": "openEHR-EHR-CLUSTER.timing_daily.v1"
+                      }
+                    ],
+                    "archetype_node_id": "openEHR-EHR-CLUSTER.dosage.v1"
+                  },
+                  {
+                    "_type": "CLUSTER",
+                    "name": {
+                      "_type": "DV_TEXT",
+                      "value": "Dosierung"
+                    },
+                    "items": [
+                      {
+                        "_type": "ELEMENT",
+                        "name": {
+                          "_type": "DV_TEXT",
+                          "value": "Dosismenge"
+                        },
+                        "value": {
+                          "_type": "DV_QUANTITY",
+                          "units": "1",
+                          "magnitude": 0
+                        },
+                        "archetype_node_id": "at0144"
+                      },
+                      {
+                        "_type": "ELEMENT",
+                        "name": {
+                          "_type": "DV_TEXT",
+                          "value": "Dosiseinheit"
+                        },
+                        "value": {
+                          "_type": "DV_TEXT",
+                          "value": "Stück"
+                        },
+                        "archetype_node_id": "at0145"
+                      },
+                      {
+                        "_type": "ELEMENT",
+                        "name": {
+                          "_type": "DV_TEXT",
+                          "value": "Dosierung Freitext"
+                        },
+                        "value": {
+                          "_type": "DV_TEXT",
+                          "value": "Lorem Ipsum"
+                        },
+                        "archetype_node_id": "at0178"
+                      },
+                      {
+                        "_type": "CLUSTER",
+                        "name": {
+                          "_type": "DV_TEXT",
+                          "value": "Tägliche Dosierung"
+                        },
+                        "items": [
+                          {
+                            "_type": "CLUSTER",
+                            "name": {
+                              "_type": "DV_TEXT",
+                              "value": "Bestimmtes Ereignis"
+                            },
+                            "items": [
+                              {
+                                "_type": "ELEMENT",
+                                "name": {
+                                  "_type": "DV_TEXT",
+                                  "value": "Ereignis"
+                                },
+                                "value": {
+                                  "_type": "DV_TEXT",
+                                  "value": "mittags"
+                                },
+                                "archetype_node_id": "at0026"
+                              }
+                            ],
+                            "archetype_node_id": "at0039"
+                          }
+                        ],
+                        "archetype_node_id": "openEHR-EHR-CLUSTER.timing_daily.v1"
+                      }
+                    ],
+                    "archetype_node_id": "openEHR-EHR-CLUSTER.dosage.v1"
+                  },
+                  {
+                    "_type": "CLUSTER",
+                    "name": {
+                      "_type": "DV_TEXT",
+                      "value": "Dosierung"
+                    },
+                    "items": [
+                      {
+                        "_type": "ELEMENT",
+                        "name": {
+                          "_type": "DV_TEXT",
+                          "value": "Dosismenge"
+                        },
+                        "value": {
+                          "_type": "DV_QUANTITY",
+                          "units": "1",
+                          "magnitude": 1
+                        },
+                        "archetype_node_id": "at0144"
+                      },
+                      {
+                        "_type": "ELEMENT",
+                        "name": {
+                          "_type": "DV_TEXT",
+                          "value": "Dosiseinheit"
+                        },
+                        "value": {
+                          "_type": "DV_TEXT",
+                          "value": "Stück"
+                        },
+                        "archetype_node_id": "at0145"
+                      },
+                      {
+                        "_type": "ELEMENT",
+                        "name": {
+                          "_type": "DV_TEXT",
+                          "value": "Dosierung Freitext"
+                        },
+                        "value": {
+                          "_type": "DV_TEXT",
+                          "value": "Lorem Ipsum"
+                        },
+                        "archetype_node_id": "at0178"
+                      },
+                      {
+                        "_type": "CLUSTER",
+                        "name": {
+                          "_type": "DV_TEXT",
+                          "value": "Tägliche Dosierung"
+                        },
+                        "items": [
+                          {
+                            "_type": "CLUSTER",
+                            "name": {
+                              "_type": "DV_TEXT",
+                              "value": "Bestimmtes Ereignis"
+                            },
+                            "items": [
+                              {
+                                "_type": "ELEMENT",
+                                "name": {
+                                  "_type": "DV_TEXT",
+                                  "value": "Ereignis"
+                                },
+                                "value": {
+                                  "_type": "DV_TEXT",
+                                  "value": "abends"
+                                },
+                                "archetype_node_id": "at0026"
+                              }
+                            ],
+                            "archetype_node_id": "at0039"
+                          }
+                        ],
+                        "archetype_node_id": "openEHR-EHR-CLUSTER.timing_daily.v1"
+                      }
+                    ],
+                    "archetype_node_id": "openEHR-EHR-CLUSTER.dosage.v1"
+                  },
+                  {
+                    "_type": "CLUSTER",
+                    "name": {
+                      "_type": "DV_TEXT",
+                      "value": "Dosierung"
+                    },
+                    "items": [
+                      {
+                        "_type": "ELEMENT",
+                        "name": {
+                          "_type": "DV_TEXT",
+                          "value": "Dosismenge"
+                        },
+                        "value": {
+                          "_type": "DV_QUANTITY",
+                          "units": "1",
+                          "magnitude": 0
+                        },
+                        "archetype_node_id": "at0144"
+                      },
+                      {
+                        "_type": "ELEMENT",
+                        "name": {
+                          "_type": "DV_TEXT",
+                          "value": "Dosiseinheit"
+                        },
+                        "value": {
+                          "_type": "DV_TEXT",
+                          "value": "Stück"
+                        },
+                        "archetype_node_id": "at0145"
+                      },
+                      {
+                        "_type": "ELEMENT",
+                        "name": {
+                          "_type": "DV_TEXT",
+                          "value": "Dosierung Freitext"
+                        },
+                        "value": {
+                          "_type": "DV_TEXT",
+                          "value": "Lorem Ipsum"
+                        },
+                        "archetype_node_id": "at0178"
+                      },
+                      {
+                        "_type": "CLUSTER",
+                        "name": {
+                          "_type": "DV_TEXT",
+                          "value": "Tägliche Dosierung"
+                        },
+                        "items": [
+                          {
+                            "_type": "CLUSTER",
+                            "name": {
+                              "_type": "DV_TEXT",
+                              "value": "Bestimmtes Ereignis"
+                            },
+                            "items": [
+                              {
+                                "_type": "ELEMENT",
+                                "name": {
+                                  "_type": "DV_TEXT",
+                                  "value": "Ereignis"
+                                },
+                                "value": {
+                                  "_type": "DV_TEXT",
+                                  "value": "nachts"
+                                },
+                                "archetype_node_id": "at0026"
+                              }
+                            ],
+                            "archetype_node_id": "at0039"
+                          }
+                        ],
+                        "archetype_node_id": "openEHR-EHR-CLUSTER.timing_daily.v1"
+                      }
+                    ],
+                    "archetype_node_id": "openEHR-EHR-CLUSTER.dosage.v1"
+                  }
+                ],
+                "archetype_node_id": "openEHR-EHR-CLUSTER.therapeutic_direction.v1"
+              }
+            ],
+            "archetype_node_id": "at0002"
+          },
+          "action_archetype_id": "/.*/",
+          "archetype_node_id": "at0001"
+        }
+      ],
+      "archetype_node_id": "openEHR-EHR-INSTRUCTION.medication_order.v2"
+    },
+    {
+      "_type": "INSTRUCTION",
+      "name": {
+        "_type": "DV_TEXT",
+        "value": "Verordnung von Arzneimittel"
+      },
+      "archetype_details": {
+        "archetype_id": {
+          "value": "openEHR-EHR-INSTRUCTION.medication_order.v2"
+        },
+        "rm_version": "1.0.4"
+      },
+      "language": {
+        "_type": "CODE_PHRASE",
+        "terminology_id": {
+          "_type": "TERMINOLOGY_ID",
+          "value": "ISO_639-1"
+        },
+        "code_string": "de"
+      },
+      "encoding": {
+        "_type": "CODE_PHRASE",
+        "terminology_id": {
+          "_type": "TERMINOLOGY_ID",
+          "value": "IANA_character-sets"
+        },
+        "code_string": "UTF-8"
+      },
+      "subject": {
+        "_type": "PARTY_SELF"
+      },
+      "narrative": {
+        "_type": "DV_TEXT",
+        "value": "Lorem ispum"
+      },
+      "activities": [
+        {
+          "_type": "ACTIVITY",
+          "name": {
+            "_type": "DV_TEXT",
+            "value": "Verordnung"
+          },
+          "description": {
+            "_type": "ITEM_TREE",
+            "name": {
+              "_type": "DV_TEXT",
+              "value": "Tree"
+            },
+            "items": [
+              {
+                "_type": "ELEMENT",
+                "name": {
+                  "_type": "DV_TEXT",
+                  "value": "Einnahmegrund"
+                },
+                "value": {
+                  "_type": "DV_TEXT",
+                  "value": "erhöhte Blutfette"
+                },
+                "archetype_node_id": "at0018"
+              },
+              {
+                "_type": "ELEMENT",
+                "name": {
+                  "_type": "DV_TEXT",
+                  "value": "Hinweise zur Einnahme"
+                },
+                "value": {
+                  "_type": "DV_TEXT",
+                  "value": "nach der Mahlzeit"
+                },
+                "archetype_node_id": "at0044"
+              },
+              {
+                "_type": "ELEMENT",
+                "name": {
+                  "_type": "DV_TEXT",
+                  "value": "Handelsname"
+                },
+                "value": {
+                  "_type": "DV_TEXT",
+                  "value": "SIMVA BASICS 20 mg|"
+                },
+                "archetype_node_id": "at0070"
+              },
+              {
+                "_type": "CLUSTER",
+                "name": {
+                  "_type": "DV_TEXT",
+                  "value": "Detaillierte Angaben zu der Verordnung"
+                },
+                "items": [
+                  {
+                    "_type": "ELEMENT",
+                    "name": {
+                      "_type": "DV_TEXT",
+                      "value": "Datum der Verordnung"
+                    },
+                    "value": {
+                      "_type": "DV_DATE_TIME",
+                      "value": "1936-12-13"
+                    },
+                    "archetype_node_id": "at0012"
+                  }
+                ],
+                "archetype_node_id": "at0113"
+              },
+              {
+                "_type": "ELEMENT",
+                "name": {
+                  "_type": "DV_TEXT",
+                  "value": "Kommentar"
+                },
+                "value": {
+                  "_type": "DV_TEXT",
+                  "value": "Entry generated by Medication Plan Pipeline (automated)"
+                },
+                "archetype_node_id": "at0167"
+              },
+              {
+                "_type": "CLUSTER",
+                "name": {
+                  "_type": "DV_TEXT",
+                  "value": "Arzneimittel"
+                },
+                "items": [
+                  {
+                    "_type": "ELEMENT",
+                    "name": {
+                      "_type": "DV_TEXT",
+                      "value": "Darreichungsform"
+                    },
+                    "value": {
+                      "_type": "DV_TEXT",
+                      "value": "Gel"
+                    },
+                    "archetype_node_id": "at0071"
+                  },
+                  {
+                    "_type": "CLUSTER",
+                    "name": {
+                      "_type": "DV_TEXT",
+                      "value": "Wirkstoff"
+                    },
+                    "items": [
+                      {
+                        "_type": "ELEMENT",
+                        "name": {
+                          "_type": "DV_TEXT",
+                          "value": "Wirkstoff"
+                        },
+                        "value": {
+                          "_type": "DV_TEXT",
+                          "value": "Simvastatin"
+                        },
+                        "archetype_node_id": "at0132"
+                      }
+                    ],
+                    "archetype_node_id": "openEHR-EHR-CLUSTER.medication.v1"
+                  }
+                ],
+                "archetype_node_id": "openEHR-EHR-CLUSTER.medication.v1"
+              },
+              {
+                "_type": "CLUSTER",
+                "name": {
+                  "_type": "DV_TEXT",
+                  "value": "Therapeutische Anweisung"
+                },
+                "items": [
+                  {
+                    "_type": "CLUSTER",
+                    "name": {
+                      "_type": "DV_TEXT",
+                      "value": "Dosierung"
+                    },
+                    "items": [
+                      {
+                        "_type": "ELEMENT",
+                        "name": {
+                          "_type": "DV_TEXT",
+                          "value": "Dosismenge"
+                        },
+                        "value": {
+                          "_type": "DV_QUANTITY",
+                          "units": "1",
+                          "magnitude": 0
+                        },
+                        "archetype_node_id": "at0144"
+                      },
+                      {
+                        "_type": "ELEMENT",
+                        "name": {
+                          "_type": "DV_TEXT",
+                          "value": "Dosiseinheit"
+                        },
+                        "value": {
+                          "_type": "DV_TEXT",
+                          "value": "Stück"
+                        },
+                        "archetype_node_id": "at0145"
+                      },
+                      {
+                        "_type": "ELEMENT",
+                        "name": {
+                          "_type": "DV_TEXT",
+                          "value": "Dosierung Freitext"
+                        },
+                        "value": {
+                          "_type": "DV_TEXT",
+                          "value": "Lorem Ipsum"
+                        },
+                        "archetype_node_id": "at0178"
+                      },
+                      {
+                        "_type": "CLUSTER",
+                        "name": {
+                          "_type": "DV_TEXT",
+                          "value": "Tägliche Dosierung"
+                        },
+                        "items": [
+                          {
+                            "_type": "CLUSTER",
+                            "name": {
+                              "_type": "DV_TEXT",
+                              "value": "Bestimmtes Ereignis"
+                            },
+                            "items": [
+                              {
+                                "_type": "ELEMENT",
+                                "name": {
+                                  "_type": "DV_TEXT",
+                                  "value": "Ereignis"
+                                },
+                                "value": {
+                                  "_type": "DV_TEXT",
+                                  "value": "morgens"
+                                },
+                                "archetype_node_id": "at0026"
+                              }
+                            ],
+                            "archetype_node_id": "at0039"
+                          }
+                        ],
+                        "archetype_node_id": "openEHR-EHR-CLUSTER.timing_daily.v1"
+                      }
+                    ],
+                    "archetype_node_id": "openEHR-EHR-CLUSTER.dosage.v1"
+                  },
+                  {
+                    "_type": "CLUSTER",
+                    "name": {
+                      "_type": "DV_TEXT",
+                      "value": "Dosierung"
+                    },
+                    "items": [
+                      {
+                        "_type": "ELEMENT",
+                        "name": {
+                          "_type": "DV_TEXT",
+                          "value": "Dosismenge"
+                        },
+                        "value": {
+                          "_type": "DV_QUANTITY",
+                          "units": "1",
+                          "magnitude": 0
+                        },
+                        "archetype_node_id": "at0144"
+                      },
+                      {
+                        "_type": "ELEMENT",
+                        "name": {
+                          "_type": "DV_TEXT",
+                          "value": "Dosiseinheit"
+                        },
+                        "value": {
+                          "_type": "DV_TEXT",
+                          "value": "Stück"
+                        },
+                        "archetype_node_id": "at0145"
+                      },
+                      {
+                        "_type": "ELEMENT",
+                        "name": {
+                          "_type": "DV_TEXT",
+                          "value": "Dosierung Freitext"
+                        },
+                        "value": {
+                          "_type": "DV_TEXT",
+                          "value": "Lorem Ipsum"
+                        },
+                        "archetype_node_id": "at0178"
+                      },
+                      {
+                        "_type": "CLUSTER",
+                        "name": {
+                          "_type": "DV_TEXT",
+                          "value": "Tägliche Dosierung"
+                        },
+                        "items": [
+                          {
+                            "_type": "CLUSTER",
+                            "name": {
+                              "_type": "DV_TEXT",
+                              "value": "Bestimmtes Ereignis"
+                            },
+                            "items": [
+                              {
+                                "_type": "ELEMENT",
+                                "name": {
+                                  "_type": "DV_TEXT",
+                                  "value": "Ereignis"
+                                },
+                                "value": {
+                                  "_type": "DV_TEXT",
+                                  "value": "mittags"
+                                },
+                                "archetype_node_id": "at0026"
+                              }
+                            ],
+                            "archetype_node_id": "at0039"
+                          }
+                        ],
+                        "archetype_node_id": "openEHR-EHR-CLUSTER.timing_daily.v1"
+                      }
+                    ],
+                    "archetype_node_id": "openEHR-EHR-CLUSTER.dosage.v1"
+                  },
+                  {
+                    "_type": "CLUSTER",
+                    "name": {
+                      "_type": "DV_TEXT",
+                      "value": "Dosierung"
+                    },
+                    "items": [
+                      {
+                        "_type": "ELEMENT",
+                        "name": {
+                          "_type": "DV_TEXT",
+                          "value": "Dosismenge"
+                        },
+                        "value": {
+                          "_type": "DV_QUANTITY",
+                          "units": "1",
+                          "magnitude": 1
+                        },
+                        "archetype_node_id": "at0144"
+                      },
+                      {
+                        "_type": "ELEMENT",
+                        "name": {
+                          "_type": "DV_TEXT",
+                          "value": "Dosiseinheit"
+                        },
+                        "value": {
+                          "_type": "DV_TEXT",
+                          "value": "Stück"
+                        },
+                        "archetype_node_id": "at0145"
+                      },
+                      {
+                        "_type": "ELEMENT",
+                        "name": {
+                          "_type": "DV_TEXT",
+                          "value": "Dosierung Freitext"
+                        },
+                        "value": {
+                          "_type": "DV_TEXT",
+                          "value": "Lorem Ipsum"
+                        },
+                        "archetype_node_id": "at0178"
+                      },
+                      {
+                        "_type": "CLUSTER",
+                        "name": {
+                          "_type": "DV_TEXT",
+                          "value": "Tägliche Dosierung"
+                        },
+                        "items": [
+                          {
+                            "_type": "CLUSTER",
+                            "name": {
+                              "_type": "DV_TEXT",
+                              "value": "Bestimmtes Ereignis"
+                            },
+                            "items": [
+                              {
+                                "_type": "ELEMENT",
+                                "name": {
+                                  "_type": "DV_TEXT",
+                                  "value": "Ereignis"
+                                },
+                                "value": {
+                                  "_type": "DV_TEXT",
+                                  "value": "abends"
+                                },
+                                "archetype_node_id": "at0026"
+                              }
+                            ],
+                            "archetype_node_id": "at0039"
+                          }
+                        ],
+                        "archetype_node_id": "openEHR-EHR-CLUSTER.timing_daily.v1"
+                      }
+                    ],
+                    "archetype_node_id": "openEHR-EHR-CLUSTER.dosage.v1"
+                  },
+                  {
+                    "_type": "CLUSTER",
+                    "name": {
+                      "_type": "DV_TEXT",
+                      "value": "Dosierung"
+                    },
+                    "items": [
+                      {
+                        "_type": "ELEMENT",
+                        "name": {
+                          "_type": "DV_TEXT",
+                          "value": "Dosismenge"
+                        },
+                        "value": {
+                          "_type": "DV_QUANTITY",
+                          "units": "1",
+                          "magnitude": 0
+                        },
+                        "archetype_node_id": "at0144"
+                      },
+                      {
+                        "_type": "ELEMENT",
+                        "name": {
+                          "_type": "DV_TEXT",
+                          "value": "Dosiseinheit"
+                        },
+                        "value": {
+                          "_type": "DV_TEXT",
+                          "value": "Stück"
+                        },
+                        "archetype_node_id": "at0145"
+                      },
+                      {
+                        "_type": "ELEMENT",
+                        "name": {
+                          "_type": "DV_TEXT",
+                          "value": "Dosierung Freitext"
+                        },
+                        "value": {
+                          "_type": "DV_TEXT",
+                          "value": "Lorem Ipsum"
+                        },
+                        "archetype_node_id": "at0178"
+                      },
+                      {
+                        "_type": "CLUSTER",
+                        "name": {
+                          "_type": "DV_TEXT",
+                          "value": "Tägliche Dosierung"
+                        },
+                        "items": [
+                          {
+                            "_type": "CLUSTER",
+                            "name": {
+                              "_type": "DV_TEXT",
+                              "value": "Bestimmtes Ereignis"
+                            },
+                            "items": [
+                              {
+                                "_type": "ELEMENT",
+                                "name": {
+                                  "_type": "DV_TEXT",
+                                  "value": "Ereignis"
+                                },
+                                "value": {
+                                  "_type": "DV_TEXT",
+                                  "value": "nachts"
+                                },
+                                "archetype_node_id": "at0026"
+                              }
+                            ],
+                            "archetype_node_id": "at0039"
+                          }
+                        ],
+                        "archetype_node_id": "openEHR-EHR-CLUSTER.timing_daily.v1"
+                      }
+                    ],
+                    "archetype_node_id": "openEHR-EHR-CLUSTER.dosage.v1"
+                  }
+                ],
+                "archetype_node_id": "openEHR-EHR-CLUSTER.therapeutic_direction.v1"
+              }
+            ],
+            "archetype_node_id": "at0002"
+          },
+          "action_archetype_id": "/.*/",
+          "archetype_node_id": "at0001"
+        }
+      ],
+      "archetype_node_id": "openEHR-EHR-INSTRUCTION.medication_order.v2"
+    },
+    {
+      "_type": "INSTRUCTION",
+      "name": {
+        "_type": "DV_TEXT",
+        "value": "Verordnung von Arzneimittel"
+      },
+      "archetype_details": {
+        "archetype_id": {
+          "value": "openEHR-EHR-INSTRUCTION.medication_order.v2"
+        },
+        "rm_version": "1.0.4"
+      },
+      "language": {
+        "_type": "CODE_PHRASE",
+        "terminology_id": {
+          "_type": "TERMINOLOGY_ID",
+          "value": "ISO_639-1"
+        },
+        "code_string": "de"
+      },
+      "encoding": {
+        "_type": "CODE_PHRASE",
+        "terminology_id": {
+          "_type": "TERMINOLOGY_ID",
+          "value": "IANA_character-sets"
+        },
+        "code_string": "UTF-8"
+      },
+      "subject": {
+        "_type": "PARTY_SELF"
+      },
+      "narrative": {
+        "_type": "DV_TEXT",
+        "value": "Lorem ispum"
+      },
+      "activities": [
+        {
+          "_type": "ACTIVITY",
+          "name": {
+            "_type": "DV_TEXT",
+            "value": "Verordnung"
+          },
+          "description": {
+            "_type": "ITEM_TREE",
+            "name": {
+              "_type": "DV_TEXT",
+              "value": "Tree"
+            },
+            "items": [
+              {
+                "_type": "ELEMENT",
+                "name": {
+                  "_type": "DV_TEXT",
+                  "value": "Einnahmegrund"
+                },
+                "value": {
+                  "_type": "DV_TEXT",
+                  "value": "Diabetes"
+                },
+                "archetype_node_id": "at0018"
+              },
+              {
+                "_type": "ELEMENT",
+                "name": {
+                  "_type": "DV_TEXT",
+                  "value": "Hinweise zur Einnahme"
+                },
+                "value": {
+                  "_type": "DV_TEXT",
+                  "value": "subkutan"
+                },
+                "archetype_node_id": "at0044"
+              },
+              {
+                "_type": "ELEMENT",
+                "name": {
+                  "_type": "DV_TEXT",
+                  "value": "Handelsname"
+                },
+                "value": {
+                  "_type": "DV_TEXT",
+                  "value": "|ERn APHANE PENFILL"
+                },
+                "archetype_node_id": "at0070"
+              },
+              {
+                "_type": "CLUSTER",
+                "name": {
+                  "_type": "DV_TEXT",
+                  "value": "Detaillierte Angaben zu der Verordnung"
+                },
+                "items": [
+                  {
+                    "_type": "ELEMENT",
+                    "name": {
+                      "_type": "DV_TEXT",
+                      "value": "Datum der Verordnung"
+                    },
+                    "value": {
+                      "_type": "DV_DATE_TIME",
+                      "value": "1936-12-13"
+                    },
+                    "archetype_node_id": "at0012"
+                  }
+                ],
+                "archetype_node_id": "at0113"
+              },
+              {
+                "_type": "ELEMENT",
+                "name": {
+                  "_type": "DV_TEXT",
+                  "value": "Kommentar"
+                },
+                "value": {
+                  "_type": "DV_TEXT",
+                  "value": "Entry generated by Medication Plan Pipeline (automated)"
+                },
+                "archetype_node_id": "at0167"
+              },
+              {
+                "_type": "CLUSTER",
+                "name": {
+                  "_type": "DV_TEXT",
+                  "value": "Arzneimittel"
+                },
+                "items": [
+                  {
+                    "_type": "ELEMENT",
+                    "name": {
+                      "_type": "DV_TEXT",
+                      "value": "Darreichungsform"
+                    },
+                    "value": {
+                      "_type": "DV_TEXT",
+                      "value": "Ampullen"
+                    },
+                    "archetype_node_id": "at0071"
+                  },
+                  {
+                    "_type": "CLUSTER",
+                    "name": {
+                      "_type": "DV_TEXT",
+                      "value": "Wirkstoff"
+                    },
+                    "items": [
+                      {
+                        "_type": "ELEMENT",
+                        "name": {
+                          "_type": "DV_TEXT",
+                          "value": "Wirkstoff"
+                        },
+                        "value": {
+                          "_type": "DV_TEXT",
+                          "value": "Insulin-Isophan"
+                        },
+                        "archetype_node_id": "at0132"
+                      }
+                    ],
+                    "archetype_node_id": "openEHR-EHR-CLUSTER.medication.v1"
+                  }
+                ],
+                "archetype_node_id": "openEHR-EHR-CLUSTER.medication.v1"
+              },
+              {
+                "_type": "CLUSTER",
+                "name": {
+                  "_type": "DV_TEXT",
+                  "value": "Therapeutische Anweisung"
+                },
+                "items": [
+                  {
+                    "_type": "CLUSTER",
+                    "name": {
+                      "_type": "DV_TEXT",
+                      "value": "Dosierung"
+                    },
+                    "items": [
+                      {
+                        "_type": "ELEMENT",
+                        "name": {
+                          "_type": "DV_TEXT",
+                          "value": "Dosismenge"
+                        },
+                        "value": {
+                          "_type": "DV_QUANTITY",
+                          "units": "1",
+                          "magnitude": 201
+                        },
+                        "archetype_node_id": "at0144"
+                      },
+                      {
+                        "_type": "ELEMENT",
+                        "name": {
+                          "_type": "DV_TEXT",
+                          "value": "Dosiseinheit"
+                        },
+                        "value": {
+                          "_type": "DV_TEXT",
+                          "value": "Hub"
+                        },
+                        "archetype_node_id": "at0145"
+                      },
+                      {
+                        "_type": "ELEMENT",
+                        "name": {
+                          "_type": "DV_TEXT",
+                          "value": "Dosierung Freitext"
+                        },
+                        "value": {
+                          "_type": "DV_TEXT",
+                          "value": "Lorem Ipsum"
+                        },
+                        "archetype_node_id": "at0178"
+                      },
+                      {
+                        "_type": "CLUSTER",
+                        "name": {
+                          "_type": "DV_TEXT",
+                          "value": "Tägliche Dosierung"
+                        },
+                        "items": [
+                          {
+                            "_type": "CLUSTER",
+                            "name": {
+                              "_type": "DV_TEXT",
+                              "value": "Bestimmtes Ereignis"
+                            },
+                            "items": [
+                              {
+                                "_type": "ELEMENT",
+                                "name": {
+                                  "_type": "DV_TEXT",
+                                  "value": "Ereignis"
+                                },
+                                "value": {
+                                  "_type": "DV_TEXT",
+                                  "value": "morgens"
+                                },
+                                "archetype_node_id": "at0026"
+                              }
+                            ],
+                            "archetype_node_id": "at0039"
+                          }
+                        ],
+                        "archetype_node_id": "openEHR-EHR-CLUSTER.timing_daily.v1"
+                      }
+                    ],
+                    "archetype_node_id": "openEHR-EHR-CLUSTER.dosage.v1"
+                  },
+                  {
+                    "_type": "CLUSTER",
+                    "name": {
+                      "_type": "DV_TEXT",
+                      "value": "Dosierung"
+                    },
+                    "items": [
+                      {
+                        "_type": "ELEMENT",
+                        "name": {
+                          "_type": "DV_TEXT",
+                          "value": "Dosismenge"
+                        },
+                        "value": {
+                          "_type": "DV_QUANTITY",
+                          "units": "1",
+                          "magnitude": 0
+                        },
+                        "archetype_node_id": "at0144"
+                      },
+                      {
+                        "_type": "ELEMENT",
+                        "name": {
+                          "_type": "DV_TEXT",
+                          "value": "Dosiseinheit"
+                        },
+                        "value": {
+                          "_type": "DV_TEXT",
+                          "value": "Hub"
+                        },
+                        "archetype_node_id": "at0145"
+                      },
+                      {
+                        "_type": "ELEMENT",
+                        "name": {
+                          "_type": "DV_TEXT",
+                          "value": "Dosierung Freitext"
+                        },
+                        "value": {
+                          "_type": "DV_TEXT",
+                          "value": "Lorem Ipsum"
+                        },
+                        "archetype_node_id": "at0178"
+                      },
+                      {
+                        "_type": "CLUSTER",
+                        "name": {
+                          "_type": "DV_TEXT",
+                          "value": "Tägliche Dosierung"
+                        },
+                        "items": [
+                          {
+                            "_type": "CLUSTER",
+                            "name": {
+                              "_type": "DV_TEXT",
+                              "value": "Bestimmtes Ereignis"
+                            },
+                            "items": [
+                              {
+                                "_type": "ELEMENT",
+                                "name": {
+                                  "_type": "DV_TEXT",
+                                  "value": "Ereignis"
+                                },
+                                "value": {
+                                  "_type": "DV_TEXT",
+                                  "value": "mittags"
+                                },
+                                "archetype_node_id": "at0026"
+                              }
+                            ],
+                            "archetype_node_id": "at0039"
+                          }
+                        ],
+                        "archetype_node_id": "openEHR-EHR-CLUSTER.timing_daily.v1"
+                      }
+                    ],
+                    "archetype_node_id": "openEHR-EHR-CLUSTER.dosage.v1"
+                  },
+                  {
+                    "_type": "CLUSTER",
+                    "name": {
+                      "_type": "DV_TEXT",
+                      "value": "Dosierung"
+                    },
+                    "items": [
+                      {
+                        "_type": "ELEMENT",
+                        "name": {
+                          "_type": "DV_TEXT",
+                          "value": "Dosismenge"
+                        },
+                        "value": {
+                          "_type": "DV_QUANTITY",
+                          "units": "1",
+                          "magnitude": 10
+                        },
+                        "archetype_node_id": "at0144"
+                      },
+                      {
+                        "_type": "ELEMENT",
+                        "name": {
+                          "_type": "DV_TEXT",
+                          "value": "Dosiseinheit"
+                        },
+                        "value": {
+                          "_type": "DV_TEXT",
+                          "value": "Hub"
+                        },
+                        "archetype_node_id": "at0145"
+                      },
+                      {
+                        "_type": "ELEMENT",
+                        "name": {
+                          "_type": "DV_TEXT",
+                          "value": "Dosierung Freitext"
+                        },
+                        "value": {
+                          "_type": "DV_TEXT",
+                          "value": "Lorem Ipsum"
+                        },
+                        "archetype_node_id": "at0178"
+                      },
+                      {
+                        "_type": "CLUSTER",
+                        "name": {
+                          "_type": "DV_TEXT",
+                          "value": "Tägliche Dosierung"
+                        },
+                        "items": [
+                          {
+                            "_type": "CLUSTER",
+                            "name": {
+                              "_type": "DV_TEXT",
+                              "value": "Bestimmtes Ereignis"
+                            },
+                            "items": [
+                              {
+                                "_type": "ELEMENT",
+                                "name": {
+                                  "_type": "DV_TEXT",
+                                  "value": "Ereignis"
+                                },
+                                "value": {
+                                  "_type": "DV_TEXT",
+                                  "value": "abends"
+                                },
+                                "archetype_node_id": "at0026"
+                              }
+                            ],
+                            "archetype_node_id": "at0039"
+                          }
+                        ],
+                        "archetype_node_id": "openEHR-EHR-CLUSTER.timing_daily.v1"
+                      }
+                    ],
+                    "archetype_node_id": "openEHR-EHR-CLUSTER.dosage.v1"
+                  },
+                  {
+                    "_type": "CLUSTER",
+                    "name": {
+                      "_type": "DV_TEXT",
+                      "value": "Dosierung"
+                    },
+                    "items": [
+                      {
+                        "_type": "ELEMENT",
+                        "name": {
+                          "_type": "DV_TEXT",
+                          "value": "Dosismenge"
+                        },
+                        "value": {
+                          "_type": "DV_QUANTITY",
+                          "units": "1",
+                          "magnitude": 0
+                        },
+                        "archetype_node_id": "at0144"
+                      },
+                      {
+                        "_type": "ELEMENT",
+                        "name": {
+                          "_type": "DV_TEXT",
+                          "value": "Dosiseinheit"
+                        },
+                        "value": {
+                          "_type": "DV_TEXT",
+                          "value": "Hub"
+                        },
+                        "archetype_node_id": "at0145"
+                      },
+                      {
+                        "_type": "ELEMENT",
+                        "name": {
+                          "_type": "DV_TEXT",
+                          "value": "Dosierung Freitext"
+                        },
+                        "value": {
+                          "_type": "DV_TEXT",
+                          "value": "Lorem Ipsum"
+                        },
+                        "archetype_node_id": "at0178"
+                      },
+                      {
+                        "_type": "CLUSTER",
+                        "name": {
+                          "_type": "DV_TEXT",
+                          "value": "Tägliche Dosierung"
+                        },
+                        "items": [
+                          {
+                            "_type": "CLUSTER",
+                            "name": {
+                              "_type": "DV_TEXT",
+                              "value": "Bestimmtes Ereignis"
+                            },
+                            "items": [
+                              {
+                                "_type": "ELEMENT",
+                                "name": {
+                                  "_type": "DV_TEXT",
+                                  "value": "Ereignis"
+                                },
+                                "value": {
+                                  "_type": "DV_TEXT",
+                                  "value": "nachts"
+                                },
+                                "archetype_node_id": "at0026"
+                              }
+                            ],
+                            "archetype_node_id": "at0039"
+                          }
+                        ],
+                        "archetype_node_id": "openEHR-EHR-CLUSTER.timing_daily.v1"
+                      }
+                    ],
+                    "archetype_node_id": "openEHR-EHR-CLUSTER.dosage.v1"
+                  }
+                ],
+                "archetype_node_id": "openEHR-EHR-CLUSTER.therapeutic_direction.v1"
+              }
+            ],
+            "archetype_node_id": "at0002"
+          },
+          "action_archetype_id": "/.*/",
+          "archetype_node_id": "at0001"
+        }
+      ],
+      "archetype_node_id": "openEHR-EHR-INSTRUCTION.medication_order.v2"
+    },
+    {
+      "_type": "INSTRUCTION",
+      "name": {
+        "_type": "DV_TEXT",
+        "value": "Verordnung von Arzneimittel"
+      },
+      "archetype_details": {
+        "archetype_id": {
+          "value": "openEHR-EHR-INSTRUCTION.medication_order.v2"
+        },
+        "rm_version": "1.0.4"
+      },
+      "language": {
+        "_type": "CODE_PHRASE",
+        "terminology_id": {
+          "_type": "TERMINOLOGY_ID",
+          "value": "ISO_639-1"
+        },
+        "code_string": "de"
+      },
+      "encoding": {
+        "_type": "CODE_PHRASE",
+        "terminology_id": {
+          "_type": "TERMINOLOGY_ID",
+          "value": "IANA_character-sets"
+        },
+        "code_string": "UTF-8"
+      },
+      "subject": {
+        "_type": "PARTY_SELF"
+      },
+      "narrative": {
+        "_type": "DV_TEXT",
+        "value": "Lorem ispum"
+      },
+      "activities": [
+        {
+          "_type": "ACTIVITY",
+          "name": {
+            "_type": "DV_TEXT",
+            "value": "Verordnung"
+          },
+          "description": {
+            "_type": "ITEM_TREE",
+            "name": {
+              "_type": "DV_TEXT",
+              "value": "Tree"
+            },
+            "items": [
+              {
+                "_type": "ELEMENT",
+                "name": {
+                  "_type": "DV_TEXT",
+                  "value": "Einnahmegrund"
+                },
+                "value": {
+                  "_type": "DV_TEXT",
+                  "value": "Schlaflosigkeit"
+                },
+                "archetype_node_id": "at0018"
+              },
+              {
+                "_type": "ELEMENT",
+                "name": {
+                  "_type": "DV_TEXT",
+                  "value": "Hinweise zur Einnahme"
+                },
+                "value": {
+                  "_type": "DV_TEXT",
+                  "value": "|bei Bedarf"
+                },
+                "archetype_node_id": "at0044"
+              },
+              {
+                "_type": "ELEMENT",
+                "name": {
+                  "_type": "DV_TEXT",
+                  "value": "Handelsname"
+                },
+                "value": {
+                  "_type": "DV_TEXT",
+                  "value": "|Kcnapransr"
+                },
+                "archetype_node_id": "at0070"
+              },
+              {
+                "_type": "CLUSTER",
+                "name": {
+                  "_type": "DV_TEXT",
+                  "value": "Detaillierte Angaben zu der Verordnung"
+                },
+                "items": [
+                  {
+                    "_type": "ELEMENT",
+                    "name": {
+                      "_type": "DV_TEXT",
+                      "value": "Datum der Verordnung"
+                    },
+                    "value": {
+                      "_type": "DV_DATE_TIME",
+                      "value": "1936-12-13"
+                    },
+                    "archetype_node_id": "at0012"
+                  }
+                ],
+                "archetype_node_id": "at0113"
+              },
+              {
+                "_type": "ELEMENT",
+                "name": {
+                  "_type": "DV_TEXT",
+                  "value": "Kommentar"
+                },
+                "value": {
+                  "_type": "DV_TEXT",
+                  "value": "Entry generated by Medication Plan Pipeline (automated)"
+                },
+                "archetype_node_id": "at0167"
+              },
+              {
+                "_type": "CLUSTER",
+                "name": {
+                  "_type": "DV_TEXT",
+                  "value": "Arzneimittel"
+                },
+                "items": [
+                  {
+                    "_type": "ELEMENT",
+                    "name": {
+                      "_type": "DV_TEXT",
+                      "value": "Darreichungsform"
+                    },
+                    "value": {
+                      "_type": "DV_TEXT",
+                      "value": "Bad"
+                    },
+                    "archetype_node_id": "at0071"
+                  },
+                  {
+                    "_type": "CLUSTER",
+                    "name": {
+                      "_type": "DV_TEXT",
+                      "value": "Wirkstoff"
+                    },
+                    "items": [
+                      {
+                        "_type": "ELEMENT",
+                        "name": {
+                          "_type": "DV_TEXT",
+                          "value": "Wirkstoff"
+                        },
+                        "value": {
+                          "_type": "DV_TEXT",
+                          "value": "Diphenhydramin"
+                        },
+                        "archetype_node_id": "at0132"
+                      }
+                    ],
+                    "archetype_node_id": "openEHR-EHR-CLUSTER.medication.v1"
+                  }
+                ],
+                "archetype_node_id": "openEHR-EHR-CLUSTER.medication.v1"
+              },
+              {
+                "_type": "CLUSTER",
+                "name": {
+                  "_type": "DV_TEXT",
+                  "value": "Therapeutische Anweisung"
+                },
+                "items": [
+                  {
+                    "_type": "CLUSTER",
+                    "name": {
+                      "_type": "DV_TEXT",
+                      "value": "Dosierung"
+                    },
+                    "items": [
+                      {
+                        "_type": "ELEMENT",
+                        "name": {
+                          "_type": "DV_TEXT",
+                          "value": "Dosismenge"
+                        },
+                        "value": {
+                          "_type": "DV_QUANTITY",
+                          "units": "1",
+                          "magnitude": 0
+                        },
+                        "archetype_node_id": "at0144"
+                      },
+                      {
+                        "_type": "ELEMENT",
+                        "name": {
+                          "_type": "DV_TEXT",
+                          "value": "Dosiseinheit"
+                        },
+                        "value": {
+                          "_type": "DV_TEXT",
+                          "value": "Stück"
+                        },
+                        "archetype_node_id": "at0145"
+                      },
+                      {
+                        "_type": "ELEMENT",
+                        "name": {
+                          "_type": "DV_TEXT",
+                          "value": "Dosierung Freitext"
+                        },
+                        "value": {
+                          "_type": "DV_TEXT",
+                          "value": "Lorem Ipsum"
+                        },
+                        "archetype_node_id": "at0178"
+                      },
+                      {
+                        "_type": "CLUSTER",
+                        "name": {
+                          "_type": "DV_TEXT",
+                          "value": "Tägliche Dosierung"
+                        },
+                        "items": [
+                          {
+                            "_type": "CLUSTER",
+                            "name": {
+                              "_type": "DV_TEXT",
+                              "value": "Bestimmtes Ereignis"
+                            },
+                            "items": [
+                              {
+                                "_type": "ELEMENT",
+                                "name": {
+                                  "_type": "DV_TEXT",
+                                  "value": "Ereignis"
+                                },
+                                "value": {
+                                  "_type": "DV_TEXT",
+                                  "value": "morgens"
+                                },
+                                "archetype_node_id": "at0026"
+                              }
+                            ],
+                            "archetype_node_id": "at0039"
+                          }
+                        ],
+                        "archetype_node_id": "openEHR-EHR-CLUSTER.timing_daily.v1"
+                      }
+                    ],
+                    "archetype_node_id": "openEHR-EHR-CLUSTER.dosage.v1"
+                  },
+                  {
+                    "_type": "CLUSTER",
+                    "name": {
+                      "_type": "DV_TEXT",
+                      "value": "Dosierung"
+                    },
+                    "items": [
+                      {
+                        "_type": "ELEMENT",
+                        "name": {
+                          "_type": "DV_TEXT",
+                          "value": "Dosismenge"
+                        },
+                        "value": {
+                          "_type": "DV_QUANTITY",
+                          "units": "1",
+                          "magnitude": 0
+                        },
+                        "archetype_node_id": "at0144"
+                      },
+                      {
+                        "_type": "ELEMENT",
+                        "name": {
+                          "_type": "DV_TEXT",
+                          "value": "Dosiseinheit"
+                        },
+                        "value": {
+                          "_type": "DV_TEXT",
+                          "value": "Stück"
+                        },
+                        "archetype_node_id": "at0145"
+                      },
+                      {
+                        "_type": "ELEMENT",
+                        "name": {
+                          "_type": "DV_TEXT",
+                          "value": "Dosierung Freitext"
+                        },
+                        "value": {
+                          "_type": "DV_TEXT",
+                          "value": "Lorem Ipsum"
+                        },
+                        "archetype_node_id": "at0178"
+                      },
+                      {
+                        "_type": "CLUSTER",
+                        "name": {
+                          "_type": "DV_TEXT",
+                          "value": "Tägliche Dosierung"
+                        },
+                        "items": [
+                          {
+                            "_type": "CLUSTER",
+                            "name": {
+                              "_type": "DV_TEXT",
+                              "value": "Bestimmtes Ereignis"
+                            },
+                            "items": [
+                              {
+                                "_type": "ELEMENT",
+                                "name": {
+                                  "_type": "DV_TEXT",
+                                  "value": "Ereignis"
+                                },
+                                "value": {
+                                  "_type": "DV_TEXT",
+                                  "value": "mittags"
+                                },
+                                "archetype_node_id": "at0026"
+                              }
+                            ],
+                            "archetype_node_id": "at0039"
+                          }
+                        ],
+                        "archetype_node_id": "openEHR-EHR-CLUSTER.timing_daily.v1"
+                      }
+                    ],
+                    "archetype_node_id": "openEHR-EHR-CLUSTER.dosage.v1"
+                  },
+                  {
+                    "_type": "CLUSTER",
+                    "name": {
+                      "_type": "DV_TEXT",
+                      "value": "Dosierung"
+                    },
+                    "items": [
+                      {
+                        "_type": "ELEMENT",
+                        "name": {
+                          "_type": "DV_TEXT",
+                          "value": "Dosismenge"
+                        },
+                        "value": {
+                          "_type": "DV_QUANTITY",
+                          "units": "1",
+                          "magnitude": 0
+                        },
+                        "archetype_node_id": "at0144"
+                      },
+                      {
+                        "_type": "ELEMENT",
+                        "name": {
+                          "_type": "DV_TEXT",
+                          "value": "Dosiseinheit"
+                        },
+                        "value": {
+                          "_type": "DV_TEXT",
+                          "value": "Stück"
+                        },
+                        "archetype_node_id": "at0145"
+                      },
+                      {
+                        "_type": "ELEMENT",
+                        "name": {
+                          "_type": "DV_TEXT",
+                          "value": "Dosierung Freitext"
+                        },
+                        "value": {
+                          "_type": "DV_TEXT",
+                          "value": "Lorem Ipsum"
+                        },
+                        "archetype_node_id": "at0178"
+                      },
+                      {
+                        "_type": "CLUSTER",
+                        "name": {
+                          "_type": "DV_TEXT",
+                          "value": "Tägliche Dosierung"
+                        },
+                        "items": [
+                          {
+                            "_type": "CLUSTER",
+                            "name": {
+                              "_type": "DV_TEXT",
+                              "value": "Bestimmtes Ereignis"
+                            },
+                            "items": [
+                              {
+                                "_type": "ELEMENT",
+                                "name": {
+                                  "_type": "DV_TEXT",
+                                  "value": "Ereignis"
+                                },
+                                "value": {
+                                  "_type": "DV_TEXT",
+                                  "value": "abends"
+                                },
+                                "archetype_node_id": "at0026"
+                              }
+                            ],
+                            "archetype_node_id": "at0039"
+                          }
+                        ],
+                        "archetype_node_id": "openEHR-EHR-CLUSTER.timing_daily.v1"
+                      }
+                    ],
+                    "archetype_node_id": "openEHR-EHR-CLUSTER.dosage.v1"
+                  },
+                  {
+                    "_type": "CLUSTER",
+                    "name": {
+                      "_type": "DV_TEXT",
+                      "value": "Dosierung"
+                    },
+                    "items": [
+                      {
+                        "_type": "ELEMENT",
+                        "name": {
+                          "_type": "DV_TEXT",
+                          "value": "Dosismenge"
+                        },
+                        "value": {
+                          "_type": "DV_QUANTITY",
+                          "units": "1",
+                          "magnitude": 1
+                        },
+                        "archetype_node_id": "at0144"
+                      },
+                      {
+                        "_type": "ELEMENT",
+                        "name": {
+                          "_type": "DV_TEXT",
+                          "value": "Dosiseinheit"
+                        },
+                        "value": {
+                          "_type": "DV_TEXT",
+                          "value": "Stück"
+                        },
+                        "archetype_node_id": "at0145"
+                      },
+                      {
+                        "_type": "ELEMENT",
+                        "name": {
+                          "_type": "DV_TEXT",
+                          "value": "Dosierung Freitext"
+                        },
+                        "value": {
+                          "_type": "DV_TEXT",
+                          "value": "Lorem Ipsum"
+                        },
+                        "archetype_node_id": "at0178"
+                      },
+                      {
+                        "_type": "CLUSTER",
+                        "name": {
+                          "_type": "DV_TEXT",
+                          "value": "Tägliche Dosierung"
+                        },
+                        "items": [
+                          {
+                            "_type": "CLUSTER",
+                            "name": {
+                              "_type": "DV_TEXT",
+                              "value": "Bestimmtes Ereignis"
+                            },
+                            "items": [
+                              {
+                                "_type": "ELEMENT",
+                                "name": {
+                                  "_type": "DV_TEXT",
+                                  "value": "Ereignis"
+                                },
+                                "value": {
+                                  "_type": "DV_TEXT",
+                                  "value": "nachts"
+                                },
+                                "archetype_node_id": "at0026"
+                              }
+                            ],
+                            "archetype_node_id": "at0039"
+                          }
+                        ],
+                        "archetype_node_id": "openEHR-EHR-CLUSTER.timing_daily.v1"
+                      }
+                    ],
+                    "archetype_node_id": "openEHR-EHR-CLUSTER.dosage.v1"
+                  }
+                ],
+                "archetype_node_id": "openEHR-EHR-CLUSTER.therapeutic_direction.v1"
+              }
+            ],
+            "archetype_node_id": "at0002"
+          },
+          "action_archetype_id": "/.*/",
+          "archetype_node_id": "at0001"
+        }
+      ],
+      "archetype_node_id": "openEHR-EHR-INSTRUCTION.medication_order.v2"
+    },
+    {
+      "_type": "INSTRUCTION",
+      "name": {
+        "_type": "DV_TEXT",
+        "value": "Verordnung von Arzneimittel"
+      },
+      "archetype_details": {
+        "archetype_id": {
+          "value": "openEHR-EHR-INSTRUCTION.medication_order.v2"
+        },
+        "rm_version": "1.0.4"
+      },
+      "language": {
+        "_type": "CODE_PHRASE",
+        "terminology_id": {
+          "_type": "TERMINOLOGY_ID",
+          "value": "ISO_639-1"
+        },
+        "code_string": "de"
+      },
+      "encoding": {
+        "_type": "CODE_PHRASE",
+        "terminology_id": {
+          "_type": "TERMINOLOGY_ID",
+          "value": "IANA_character-sets"
+        },
+        "code_string": "UTF-8"
+      },
+      "subject": {
+        "_type": "PARTY_SELF"
+      },
+      "narrative": {
+        "_type": "DV_TEXT",
+        "value": "Lorem ispum"
+      },
+      "activities": [
+        {
+          "_type": "ACTIVITY",
+          "name": {
+            "_type": "DV_TEXT",
+            "value": "Verordnung"
+          },
+          "description": {
+            "_type": "ITEM_TREE",
+            "name": {
+              "_type": "DV_TEXT",
+              "value": "Tree"
+            },
+            "items": [
+              {
+                "_type": "ELEMENT",
+                "name": {
+                  "_type": "DV_TEXT",
+                  "value": "Einnahmegrund"
+                },
+                "value": {
+                  "_type": "DV_TEXT",
+                  "value": "BE man"
+                },
+                "archetype_node_id": "at0018"
+              },
+              {
+                "_type": "ELEMENT",
+                "name": {
+                  "_type": "DV_TEXT",
+                  "value": "Hinweise zur Einnahme"
+                },
+                "value": {
+                  "_type": "DV_TEXT",
+                  "value": ""
+                },
+                "archetype_node_id": "at0044"
+              },
+              {
+                "_type": "ELEMENT",
+                "name": {
+                  "_type": "DV_TEXT",
+                  "value": "Handelsname"
+                },
+                "value": {
+                  "_type": "DV_TEXT",
+                  "value": "SINUPRET EXTRACT"
+                },
+                "archetype_node_id": "at0070"
+              },
+              {
+                "_type": "CLUSTER",
+                "name": {
+                  "_type": "DV_TEXT",
+                  "value": "Detaillierte Angaben zu der Verordnung"
+                },
+                "items": [
+                  {
+                    "_type": "ELEMENT",
+                    "name": {
+                      "_type": "DV_TEXT",
+                      "value": "Datum der Verordnung"
+                    },
+                    "value": {
+                      "_type": "DV_DATE_TIME",
+                      "value": "1936-12-13"
+                    },
+                    "archetype_node_id": "at0012"
+                  }
+                ],
+                "archetype_node_id": "at0113"
+              },
+              {
+                "_type": "ELEMENT",
+                "name": {
+                  "_type": "DV_TEXT",
+                  "value": "Kommentar"
+                },
+                "value": {
+                  "_type": "DV_TEXT",
+                  "value": "Entry generated by Medication Plan Pipeline (automated)"
+                },
+                "archetype_node_id": "at0167"
+              },
+              {
+                "_type": "CLUSTER",
+                "name": {
+                  "_type": "DV_TEXT",
+                  "value": "Arzneimittel"
+                },
+                "items": [
+                  {
+                    "_type": "ELEMENT",
+                    "name": {
+                      "_type": "DV_TEXT",
+                      "value": "Darreichungsform"
+                    },
+                    "value": {
+                      "_type": "DV_TEXT",
+                      "value": "überzogene Tabletten"
+                    },
+                    "archetype_node_id": "at0071"
+                  },
+                  {
+                    "_type": "CLUSTER",
+                    "name": {
+                      "_type": "DV_TEXT",
+                      "value": "Wirkstoff"
+                    },
+                    "items": [
+                      {
+                        "_type": "ELEMENT",
+                        "name": {
+                          "_type": "DV_TEXT",
+                          "value": "Wirkstoff"
+                        },
+                        "value": {
+                          "_type": "DV_TEXT",
+                          "value": "Kombipräparat"
+                        },
+                        "archetype_node_id": "at0132"
+                      }
+                    ],
+                    "archetype_node_id": "openEHR-EHR-CLUSTER.medication.v1"
+                  }
+                ],
+                "archetype_node_id": "openEHR-EHR-CLUSTER.medication.v1"
+              },
+              {
+                "_type": "CLUSTER",
+                "name": {
+                  "_type": "DV_TEXT",
+                  "value": "Therapeutische Anweisung"
+                },
+                "items": [
+                  {
+                    "_type": "CLUSTER",
+                    "name": {
+                      "_type": "DV_TEXT",
+                      "value": "Dosierung"
+                    },
+                    "items": [
+                      {
+                        "_type": "ELEMENT",
+                        "name": {
+                          "_type": "DV_TEXT",
+                          "value": "Dosismenge"
+                        },
+                        "value": {
+                          "_type": "DV_QUANTITY",
+                          "units": "1",
+                          "magnitude": 11
+                        },
+                        "archetype_node_id": "at0144"
+                      },
+                      {
+                        "_type": "ELEMENT",
+                        "name": {
+                          "_type": "DV_TEXT",
+                          "value": "Dosiseinheit"
+                        },
+                        "value": {
+                          "_type": "DV_TEXT",
+                          "value": "Stück"
+                        },
+                        "archetype_node_id": "at0145"
+                      },
+                      {
+                        "_type": "ELEMENT",
+                        "name": {
+                          "_type": "DV_TEXT",
+                          "value": "Dosierung Freitext"
+                        },
+                        "value": {
+                          "_type": "DV_TEXT",
+                          "value": "Lorem Ipsum"
+                        },
+                        "archetype_node_id": "at0178"
+                      },
+                      {
+                        "_type": "CLUSTER",
+                        "name": {
+                          "_type": "DV_TEXT",
+                          "value": "Tägliche Dosierung"
+                        },
+                        "items": [
+                          {
+                            "_type": "CLUSTER",
+                            "name": {
+                              "_type": "DV_TEXT",
+                              "value": "Bestimmtes Ereignis"
+                            },
+                            "items": [
+                              {
+                                "_type": "ELEMENT",
+                                "name": {
+                                  "_type": "DV_TEXT",
+                                  "value": "Ereignis"
+                                },
+                                "value": {
+                                  "_type": "DV_TEXT",
+                                  "value": "morgens"
+                                },
+                                "archetype_node_id": "at0026"
+                              }
+                            ],
+                            "archetype_node_id": "at0039"
+                          }
+                        ],
+                        "archetype_node_id": "openEHR-EHR-CLUSTER.timing_daily.v1"
+                      }
+                    ],
+                    "archetype_node_id": "openEHR-EHR-CLUSTER.dosage.v1"
+                  },
+                  {
+                    "_type": "CLUSTER",
+                    "name": {
+                      "_type": "DV_TEXT",
+                      "value": "Dosierung"
+                    },
+                    "items": [
+                      {
+                        "_type": "ELEMENT",
+                        "name": {
+                          "_type": "DV_TEXT",
+                          "value": "Dosismenge"
+                        },
+                        "value": {
+                          "_type": "DV_QUANTITY",
+                          "units": "1",
+                          "magnitude": 0
+                        },
+                        "archetype_node_id": "at0144"
+                      },
+                      {
+                        "_type": "ELEMENT",
+                        "name": {
+                          "_type": "DV_TEXT",
+                          "value": "Dosiseinheit"
+                        },
+                        "value": {
+                          "_type": "DV_TEXT",
+                          "value": "Stück"
+                        },
+                        "archetype_node_id": "at0145"
+                      },
+                      {
+                        "_type": "ELEMENT",
+                        "name": {
+                          "_type": "DV_TEXT",
+                          "value": "Dosierung Freitext"
+                        },
+                        "value": {
+                          "_type": "DV_TEXT",
+                          "value": "Lorem Ipsum"
+                        },
+                        "archetype_node_id": "at0178"
+                      },
+                      {
+                        "_type": "CLUSTER",
+                        "name": {
+                          "_type": "DV_TEXT",
+                          "value": "Tägliche Dosierung"
+                        },
+                        "items": [
+                          {
+                            "_type": "CLUSTER",
+                            "name": {
+                              "_type": "DV_TEXT",
+                              "value": "Bestimmtes Ereignis"
+                            },
+                            "items": [
+                              {
+                                "_type": "ELEMENT",
+                                "name": {
+                                  "_type": "DV_TEXT",
+                                  "value": "Ereignis"
+                                },
+                                "value": {
+                                  "_type": "DV_TEXT",
+                                  "value": "mittags"
+                                },
+                                "archetype_node_id": "at0026"
+                              }
+                            ],
+                            "archetype_node_id": "at0039"
+                          }
+                        ],
+                        "archetype_node_id": "openEHR-EHR-CLUSTER.timing_daily.v1"
+                      }
+                    ],
+                    "archetype_node_id": "openEHR-EHR-CLUSTER.dosage.v1"
+                  },
+                  {
+                    "_type": "CLUSTER",
+                    "name": {
+                      "_type": "DV_TEXT",
+                      "value": "Dosierung"
+                    },
+                    "items": [
+                      {
+                        "_type": "ELEMENT",
+                        "name": {
+                          "_type": "DV_TEXT",
+                          "value": "Dosismenge"
+                        },
+                        "value": {
+                          "_type": "DV_QUANTITY",
+                          "units": "1",
+                          "magnitude": 1
+                        },
+                        "archetype_node_id": "at0144"
+                      },
+                      {
+                        "_type": "ELEMENT",
+                        "name": {
+                          "_type": "DV_TEXT",
+                          "value": "Dosiseinheit"
+                        },
+                        "value": {
+                          "_type": "DV_TEXT",
+                          "value": "Stück"
+                        },
+                        "archetype_node_id": "at0145"
+                      },
+                      {
+                        "_type": "ELEMENT",
+                        "name": {
+                          "_type": "DV_TEXT",
+                          "value": "Dosierung Freitext"
+                        },
+                        "value": {
+                          "_type": "DV_TEXT",
+                          "value": "Lorem Ipsum"
+                        },
+                        "archetype_node_id": "at0178"
+                      },
+                      {
+                        "_type": "CLUSTER",
+                        "name": {
+                          "_type": "DV_TEXT",
+                          "value": "Tägliche Dosierung"
+                        },
+                        "items": [
+                          {
+                            "_type": "CLUSTER",
+                            "name": {
+                              "_type": "DV_TEXT",
+                              "value": "Bestimmtes Ereignis"
+                            },
+                            "items": [
+                              {
+                                "_type": "ELEMENT",
+                                "name": {
+                                  "_type": "DV_TEXT",
+                                  "value": "Ereignis"
+                                },
+                                "value": {
+                                  "_type": "DV_TEXT",
+                                  "value": "abends"
+                                },
+                                "archetype_node_id": "at0026"
+                              }
+                            ],
+                            "archetype_node_id": "at0039"
+                          }
+                        ],
+                        "archetype_node_id": "openEHR-EHR-CLUSTER.timing_daily.v1"
+                      }
+                    ],
+                    "archetype_node_id": "openEHR-EHR-CLUSTER.dosage.v1"
+                  },
+                  {
+                    "_type": "CLUSTER",
+                    "name": {
+                      "_type": "DV_TEXT",
+                      "value": "Dosierung"
+                    },
+                    "items": [
+                      {
+                        "_type": "ELEMENT",
+                        "name": {
+                          "_type": "DV_TEXT",
+                          "value": "Dosismenge"
+                        },
+                        "value": {
+                          "_type": "DV_QUANTITY",
+                          "units": "1",
+                          "magnitude": 0
+                        },
+                        "archetype_node_id": "at0144"
+                      },
+                      {
+                        "_type": "ELEMENT",
+                        "name": {
+                          "_type": "DV_TEXT",
+                          "value": "Dosiseinheit"
+                        },
+                        "value": {
+                          "_type": "DV_TEXT",
+                          "value": "Stück"
+                        },
+                        "archetype_node_id": "at0145"
+                      },
+                      {
+                        "_type": "ELEMENT",
+                        "name": {
+                          "_type": "DV_TEXT",
+                          "value": "Dosierung Freitext"
+                        },
+                        "value": {
+                          "_type": "DV_TEXT",
+                          "value": "Lorem Ipsum"
+                        },
+                        "archetype_node_id": "at0178"
+                      },
+                      {
+                        "_type": "CLUSTER",
+                        "name": {
+                          "_type": "DV_TEXT",
+                          "value": "Tägliche Dosierung"
+                        },
+                        "items": [
+                          {
+                            "_type": "CLUSTER",
+                            "name": {
+                              "_type": "DV_TEXT",
+                              "value": "Bestimmtes Ereignis"
+                            },
+                            "items": [
+                              {
+                                "_type": "ELEMENT",
+                                "name": {
+                                  "_type": "DV_TEXT",
+                                  "value": "Ereignis"
+                                },
+                                "value": {
+                                  "_type": "DV_TEXT",
+                                  "value": "nachts"
+                                },
+                                "archetype_node_id": "at0026"
+                              }
+                            ],
+                            "archetype_node_id": "at0039"
+                          }
+                        ],
+                        "archetype_node_id": "openEHR-EHR-CLUSTER.timing_daily.v1"
+                      }
+                    ],
+                    "archetype_node_id": "openEHR-EHR-CLUSTER.dosage.v1"
+                  }
+                ],
+                "archetype_node_id": "openEHR-EHR-CLUSTER.therapeutic_direction.v1"
+              }
+            ],
+            "archetype_node_id": "at0002"
+          },
+          "action_archetype_id": "/.*/",
+          "archetype_node_id": "at0001"
+        }
+      ],
+      "archetype_node_id": "openEHR-EHR-INSTRUCTION.medication_order.v2"
+    },
+    {
+      "_type": "INSTRUCTION",
+      "name": {
+        "_type": "DV_TEXT",
+        "value": "Verordnung von Arzneimittel"
+      },
+      "archetype_details": {
+        "archetype_id": {
+          "value": "openEHR-EHR-INSTRUCTION.medication_order.v2"
+        },
+        "rm_version": "1.0.4"
+      },
+      "language": {
+        "_type": "CODE_PHRASE",
+        "terminology_id": {
+          "_type": "TERMINOLOGY_ID",
+          "value": "ISO_639-1"
+        },
+        "code_string": "de"
+      },
+      "encoding": {
+        "_type": "CODE_PHRASE",
+        "terminology_id": {
+          "_type": "TERMINOLOGY_ID",
+          "value": "IANA_character-sets"
+        },
+        "code_string": "UTF-8"
+      },
+      "subject": {
+        "_type": "PARTY_SELF"
+      },
+      "narrative": {
+        "_type": "DV_TEXT",
+        "value": "Lorem ispum"
+      },
+      "activities": [
+        {
+          "_type": "ACTIVITY",
+          "name": {
+            "_type": "DV_TEXT",
+            "value": "Verordnung"
+          },
+          "description": {
+            "_type": "ITEM_TREE",
+            "name": {
+              "_type": "DV_TEXT",
+              "value": "Tree"
+            },
+            "items": [
+              {
+                "_type": "ELEMENT",
+                "name": {
+                  "_type": "DV_TEXT",
+                  "value": "Einnahmegrund"
+                },
+                "value": {
+                  "_type": "DV_TEXT",
+                  "value": "INebenhöhlenentzündung"
+                },
+                "archetype_node_id": "at0018"
+              },
+              {
+                "_type": "ELEMENT",
+                "name": {
+                  "_type": "DV_TEXT",
+                  "value": "Hinweise zur Einnahme"
+                },
+                "value": {
+                  "_type": "DV_TEXT",
+                  "value": "alle 8 Stunden einnehmen"
+                },
+                "archetype_node_id": "at0044"
+              },
+              {
+                "_type": "ELEMENT",
+                "name": {
+                  "_type": "DV_TEXT",
+                  "value": "Handelsname"
+                },
+                "value": {
+                  "_type": "DV_TEXT",
+                  "value": "CEFACLOR STADA 500 mg"
+                },
+                "archetype_node_id": "at0070"
+              },
+              {
+                "_type": "CLUSTER",
+                "name": {
+                  "_type": "DV_TEXT",
+                  "value": "Detaillierte Angaben zu der Verordnung"
+                },
+                "items": [
+                  {
+                    "_type": "ELEMENT",
+                    "name": {
+                      "_type": "DV_TEXT",
+                      "value": "Datum der Verordnung"
+                    },
+                    "value": {
+                      "_type": "DV_DATE_TIME",
+                      "value": "1936-12-13"
+                    },
+                    "archetype_node_id": "at0012"
+                  }
+                ],
+                "archetype_node_id": "at0113"
+              },
+              {
+                "_type": "ELEMENT",
+                "name": {
+                  "_type": "DV_TEXT",
+                  "value": "Kommentar"
+                },
+                "value": {
+                  "_type": "DV_TEXT",
+                  "value": "Entry generated by Medication Plan Pipeline (automated)"
+                },
+                "archetype_node_id": "at0167"
+              },
+              {
+                "_type": "CLUSTER",
+                "name": {
+                  "_type": "DV_TEXT",
+                  "value": "Arzneimittel"
+                },
+                "items": [
+                  {
+                    "_type": "ELEMENT",
+                    "name": {
+                      "_type": "DV_TEXT",
+                      "value": "Darreichungsform"
+                    },
+                    "value": {
+                      "_type": "DV_TEXT",
+                      "value": "Kapseln"
+                    },
+                    "archetype_node_id": "at0071"
+                  },
+                  {
+                    "_type": "CLUSTER",
+                    "name": {
+                      "_type": "DV_TEXT",
+                      "value": "Wirkstoff"
+                    },
+                    "items": [
+                      {
+                        "_type": "ELEMENT",
+                        "name": {
+                          "_type": "DV_TEXT",
+                          "value": "Wirkstoff"
+                        },
+                        "value": {
+                          "_type": "DV_TEXT",
+                          "value": "Cefaclor"
+                        },
+                        "archetype_node_id": "at0132"
+                      }
+                    ],
+                    "archetype_node_id": "openEHR-EHR-CLUSTER.medication.v1"
+                  }
+                ],
+                "archetype_node_id": "openEHR-EHR-CLUSTER.medication.v1"
+              },
+              {
+                "_type": "CLUSTER",
+                "name": {
+                  "_type": "DV_TEXT",
+                  "value": "Therapeutische Anweisung"
+                },
+                "items": [
+                  {
+                    "_type": "CLUSTER",
+                    "name": {
+                      "_type": "DV_TEXT",
+                      "value": "Dosierung"
+                    },
+                    "items": [
+                      {
+                        "_type": "ELEMENT",
+                        "name": {
+                          "_type": "DV_TEXT",
+                          "value": "Dosismenge"
+                        },
+                        "value": {
+                          "_type": "DV_QUANTITY",
+                          "units": "1",
+                          "magnitude": 1
+                        },
+                        "archetype_node_id": "at0144"
+                      },
+                      {
+                        "_type": "ELEMENT",
+                        "name": {
+                          "_type": "DV_TEXT",
+                          "value": "Dosiseinheit"
+                        },
+                        "value": {
+                          "_type": "DV_TEXT",
+                          "value": "Stück"
+                        },
+                        "archetype_node_id": "at0145"
+                      },
+                      {
+                        "_type": "ELEMENT",
+                        "name": {
+                          "_type": "DV_TEXT",
+                          "value": "Dosierung Freitext"
+                        },
+                        "value": {
+                          "_type": "DV_TEXT",
+                          "value": "Lorem Ipsum"
+                        },
+                        "archetype_node_id": "at0178"
+                      },
+                      {
+                        "_type": "CLUSTER",
+                        "name": {
+                          "_type": "DV_TEXT",
+                          "value": "Tägliche Dosierung"
+                        },
+                        "items": [
+                          {
+                            "_type": "CLUSTER",
+                            "name": {
+                              "_type": "DV_TEXT",
+                              "value": "Bestimmtes Ereignis"
+                            },
+                            "items": [
+                              {
+                                "_type": "ELEMENT",
+                                "name": {
+                                  "_type": "DV_TEXT",
+                                  "value": "Ereignis"
+                                },
+                                "value": {
+                                  "_type": "DV_TEXT",
+                                  "value": "morgens"
+                                },
+                                "archetype_node_id": "at0026"
+                              }
+                            ],
+                            "archetype_node_id": "at0039"
+                          }
+                        ],
+                        "archetype_node_id": "openEHR-EHR-CLUSTER.timing_daily.v1"
+                      }
+                    ],
+                    "archetype_node_id": "openEHR-EHR-CLUSTER.dosage.v1"
+                  },
+                  {
+                    "_type": "CLUSTER",
+                    "name": {
+                      "_type": "DV_TEXT",
+                      "value": "Dosierung"
+                    },
+                    "items": [
+                      {
+                        "_type": "ELEMENT",
+                        "name": {
+                          "_type": "DV_TEXT",
+                          "value": "Dosismenge"
+                        },
+                        "value": {
+                          "_type": "DV_QUANTITY",
+                          "units": "1",
+                          "magnitude": 1
+                        },
+                        "archetype_node_id": "at0144"
+                      },
+                      {
+                        "_type": "ELEMENT",
+                        "name": {
+                          "_type": "DV_TEXT",
+                          "value": "Dosiseinheit"
+                        },
+                        "value": {
+                          "_type": "DV_TEXT",
+                          "value": "Stück"
+                        },
+                        "archetype_node_id": "at0145"
+                      },
+                      {
+                        "_type": "ELEMENT",
+                        "name": {
+                          "_type": "DV_TEXT",
+                          "value": "Dosierung Freitext"
+                        },
+                        "value": {
+                          "_type": "DV_TEXT",
+                          "value": "Lorem Ipsum"
+                        },
+                        "archetype_node_id": "at0178"
+                      },
+                      {
+                        "_type": "CLUSTER",
+                        "name": {
+                          "_type": "DV_TEXT",
+                          "value": "Tägliche Dosierung"
+                        },
+                        "items": [
+                          {
+                            "_type": "CLUSTER",
+                            "name": {
+                              "_type": "DV_TEXT",
+                              "value": "Bestimmtes Ereignis"
+                            },
+                            "items": [
+                              {
+                                "_type": "ELEMENT",
+                                "name": {
+                                  "_type": "DV_TEXT",
+                                  "value": "Ereignis"
+                                },
+                                "value": {
+                                  "_type": "DV_TEXT",
+                                  "value": "mittags"
+                                },
+                                "archetype_node_id": "at0026"
+                              }
+                            ],
+                            "archetype_node_id": "at0039"
+                          }
+                        ],
+                        "archetype_node_id": "openEHR-EHR-CLUSTER.timing_daily.v1"
+                      }
+                    ],
+                    "archetype_node_id": "openEHR-EHR-CLUSTER.dosage.v1"
+                  },
+                  {
+                    "_type": "CLUSTER",
+                    "name": {
+                      "_type": "DV_TEXT",
+                      "value": "Dosierung"
+                    },
+                    "items": [
+                      {
+                        "_type": "ELEMENT",
+                        "name": {
+                          "_type": "DV_TEXT",
+                          "value": "Dosismenge"
+                        },
+                        "value": {
+                          "_type": "DV_QUANTITY",
+                          "units": "1",
+                          "magnitude": 1
+                        },
+                        "archetype_node_id": "at0144"
+                      },
+                      {
+                        "_type": "ELEMENT",
+                        "name": {
+                          "_type": "DV_TEXT",
+                          "value": "Dosiseinheit"
+                        },
+                        "value": {
+                          "_type": "DV_TEXT",
+                          "value": "Stück"
+                        },
+                        "archetype_node_id": "at0145"
+                      },
+                      {
+                        "_type": "ELEMENT",
+                        "name": {
+                          "_type": "DV_TEXT",
+                          "value": "Dosierung Freitext"
+                        },
+                        "value": {
+                          "_type": "DV_TEXT",
+                          "value": "Lorem Ipsum"
+                        },
+                        "archetype_node_id": "at0178"
+                      },
+                      {
+                        "_type": "CLUSTER",
+                        "name": {
+                          "_type": "DV_TEXT",
+                          "value": "Tägliche Dosierung"
+                        },
+                        "items": [
+                          {
+                            "_type": "CLUSTER",
+                            "name": {
+                              "_type": "DV_TEXT",
+                              "value": "Bestimmtes Ereignis"
+                            },
+                            "items": [
+                              {
+                                "_type": "ELEMENT",
+                                "name": {
+                                  "_type": "DV_TEXT",
+                                  "value": "Ereignis"
+                                },
+                                "value": {
+                                  "_type": "DV_TEXT",
+                                  "value": "abends"
+                                },
+                                "archetype_node_id": "at0026"
+                              }
+                            ],
+                            "archetype_node_id": "at0039"
+                          }
+                        ],
+                        "archetype_node_id": "openEHR-EHR-CLUSTER.timing_daily.v1"
+                      }
+                    ],
+                    "archetype_node_id": "openEHR-EHR-CLUSTER.dosage.v1"
+                  },
+                  {
+                    "_type": "CLUSTER",
+                    "name": {
+                      "_type": "DV_TEXT",
+                      "value": "Dosierung"
+                    },
+                    "items": [
+                      {
+                        "_type": "ELEMENT",
+                        "name": {
+                          "_type": "DV_TEXT",
+                          "value": "Dosismenge"
+                        },
+                        "value": {
+                          "_type": "DV_QUANTITY",
+                          "units": "1",
+                          "magnitude": 0
+                        },
+                        "archetype_node_id": "at0144"
+                      },
+                      {
+                        "_type": "ELEMENT",
+                        "name": {
+                          "_type": "DV_TEXT",
+                          "value": "Dosiseinheit"
+                        },
+                        "value": {
+                          "_type": "DV_TEXT",
+                          "value": "Stück"
+                        },
+                        "archetype_node_id": "at0145"
+                      },
+                      {
+                        "_type": "ELEMENT",
+                        "name": {
+                          "_type": "DV_TEXT",
+                          "value": "Dosierung Freitext"
+                        },
+                        "value": {
+                          "_type": "DV_TEXT",
+                          "value": "Lorem Ipsum"
+                        },
+                        "archetype_node_id": "at0178"
+                      },
+                      {
+                        "_type": "CLUSTER",
+                        "name": {
+                          "_type": "DV_TEXT",
+                          "value": "Tägliche Dosierung"
+                        },
+                        "items": [
+                          {
+                            "_type": "CLUSTER",
+                            "name": {
+                              "_type": "DV_TEXT",
+                              "value": "Bestimmtes Ereignis"
+                            },
+                            "items": [
+                              {
+                                "_type": "ELEMENT",
+                                "name": {
+                                  "_type": "DV_TEXT",
+                                  "value": "Ereignis"
+                                },
+                                "value": {
+                                  "_type": "DV_TEXT",
+                                  "value": "nachts"
+                                },
+                                "archetype_node_id": "at0026"
+                              }
+                            ],
+                            "archetype_node_id": "at0039"
+                          }
+                        ],
+                        "archetype_node_id": "openEHR-EHR-CLUSTER.timing_daily.v1"
+                      }
+                    ],
+                    "archetype_node_id": "openEHR-EHR-CLUSTER.dosage.v1"
+                  }
+                ],
+                "archetype_node_id": "openEHR-EHR-CLUSTER.therapeutic_direction.v1"
+              }
+            ],
+            "archetype_node_id": "at0002"
+          },
+          "action_archetype_id": "/.*/",
+          "archetype_node_id": "at0001"
+        }
+      ],
+      "archetype_node_id": "openEHR-EHR-INSTRUCTION.medication_order.v2"
+    }
+  ],
+  "archetype_node_id": "openEHR-EHR-COMPOSITION.medication_list.v1",
+  "uid": {
+    "_type": "OBJECT_VERSION_ID",
+    "value": "f3fb274e-588f-4936-aa84-3b85669c70e1::local.ehrbase.org::1"
+  }
+}

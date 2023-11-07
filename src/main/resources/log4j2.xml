@@ -14,7 +14,7 @@
 
         <File name="LogValidation" fileName="/io/logs/validation.log" immediateFlush="false" append="false">
             <ThresholdFilter level="${sys:logging.level:-info}" onMatch="ACCEPT" onMismatch="DENY"/>
-            <PatternLayout pattern="%d{HH:mm:ss.SSS} - %msg%n}"/>
+            <PatternLayout pattern="%d{HH:mm:ss.SSS} - %msg%n"/>
         </File>
     </Appenders>
 

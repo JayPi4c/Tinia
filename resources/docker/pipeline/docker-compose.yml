@@ -8,7 +8,7 @@ services:
       - ./debug:/io/debug
       - ./logs:/io/logs
     environment:
-      OPENEHR_URL: http://10.17.15.239:8080/ehrbase/
+      OPENEHR_URL: http://10.18.0.119:8080/ehrbase/
       DEBUG_DRAWIMAGES: false
       LOGGING_LEVEL_COM_JAYPI4C_BA_PIPELINE_MEDICATIONPLAN: INFO
       VALIDATION_ACTIVE: false

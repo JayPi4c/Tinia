@@ -262,8 +262,7 @@
              hinweis="false"/>
         <key V="REK" DN="RetKaps" S="1.2.276.0.76.3.1.1.5.2.40" SV="1.03" bezeichnungIFA="Retard-Kapseln"
              hinweis="false"/>
-        <key V="RET" DN="RetTabl" S="1.2.276.0.76.3.1.1.5.2.40" SV="1.03" bezeichnungIFA="Retard-Tabletten"
-             hinweis="false"/>
+
         <key V="RGR" DN="RetGran" S="1.2.276.0.76.3.1.1.5.2.40" SV="1.03" bezeichnungIFA="Retard-Granulat"
              hinweis="false"/>
         <key V="RKA" DN="RekKaps" S="1.2.276.0.76.3.1.1.5.2.40" SV="1.03" bezeichnungIFA="Rektalkapseln"
@@ -313,7 +312,6 @@
         <key V="SUV" DN="Susp" S="1.2.276.0.76.3.1.1.5.2.40" SV="1.03" bezeichnungIFA="Suspension für einen Vernebler"
              hinweis="true"/>
         <key V="SWA" DN="Schwamm" S="1.2.276.0.76.3.1.1.5.2.40" SV="1.03" bezeichnungIFA="Schwämme" hinweis="false"/>
-        <key V="TAB" DN="Tabl" S="1.2.276.0.76.3.1.1.5.2.40" SV="1.03" bezeichnungIFA="Tabletten" hinweis="false"/>
         <key V="TAE" DN="Tafel" S="1.2.276.0.76.3.1.1.5.2.40" SV="1.03" bezeichnungIFA="Täfelchen" hinweis="false"/>
         <key V="TAM" DN="Amp" S="1.2.276.0.76.3.1.1.5.2.40" SV="1.03" bezeichnungIFA="Trockenampullen" hinweis="false"/>
         <key V="TEE" DN="Tee" S="1.2.276.0.76.3.1.1.5.2.40" SV="1.03" bezeichnungIFA="Tee" hinweis="false"/>
@@ -394,5 +392,10 @@
         <key V="ZKA" DN="ZerbKps" S="1.2.276.0.76.3.1.1.5.2.40" SV="1.03" bezeichnungIFA="Zerbeißkapseln"
              hinweis="true"/>
         <key V="ZPA" DN="Zahnp." S="1.2.276.0.76.3.1.1.5.2.40" SV="1.03" bezeichnungIFA="Zahnpasta" hinweis="false"/>
+
+        <!-- moved down to override Tabl and RetTabl in map-->
+        <key V="TAB" DN="Tabl" S="1.2.276.0.76.3.1.1.5.2.40" SV="1.03" bezeichnungIFA="Tabletten" hinweis="false"/>
+        <key V="RET" DN="RetTabl" S="1.2.276.0.76.3.1.1.5.2.40" SV="1.03" bezeichnungIFA="Retard-Tabletten"
+             hinweis="false"/>
     </keytab>
 </keytabs>
