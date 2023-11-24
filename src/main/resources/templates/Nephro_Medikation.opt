@@ -551,10 +551,11 @@ Der Status "abgebrochen" bedeutet, dass dem Patienten die entsprechende Fallnumm
                                   <list>Beutel mit retardierten Filmtabletten</list>
                                   <list>Flüssigseife</list>
                                   <list>Filmtabletten</list>
+                                  <list>Granulat zur Entnahme aus Kapseln</list>
                                   <list>Gel</list>
                                   <list>Gas und Lösungsmittel zur Herstellung einer Injektions/Infusionsdispersion</list>
                                   <list>Globuli</list>
-                                  <list>Magensaftresistentes Granulat</list>
+                                  <list>Magensaftresitentes Granulat</list>
                                   <list>Gelplatte</list>
                                   <list>Granulat</list>
                                   <list>Granulat zur Herstellung einer Suspension zum Einnehmen</list>
@@ -566,13 +567,17 @@ Der Status "abgebrochen" bedeutet, dass dem Patienten die entsprechende Fallnumm
                                   <list>Hartkapseln mit veränderter Wirkstofffreisetzung</list>
                                   <list>Infusionsampullen</list>
                                   <list>Infusionsbeutel</list>
+                                  <list>Infusionsdispersion</list>
+                                  <list>Injektionslösung in einer Fertigspritze</list>
                                   <list>Infusionsflaschen</list>
                                   <list>Infusionslösungskonzentrat</list>
                                   <list>Injektionsflaschen</list>
                                   <list>Infusionsset</list>
                                   <list>Inhalationsampullen</list>
                                   <list>Inhalationspulver</list>
+                                  <list>Injektions- oder Infusionslösung oder Lösung zum Einnehmen</list>
                                   <list>Injekts-, Infusionslösung</list>
+                                  <list>Injektionslösung zur intramuskulären Anwendung</list>
                                   <list>Inhalationskapseln</list>
                                   <list>Injektionslösung</list>
                                   <list>Implantat</list>
@@ -591,11 +596,12 @@ Der Status "abgebrochen" bedeutet, dass dem Patienten die entsprechende Fallnumm
                                   <list>Kegel</list>
                                   <list>Kerne</list>
                                   <list>Kaugummi</list>
+                                  <list>Konzentrat zur Herstellung einer Infusionsdispersion</list>
                                   <list>Konzentrat zur Herstellung einer Injektions- oder Infusionslösung</list>
                                   <list>Kleinkindersuppositorien</list>
                                   <list>Klistiere</list>
                                   <list>Klistier-Tabletten</list>
-                                  <list>Hartkapseln mit Magensaftresistent überzogene Pellets</list>
+                                  <list>Hartkapsel mit Magensaftresistent überzogene Pellets</list>
                                   <list>Hartkapsel magensaftresistent</list>
                                   <list>Kondome</list>
                                   <list>Kompressen</list>
@@ -616,6 +622,7 @@ Der Status "abgebrochen" bedeutet, dass dem Patienten die entsprechende Fallnumm
                                   <list>Lutschpastillen</list>
                                   <list>Lutschtabletten</list>
                                   <list>Milch</list>
+                                  <list>Mischung</list>
                                   <list>Mixtur</list>
                                   <list>Magensaftresistentes Retardgranulat</list>
                                   <list>Magensaftresistente Pellets</list>
@@ -639,17 +646,22 @@ Der Status "abgebrochen" bedeutet, dass dem Patienten die entsprechende Fallnumm
                                   <list>Pflaster</list>
                                   <list>Pflaster transdermal</list>
                                   <list>Pulver zur Herstellung einer Injektions-, Infusions-oder Inhalationslösung</list>
-                                  <list>Pulver zur Herstellung einer Infusionslösung</list>
+                                  <list>Pulver zur Herstellung einer Injektions- bzw. Infusionslösung oder Pulver und Lösungsmittel zur Herstellung einer Lösung zur intravesikalen Anwendung</list>
+                                  <list>Pulver für ein Konzentrat zur Herstellung einer Infusionslösung, Pulver zur Herstellung einer Lösung zum Einnehmen</list>
+                                  <list>Pulver zu Herstellung einer Infusionslösung</list>
                                   <list>Pulver zur Herstellung einer Injektions- oder Infusionslösung</list>
                                   <list>Pulver zur Herstellung einer Injektionslösung</list>
                                   <list>Pulver zur Herstellung eines Infusionslösungskonzentrats</list>
+                                  <list>Pulver zur Herstellung einer Infusionssuspension</list>
                                   <list>Pulver zur Herstellung einer Injektions- bzw. Infusionslösung</list>
+                                  <list>Pulver für ein Konzentrat zur Herstellung einer Infusionslösung</list>
                                   <list>Pulver zur Herstellung einer Lösung zum Einnehmen</list>
                                   <list>Pulver und Lösungsmittel zur Herstellung einer Infusionslösung</list>
                                   <list>Perlongetten</list>
                                   <list>Pulver und Lösungsmittel zur Herstellung einer Injektions-bzw. Infusionslösung</list>
                                   <list>Pulver und Lösungsmittel zur Herstellung einer Injektionslösung</list>
                                   <list>Pulver und Lösungsmittel für ein Konzentrat zur Herstellung einer Infusionslösung</list>
+                                  <list>Pulver und Lösungsmittel zur Herstellung einer Injektionssuspension</list>
                                   <list>Pulver und Lösungsmittel zur Herstellung einer Lösung zur intravesikalen Anwendung</list>
                                   <list>Pumplösung</list>
                                   <list>Presslinge</list>
@@ -662,7 +674,9 @@ Der Status "abgebrochen" bedeutet, dass dem Patienten die entsprechende Fallnumm
                                   <list>Retard-Tabletten</list>
                                   <list>Retard-Granulat</list>
                                   <list>Rektalkapseln</list>
+                                  <list>Retardmikrokapseln und Suspensionsmittel</list>
                                   <list>Rektalschaum</list>
+                                  <list>Rektalsuspension</list>
                                   <list>Retard-überzogenen Tabletten</list>
                                   <list>Saft</list>
                                   <list>Salbe</list>
@@ -678,6 +692,7 @@ Der Status "abgebrochen" bedeutet, dass dem Patienten die entsprechende Fallnumm
                                   <list>Sprühflasche</list>
                                   <list>Spüllösung</list>
                                   <list>Spray</list>
+                                  <list>Transdermales Spray</list>
                                   <list>Spritzen</list>
                                   <list>Säuglingssuppositorien</list>
                                   <list>Stechampullen</list>
@@ -686,6 +701,7 @@ Der Status "abgebrochen" bedeutet, dass dem Patienten die entsprechende Fallnumm
                                   <list>Streifen</list>
                                   <list>Substanz</list>
                                   <list>Suspension zum Einnehmen</list>
+                                  <list>Sublingualspray, Lösung</list>
                                   <list>Suppositorien</list>
                                   <list>Suspension</list>
                                   <list>Sublingualtabletten</list>
@@ -699,6 +715,7 @@ Der Status "abgebrochen" bedeutet, dass dem Patienten die entsprechende Fallnumm
                                   <list>Test</list>
                                   <list>Tinktur</list>
                                   <list>Tabletten in Kalenderpackung</list>
+                                  <list>Tablette zur Herstellung einer Lösung zum Einnehmen</list>
                                   <list>Tabletten magensaftresistent</list>
                                   <list>Tonikum</list>
                                   <list>Tampon</list>
@@ -710,6 +727,7 @@ Der Status "abgebrochen" bedeutet, dass dem Patienten die entsprechende Fallnumm
                                   <list>Trinktabletten</list>
                                   <list>Trockensaft</list>
                                   <list>Tabletten zur Herstellung einer Suspension zum Einnehmen für einen Dosierspender</list>
+                                  <list>Tablette zur Herstellung einer Suspension zum Einnehmen</list>
                                   <list>Trockensubstanz ohne Lösungsmittel</list>
                                   <list>Teststäbchen</list>
                                   <list>Transdermales System</list>
@@ -717,6 +735,7 @@ Der Status "abgebrochen" bedeutet, dass dem Patienten die entsprechende Fallnumm
                                   <list>Tube</list>
                                   <list>Tücher</list>
                                   <list>Tupfer</list>
+                                  <list>Tablette mit veränderter Wirkstofffreisetzung</list>
                                   <list>überzogene Tabletten</list>
                                   <list>Vaginallösung</list>
                                   <list>Vaginalring</list>
