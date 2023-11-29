@@ -6,6 +6,8 @@ import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
 
 import java.io.IOException;
@@ -19,6 +21,8 @@ import java.util.List;
 @Component
 public class GelbeListeActiveIngredientValidator implements IActiveIngredientValidator {
 
+    private static final Logger validationLogger = LoggerFactory.getLogger("VALIDATION-LOGGER");
+
     private int validationCount = 0;
     private int validationFailureCount = 0;
 
@@ -26,6 +30,7 @@ public class GelbeListeActiveIngredientValidator implements IActiveIngredientVal
     public boolean validate(String activeIngredient) {
         if (activeIngredient == null || activeIngredient.isEmpty()) {
             log.warn("Active ingredient is null or empty");
+            validationLogger.warn("Active ingredient is null or empty");
             return false;
         }
         return request(activeIngredient);
@@ -35,11 +40,15 @@ public class GelbeListeActiveIngredientValidator implements IActiveIngredientVal
     public void finish() {
         if (validationCount == 0) {
             log.warn("No validation requests were made");
+            validationLogger.warn("No validation requests were made");
             return;
         }
         log.info("Validation count: {}", validationCount);
+        validationLogger.info("Validation count: {}", validationCount);
         log.info("Validation failure count: {}", validationFailureCount);
+        validationLogger.info("Validation failure count: {}", validationFailureCount);
         log.info("Validation success rate: {}", (double) (validationCount - validationFailureCount) / validationCount);
+        validationLogger.info("Validation success rate: {}", (double) (validationCount - validationFailureCount) / validationCount);
     }
 
     private boolean request(String searchString) {
