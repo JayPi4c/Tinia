@@ -111,7 +111,7 @@ public class TableExtractor {
 
             if (matcher.find()) {
                 date = matcher.group(0);
-                date = date.replaceAll(",", ".");
+                date = date.replace(",", ".");
                 log.debug("Found date: {}", date);
             } else {
                 log.debug("No date found.");
@@ -150,7 +150,7 @@ public class TableExtractor {
         for (Rectangle2D cell : cells) {
             boolean found = false;
             for (List<Rectangle2D> row : rows) { // check existing rows
-                if (Math.abs(row.get(0).getY() - cell.getY()) < 10) {
+                if (Math.abs(row.getFirst().getY() - cell.getY()) < 10) {
                     row.add(cell);
                     found = true;
                     break;
@@ -165,12 +165,13 @@ public class TableExtractor {
 
         List<Rectangle2D[]> tableRows = new ArrayList<>();
 
-        final int EXPECTED_NUM_CELLS = 11;
+        final int EXPECTED_NUM_CELLS_DOSISSCHEMA_SEPARATED = 11;
+        final int EXPECTED_NUM_CELLS_DOSISSCHEMA_COMBINED = 8;
         for (List<Rectangle2D> row : rows) {
-            if (row.size() == EXPECTED_NUM_CELLS) {
+            if (row.size() == EXPECTED_NUM_CELLS_DOSISSCHEMA_SEPARATED || row.size() == EXPECTED_NUM_CELLS_DOSISSCHEMA_COMBINED) {
                 row.sort((o1, o2) -> (int) (o1.getX() - o2.getX()));
                 tableRows.add(row.toArray(new Rectangle2D[0]));
-            } else if (Math.abs(row.size() - EXPECTED_NUM_CELLS) > 3) {
+            } else if (Math.abs(row.size() - EXPECTED_NUM_CELLS_DOSISSCHEMA_SEPARATED) > 3) {
                 continue; // skip the row as there are too many or too few cells
             } else {
                 // TODO find missing cells

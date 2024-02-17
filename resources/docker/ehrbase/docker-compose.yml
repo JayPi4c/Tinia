@@ -28,6 +28,8 @@ services:
       ADMIN_API_ACTIVE: true
       ADMINAPI_ALLOWDELETEALL: true
     restart: on-failure
+    depends_on:
+      - ehrdb
 
   ehrdb:
     image: ehrbase/ehrbase-postgres:13.4.v2

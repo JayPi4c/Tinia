@@ -65,8 +65,10 @@ public class CellReader {
             log.error("Document is closed. Probably the file was not set.");
             return new ReadingResult(null, null, null);
         }
-
-        String[][] results = new String[table.length][table[0].length];
+        String[][] results = new String[table.length][];
+        for (int i = 0; i < table.length; i++) {
+            results[i] = new String[table[i].length];
+        }
         PDPage docPage = document.getPage(page);
 
         try {
@@ -85,7 +87,7 @@ public class CellReader {
             for (int i = 0; i < table.length; i++) {
                 for (int j = 0; j < table[i].length; j++) {
                     String textForRegion = textStripper.getTextForRegion(i + "_" + j);
-                    textForRegion = textForRegion.replaceAll("\n", " ").replaceAll("\r", " ");
+                    textForRegion = textForRegion.replace("\n", " ").replace("\r", " ");
                     results[i][j] = textForRegion;
                 }
             }
@@ -142,11 +144,11 @@ public class CellReader {
     }
 
     private boolean verifyRow(String[] row) {
-        if (row.length != 11) {
+        if (row.length != 11 && row.length != 8) {
             return false;
         }
         String rowString = String.join(" ", row);
-        if (rowString.replaceAll(" ", "").length() < 10) {
+        if (rowString.replace(" ", "").length() < 10) {
             return false; // less than 10 characters is probably an almost empty row with no information
         }
         return !row[3].isBlank(); // Darreichungsform darf nicht leer sein.
