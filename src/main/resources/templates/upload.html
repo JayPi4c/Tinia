@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="de" layout:decorate="~{layout/layout :: layout(title='Upload')}"
+      xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
+
+<body>
+
+<div layout:fragment="content">
+    <div th:if="${rawText == null}">
+        <h1>Upload File</h1>
+        <form action="#" enctype="multipart/form-data" method="post" th:action="@{/upload}">
+            <div>
+                <label class="form-label" for="fileInput">Select PDF file</label>
+                <input class="form-control form-control-lg" id="fileInput" name="fileInput" type="file">
+            </div>
+            <div class="form-check">
+                <input class="form-check-input" id="consentCheck" name="consentCheck" required
+                       type="checkbox">
+                <label class="form-check-label" for="consentCheck">Ich stimme dem Verarbeiten der Daten zu.</label>
+            </div>
+            <button class="btn btn-primary" type="submit">Upload</button>
+        </form>
+    </div>
+    <div th:if="${rawText != null}">
+        <h1>Converted File</h1>
+        <div>
+            <textarea class="form-control" cols="100" id="myTextArea" rows="20" th:text="${rawText}"></textarea>
+            <label for="myTextArea">Converted Text</label>
+        </div>
+    </div>
+</div>
+</body>
+</html>
