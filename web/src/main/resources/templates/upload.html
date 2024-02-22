@@ -6,7 +6,7 @@
 <body>
 
 <div layout:fragment="content">
-    <div th:if="${rawText == null}">
+    <div th:if="${output == null}">
         <h1>Upload File</h1>
         <form action="#" enctype="multipart/form-data" method="post" th:action="@{/upload}">
             <div>
@@ -21,10 +21,10 @@
             <button class="btn btn-primary" type="submit">Upload</button>
         </form>
     </div>
-    <div th:if="${rawText != null}">
+    <div th:if="${output != null}">
         <h1>Converted File</h1>
         <div>
-            <textarea class="form-control" cols="100" id="myTextArea" rows="20" th:text="${rawText}"></textarea>
+            <textarea class="form-control" cols="100" id="myTextArea" rows="20" th:text="${output}"></textarea>
             <label for="myTextArea">Converted Text</label>
         </div>
     </div>

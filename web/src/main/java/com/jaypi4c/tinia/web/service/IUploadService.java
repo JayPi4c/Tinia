@@ -1,4 +1,4 @@
-package com.jaypi4c.pdfuploader.service;
+package com.jaypi4c.tinia.web.service;
 
 import java.io.InputStream;
 

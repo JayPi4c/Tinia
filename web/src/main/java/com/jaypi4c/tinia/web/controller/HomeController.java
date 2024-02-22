@@ -1,4 +1,4 @@
-package com.jaypi4c.pdfuploader.controller;
+package com.jaypi4c.tinia.web.controller;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;

@@ -1,6 +1,6 @@
-package com.jaypi4c.pdfuploader.controller;
+package com.jaypi4c.tinia.web.controller;
 
-import com.jaypi4c.pdfuploader.service.IUploadService;
+import com.jaypi4c.tinia.web.service.IUploadService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
@@ -30,17 +30,17 @@ public class UploadController {
     @PostMapping
     public String uploadFile(Model model, @RequestParam("fileInput") MultipartFile file, @RequestParam("consentCheck") boolean consent) {
         if (!consent) {
-            model.addAttribute("rawText", "You must consent to the processing of your data.");
+            model.addAttribute("output", "You must consent to the processing of your data.");
             return UPLOAD_VIEW;
         }
-        String rawText = "Error reading file";
+        String output = "Error reading file";
         try (InputStream inputStream = file.getInputStream()) {
-            rawText = uploadService.processFile(inputStream);
+            output = uploadService.processFile(inputStream);
             log.info("{} loaded.", file.getOriginalFilename());
         } catch (Exception e) {
             log.error("Error reading file", e);
         }
-        model.addAttribute("rawText", rawText);
+        model.addAttribute("output", output);
         return UPLOAD_VIEW;
     }
 

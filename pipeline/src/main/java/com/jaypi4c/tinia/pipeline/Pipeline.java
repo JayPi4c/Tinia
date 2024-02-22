@@ -1,18 +1,16 @@
-package com.jaypi4c.pdfuploader.service.impl;
+package com.jaypi4c.tinia.pipeline;
 
-import com.jaypi4c.pdfuploader.service.IUploadService;
 import org.apache.pdfbox.pdmodel.PDDocument;
 import org.apache.pdfbox.text.PDFTextStripper;
-import org.springframework.stereotype.Service;
+import org.springframework.stereotype.Component;
 
 import java.io.IOException;
 import java.io.InputStream;
 
-@Service
-public class UploadService implements IUploadService {
+@Component
+public class Pipeline {
 
-    @Override
-    public String processFile(InputStream inputStream) {
+    public String process(InputStream inputStream) {
         try (PDDocument document = PDDocument.load(inputStream)) {
             PDFTextStripper stripper = new PDFTextStripper();
             int pages = document.getNumberOfPages();
@@ -28,5 +26,6 @@ public class UploadService implements IUploadService {
             return "Reading PDF failed";
         }
     }
+
 
 }
