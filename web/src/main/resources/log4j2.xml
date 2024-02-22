@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Configuration status="WARN">
+    <Properties>
+        <Property name="appenderPatternLayout">%d{HH:mm:ss.SSS} [%t] %-5level %logger{36}(%F:%L) - %msg%n</Property>
+    </Properties>
+    <Appenders>
+        <Console name="LogToConsole" target="SYSTEM_OUT">
+            <PatternLayout pattern="${appenderPatternLayout}"/>
+        </Console>
+        <File name="LogToFile" fileName="logs/pipeline.log" immediateFlush="false" append="false">
+            <ThresholdFilter level="${sys:logging.level:-info}" onMatch="ACCEPT" onMismatch="DENY"/>
+            <PatternLayout pattern="${appenderPatternLayout}"/>
+        </File>
+
+        <File name="LogValidation" fileName="logs/validation.log" immediateFlush="false" append="false">
+            <ThresholdFilter level="${sys:logging.level:-info}" onMatch="ACCEPT" onMismatch="DENY"/>
+            <PatternLayout pattern="%d{HH:mm:ss.SSS} - %msg%n"/>
+        </File>
+    </Appenders>
+
+    <Loggers>
+        <Logger name="com.jaypi4c" level="debug"/>
+
+        <Logger name="VALIDATION-LOGGER"
+                level="debug">
+            <AppenderRef ref="LogValidation"/>
+        </Logger>
+
+        <Root level="${sys:logging.level:-info}">
+            <AppenderRef ref="LogToFile"/>
+            <AppenderRef ref="LogToConsole"/>
+        </Root>
+    </Loggers>
+</Configuration>

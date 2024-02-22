@@ -1,0 +1,69 @@
+<keytabs xmlns="urn:ehd/001">
+    <keytab SV="1.01" SN="S_BMP_DOSIEREINHEIT" S="1.2.276.0.76.3.1.1.5.2.41">
+        <key V="#" DN="Messlöffel" S="1.2.276.0.76.3.1.1.5.2.41" SV="1.01" sortierung="8" bedeutung="Messlöffel"
+             unterstuetzt="true"/>
+        <key V="0" DN="Messbecher" S="1.2.276.0.76.3.1.1.5.2.41" SV="1.01" sortierung="9" bedeutung="Messbecher"
+             unterstuetzt="true"/>
+        <key V="1" DN="Stück" S="1.2.276.0.76.3.1.1.5.2.41" SV="1.01" sortierung="1" bedeutung="Stück"
+             unterstuetzt="true"/>
+        <key V="2" DN="Pkg." S="1.2.276.0.76.3.1.1.5.2.41" SV="1.01" sortierung="22" bedeutung="Packungen"
+             unterstuetzt="false"/>
+        <key V="3" DN="Flasche" S="1.2.276.0.76.3.1.1.5.2.41" SV="1.01" sortierung="15" bedeutung="Flasche"
+             unterstuetzt="true"/>
+        <key V="4" DN="Beutel" S="1.2.276.0.76.3.1.1.5.2.41" SV="1.01" sortierung="16" bedeutung="Beutel"
+             unterstuetzt="true"/>
+        <key V="5" DN="Hub" S="1.2.276.0.76.3.1.1.5.2.41" SV="1.01" sortierung="4" bedeutung="Hub" unterstuetzt="true"/>
+        <key V="6" DN="Tropfen" S="1.2.276.0.76.3.1.1.5.2.41" SV="1.01" sortierung="2" bedeutung="Tropfen"
+             unterstuetzt="true"/>
+        <key V="7" DN="Teelöffel" S="1.2.276.0.76.3.1.1.5.2.41" SV="1.01" sortierung="26" bedeutung="Teelöffel"
+             unterstuetzt="true"/>
+        <key V="8" DN="Esslöffel" S="1.2.276.0.76.3.1.1.5.2.41" SV="1.01" sortierung="27" bedeutung="Esslöffel"
+             unterstuetzt="true"/>
+        <key V="9" DN="E" S="1.2.276.0.76.3.1.1.5.2.41" SV="1.01" sortierung="13" bedeutung="Einheiten"
+             unterstuetzt="true"/>
+        <key V="a" DN="Tasse" S="1.2.276.0.76.3.1.1.5.2.41" SV="1.01" sortierung="29" bedeutung="Tasse"
+             unterstuetzt="true"/>
+        <key V="b" DN="Applikatorfüllung" S="1.2.276.0.76.3.1.1.5.2.41" SV="1.01" sortierung="11"
+             bedeutung="Applikatorfüllung" unterstuetzt="true"/>
+        <key V="c" DN="Augenbadewanne" S="1.2.276.0.76.3.1.1.5.2.41" SV="1.01" sortierung="33"
+             bedeutung="Augenbadewanne" unterstuetzt="true"/>
+        <key V="d" DN="Dosierbriefchen" S="1.2.276.0.76.3.1.1.5.2.41" SV="1.01" sortierung="23"
+             bedeutung="Dosierbriefchen" unterstuetzt="true"/>
+        <key V="e" DN="Dosierpipette" S="1.2.276.0.76.3.1.1.5.2.41" SV="1.01" sortierung="24" bedeutung="Dosierpipette"
+             unterstuetzt="true"/>
+        <key V="f" DN="Dosierspritze" S="1.2.276.0.76.3.1.1.5.2.41" SV="1.01" sortierung="25" bedeutung="Dosierspritze"
+             unterstuetzt="true"/>
+        <key V="g" DN="Einzeldosis" S="1.2.276.0.76.3.1.1.5.2.41" SV="1.01" sortierung="12" bedeutung="Einzeldosis"
+             unterstuetzt="true"/>
+        <key V="h" DN="Glas" S="1.2.276.0.76.3.1.1.5.2.41" SV="1.01" sortierung="28" bedeutung="Glas"
+             unterstuetzt="true"/>
+        <key V="i" DN="Likörglas" S="1.2.276.0.76.3.1.1.5.2.41" SV="1.01" sortierung="32" bedeutung="Likörglas"
+             unterstuetzt="true"/>
+        <key V="j" DN="Messkappe" S="1.2.276.0.76.3.1.1.5.2.41" SV="1.01" sortierung="30" bedeutung="Messkappe"
+             unterstuetzt="true"/>
+        <key V="k" DN="Messschale" S="1.2.276.0.76.3.1.1.5.2.41" SV="1.01" sortierung="31" bedeutung="Messschale"
+             unterstuetzt="true"/>
+        <key V="l" DN="Mio E" S="1.2.276.0.76.3.1.1.5.2.41" SV="1.01" sortierung="17" bedeutung="Million Einheiten"
+             unterstuetzt="true"/>
+        <key V="m" DN="Mio IE" S="1.2.276.0.76.3.1.1.5.2.41" SV="1.01" sortierung="18"
+             bedeutung="Million Internationale Einheiten" unterstuetzt="true"/>
+        <key V="n" DN="Pipettenteilstrich" S="1.2.276.0.76.3.1.1.5.2.41" SV="1.01" sortierung="14"
+             bedeutung="Pipettenteilstrich" unterstuetzt="true"/>
+        <key V="o" DN="Sprühstoß" S="1.2.276.0.76.3.1.1.5.2.41" SV="1.01" sortierung="5" bedeutung="Sprühstoß"
+             unterstuetzt="true"/>
+        <key V="p" DN="IE" S="1.2.276.0.76.3.1.1.5.2.41" SV="1.01" sortierung="3"
+             bedeutung="Internationale Einheiten, Immunisierungseinheit oder Insulineinheit" unterstuetzt="true"/>
+        <key V="q" DN="cm" S="1.2.276.0.76.3.1.1.5.2.41" SV="1.01" sortierung="7" bedeutung="Zentimeter"
+             unterstuetzt="true"/>
+        <key V="r" DN="l" S="1.2.276.0.76.3.1.1.5.2.41" SV="1.01" sortierung="20" bedeutung="Liter"
+             unterstuetzt="true"/>
+        <key V="s" DN="ml" S="1.2.276.0.76.3.1.1.5.2.41" SV="1.01" sortierung="6" bedeutung="Milliliter"
+             unterstuetzt="true"/>
+        <key V="t" DN="g" S="1.2.276.0.76.3.1.1.5.2.41" SV="1.01" sortierung="19" bedeutung="Gramm"
+             unterstuetzt="true"/>
+        <key V="u" DN="kg" S="1.2.276.0.76.3.1.1.5.2.41" SV="1.01" sortierung="21" bedeutung="Kilogramm"
+             unterstuetzt="false"/>
+        <key V="v" DN="mg" S="1.2.276.0.76.3.1.1.5.2.41" SV="1.01" sortierung="10" bedeutung="Milligramm"
+             unterstuetzt="false"/>
+    </keytab>
+</keytabs>

@@ -5,6 +5,15 @@ target/
 !**/src/test/**/target/
 
 ### STS ###
+
+# project specific files
+logs/
+.pgdata/
+debug/
+application-dev.properties
+log4j2-dev.xml
+
+### Eclipse ###
 .apt_generated
 .classpath
 .factorypath

@@ -1,0 +1,51 @@
+version: '3'
+
+services:
+  ehrbase:
+    image: ehrbase/ehrbase:0.30.0
+    # image: ehrbase/ehrbase:0.27.0
+    ports:
+      - 8080:8080
+    networks:
+      - ehrbase-net
+    env_file:
+      - .env.ehrbase
+    environment:
+      DB_URL: jdbc:postgresql://ehrdb:5432/ehrbase
+      DB_USER_ADMIN: ehrbase
+      DB_PASS_ADMIN: ehrbase
+      DB_USER: ehrbase_restricted
+      DB_PASS: ehrbase_restricted
+      MANAGEMENT_ENDPOINTS_WEB_EXPOSURE: env,health,info,metrics,prometheus
+      MANAGEMENT_ENDPOINTS_WEB_BASEPATH: /management
+      MANAGEMENT_ENDPOINT_ENV_ENABLED: true
+      MANAGEMENT_ENDPOINT_HEALTH_ENABLED: true
+      MANAGEMENT_ENDPOINT_HEALTH_DATASOURCE_ENABLED: true
+      MANAGEMENT_ENDPOINT_INFO_ENABLED: true
+      MANAGEMENT_ENDPOINT_METRICS_ENABLED: true
+      MANAGEMENT_ENDPOINT_PROMETHEUS_ENABLED: true
+      MANAGEMENT_ENDPOINT_HEALTH_PROBES_ENABLED: true
+      ADMIN_API_ACTIVE: true
+      ADMINAPI_ALLOWDELETEALL: true
+    restart: on-failure
+    depends_on:
+      - ehrdb
+
+  ehrdb:
+    image: ehrbase/ehrbase-postgres:13.4.v2
+    ports:
+      - 5432:5432
+    networks:
+      - ehrbase-net
+    volumes:
+      - ./.pgdata:/var/lib/postgresql/data
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      EHRBASE_USER_ADMIN: ehrbase
+      EHRBASE_PASSWORD_ADMIN: ehrbase
+      EHRBASE_USER: ehrbase_restricted
+      EHRBASE_PASSWORD: ehrbase_restricted
+
+networks:
+  ehrbase-net: { }

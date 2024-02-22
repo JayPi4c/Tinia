@@ -1,0 +1,11 @@
+Wirkstoff
+Handelsname
+Stärke
+Form
+morgens
+mittags
+abends
+zur Nacht
+Einheit
+Hinweise
+Grund

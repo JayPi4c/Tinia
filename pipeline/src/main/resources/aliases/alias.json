@@ -1,0 +1,1645 @@
+[
+  {
+    "real": "Ätherisches Öl",
+    "aliases": [
+      "AEO"
+    ]
+  },
+  {
+    "real": "Ampullen",
+    "aliases": [
+      "AMP",
+      "Amp"
+    ]
+  },
+  {
+    "real": "Ampullenpaare",
+    "aliases": [
+      "APA"
+    ]
+  },
+  {
+    "real": "Augen- und Nasensalbe",
+    "aliases": [
+      "ASN"
+    ]
+  },
+  {
+    "real": "Augen- und Ohrensalbe",
+    "aliases": [
+      "ASO"
+    ]
+  },
+  {
+    "real": "Augen- und Ohrentropfen",
+    "aliases": [
+      "ATO"
+    ]
+  },
+  {
+    "real": "Augenbad",
+    "aliases": [
+      "AUB"
+    ]
+  },
+  {
+    "real": "Augencreme",
+    "aliases": [
+      "AUC"
+    ]
+  },
+  {
+    "real": "Augengel",
+    "aliases": [
+      "AUG"
+    ]
+  },
+  {
+    "real": "Augensalbe",
+    "aliases": [
+      "AUS"
+    ]
+  },
+  {
+    "real": "Augentropfen",
+    "aliases": [
+      "ATR",
+      "AuTropf"
+    ]
+  },
+  {
+    "real": "Bad",
+    "aliases": [
+      "BAD"
+    ]
+  },
+  {
+    "real": "Balsam",
+    "aliases": [
+      "BAL"
+    ]
+  },
+  {
+    "real": "Bandage",
+    "aliases": [
+      "BAN"
+    ]
+  },
+  {
+    "real": "Basisplatte",
+    "aliases": [
+      "BPL"
+    ]
+  },
+  {
+    "real": "Beutel",
+    "aliases": [
+      "BEU"
+    ]
+  },
+  {
+    "real": "Beutel mit retardierten Filmtabletten",
+    "aliases": [
+      "FRB"
+    ]
+  },
+  {
+    "real": "Binden",
+    "aliases": [
+      "BIN"
+    ]
+  },
+  {
+    "real": "Bonbons",
+    "aliases": [
+      "BON"
+    ]
+  },
+  {
+    "real": "Brausetabletten",
+    "aliases": [
+      "BTA"
+    ]
+  },
+  {
+    "real": "Brei",
+    "aliases": [
+      "BRE"
+    ]
+  },
+  {
+    "real": "Creme",
+    "aliases": [
+      "CRE"
+    ]
+  },
+  {
+    "real": "Deo-Spray",
+    "aliases": [
+      "XDS"
+    ]
+  },
+  {
+    "real": "Depot-Injektionssuspension",
+    "aliases": [
+      "DIS"
+    ]
+  },
+  {
+    "real": "Digitale Gesundheitsanwendungen",
+    "aliases": [
+      "DIG"
+    ]
+  },
+  {
+    "real": "Dilution",
+    "aliases": [
+      "DIL"
+    ]
+  },
+  {
+    "real": "Dosieraerosol",
+    "aliases": [
+      "DOS"
+    ]
+  },
+  {
+    "real": "Dosierschaum",
+    "aliases": [
+      "DSC"
+    ]
+  },
+  {
+    "real": "Dosierspray",
+    "aliases": [
+      "DSS"
+    ]
+  },
+  {
+    "real": "Dragees",
+    "aliases": [
+      "DRA"
+    ]
+  },
+  {
+    "real": "Dragees in Kalenderpackung",
+    "aliases": [
+      "DKA"
+    ]
+  },
+  {
+    "real": "Dragees magensaftresistent",
+    "aliases": [
+      "DRM"
+    ]
+  },
+  {
+    "real": "Durchstechflaschen",
+    "aliases": [
+      "DFL"
+    ]
+  },
+  {
+    "real": "Duschgel",
+    "aliases": [
+      "XDG"
+    ]
+  },
+  {
+    "real": "Einreibung",
+    "aliases": [
+      "EIN"
+    ]
+  },
+  {
+    "real": "Einzeldosis-Pipetten",
+    "aliases": [
+      "EDP"
+    ]
+  },
+  {
+    "real": "Elektroden",
+    "aliases": [
+      "ELE"
+    ]
+  },
+  {
+    "real": "Elixier",
+    "aliases": [
+      "ELI"
+    ]
+  },
+  {
+    "real": "Emulsion",
+    "aliases": [
+      "EMU"
+    ]
+  },
+  {
+    "real": "Erwachsenen-Suppositorien",
+    "aliases": [
+      "ESU"
+    ]
+  },
+  {
+    "real": "Essenz",
+    "aliases": [
+      "ESS"
+    ]
+  },
+  {
+    "real": "Extrakt",
+    "aliases": [
+      "EXT"
+    ]
+  },
+  {
+    "real": "Fertigspritzen",
+    "aliases": [
+      "FER"
+    ]
+  },
+  {
+    "real": "Festiger",
+    "aliases": [
+      "XFE"
+    ]
+  },
+  {
+    "real": "Fettsalbe",
+    "aliases": [
+      "FET"
+    ]
+  },
+  {
+    "real": "Filmdragees",
+    "aliases": [
+      "FDA"
+    ]
+  },
+  {
+    "real": "Filmtabletten",
+    "aliases": [
+      "FTA"
+    ]
+  },
+  {
+    "real": "Filmtabletten magensaftresistent",
+    "aliases": [
+      "FMR"
+    ]
+  },
+  {
+    "real": "Filterbeutel",
+    "aliases": [
+      "FBE"
+    ]
+  },
+  {
+    "real": "Flasche",
+    "aliases": [
+      "FLA"
+    ]
+  },
+  {
+    "real": "Flüssigigkeit",
+    "aliases": [
+      "FLU",
+      "Fluess",
+      "Flüss"
+    ]
+  },
+  {
+    "real": "Flüssigkeit zum Einnehmen",
+    "aliases": [
+      "FLE"
+    ]
+  },
+  {
+    "real": "Flüssigseife",
+    "aliases": [
+      "FSE"
+    ]
+  },
+  {
+    "real": "Folie",
+    "aliases": [
+      "FOL"
+    ]
+  },
+  {
+    "real": "Franzbranntwein",
+    "aliases": [
+      "FBW"
+    ]
+  },
+  {
+    "real": "Gas und Lösungsmittel zur Herstellung einer Injektions-/Infusions-",
+    "aliases": [
+      "GLI"
+    ]
+  },
+  {
+    "real": "Gel",
+    "aliases": [
+      "GEL"
+    ]
+  },
+  {
+    "real": "Gelplatte",
+    "aliases": [
+      "GPA"
+    ]
+  },
+  {
+    "real": "Gesichtsmaske",
+    "aliases": [
+      "XGM"
+    ]
+  },
+  {
+    "real": "Globuli",
+    "aliases": [
+      "GLO"
+    ]
+  },
+  {
+    "real": "Granulat",
+    "aliases": [
+      "GRA"
+    ]
+  },
+  {
+    "real": "Granulat zur Entnahme aus Kapseln",
+    "aliases": [
+      "GEK"
+    ]
+  },
+  {
+    "real": "Granulat zur Herstellung einer Suspension zum Einnehmen",
+    "aliases": [
+      "GSE"
+    ]
+  },
+  {
+    "real": "Gurgellösung",
+    "aliases": [
+      "GUL"
+    ]
+  },
+  {
+    "real": "Haarspülung",
+    "aliases": [
+      "XHS"
+    ]
+  },
+  {
+    "real": "Halsband",
+    "aliases": [
+      "XHA"
+    ]
+  },
+  {
+    "real": "Handschuhe",
+    "aliases": [
+      "HAS"
+    ]
+  },
+  {
+    "real": "Hartkapseln",
+    "aliases": [
+      "HKP"
+    ]
+  },
+  {
+    "real": "Hartkapseln mit magensaftresistent überzogenen Pellets",
+    "aliases": [
+      "KMP"
+    ]
+  },
+  {
+    "real": "Hartkapseln mit Pulver zur Inhalation",
+    "aliases": [
+      "HPI"
+    ]
+  },
+  {
+    "real": "Hartkapseln mit veränderter Wirkstofffreisetzung",
+    "aliases": [
+      "HVW"
+    ]
+  },
+  {
+    "real": "Implantat",
+    "aliases": [
+      "IMP"
+    ]
+  },
+  {
+    "real": "Infusionsampullen",
+    "aliases": [
+      "IFA"
+    ]
+  },
+  {
+    "real": "Infusionsbeutel",
+    "aliases": [
+      "IFB"
+    ]
+  },
+  {
+    "real": "Infusionsdispersion",
+    "aliases": [
+      "IFD"
+    ]
+  },
+  {
+    "real": "Infusionsflaschen",
+    "aliases": [
+      "IFF"
+    ]
+  },
+  {
+    "real": "Infusionslösung",
+    "aliases": [
+      "INF"
+    ]
+  },
+  {
+    "real": "Infusionslösungskonzentrat",
+    "aliases": [
+      "IFK"
+    ]
+  },
+  {
+    "real": "Infusionsset",
+    "aliases": [
+      "IFS"
+    ]
+  },
+  {
+    "real": "Inhalat",
+    "aliases": [
+      "INH"
+    ]
+  },
+  {
+    "real": "Inhalationsampullen",
+    "aliases": [
+      "IHA"
+    ]
+  },
+  {
+    "real": "Inhalationskapseln",
+    "aliases": [
+      "IKA",
+      "InhKaps"
+    ]
+  },
+  {
+    "real": "Inhalationslösung",
+    "aliases": [
+      "INL",
+      "Inhlös"
+    ]
+  },
+  {
+    "real": "Inhalationspulver",
+    "aliases": [
+      "IHP",
+      "InhPulv",
+      "Inhalie"
+    ]
+  },
+  {
+    "real": "Injektionsflaschen",
+    "aliases": [
+      "IFL"
+    ]
+  },
+  {
+    "real": "Injektions-, Infusionsflaschen",
+    "aliases": [
+      "INI"
+    ]
+  },
+  {
+    "real": "Injektions-, Infusionslösung",
+    "aliases": [
+      "IIL"
+    ]
+  },
+  {
+    "real": "Injektions- oder Infusionslösung oder Lösung zum Einnehmen",
+    "aliases": [
+      "IIE"
+    ]
+  },
+  {
+    "real": "Injektionslösung",
+    "aliases": [
+      "ILO"
+    ]
+  },
+  {
+    "real": "Injektionslösung in einem Fertigpen",
+    "aliases": [
+      "PEN",
+      "Pen"
+    ]
+  },
+  {
+    "real": "Injektionslösung in einer Fertigspritze",
+    "aliases": [
+      "IFE"
+    ]
+  },
+  {
+    "real": "Injektionslösung zur intramuskulären Anwendung",
+    "aliases": [
+      "IIM"
+    ]
+  },
+  {
+    "real": "Injektionssuspension",
+    "aliases": [
+      "ISU"
+    ]
+  },
+  {
+    "real": "Instant-Tee",
+    "aliases": [
+      "INS"
+    ]
+  },
+  {
+    "real": "Instillation",
+    "aliases": [
+      "IST"
+    ]
+  },
+  {
+    "real": "Intrauterinpessar",
+    "aliases": [
+      "IUP"
+    ]
+  },
+  {
+    "real": "Kanülen",
+    "aliases": [
+      "KAN"
+    ]
+  },
+  {
+    "real": "Kapseln",
+    "aliases": [
+      "KAP",
+      "Kaps"
+    ]
+  },
+  {
+    "real": "Hartkapsel magensaftresistent",
+    "aliases": [
+      "KMR"
+    ]
+  },
+  {
+    "real": "Katheter",
+    "aliases": [
+      "KAT"
+    ]
+  },
+  {
+    "real": "Kaudragees",
+    "aliases": [
+      "KDA"
+    ]
+  },
+  {
+    "real": "Kaugummi",
+    "aliases": [
+      "KGU"
+    ]
+  },
+  {
+    "real": "Kautabletten",
+    "aliases": [
+      "KTA",
+      "KauTabl"
+    ]
+  },
+  {
+    "real": "Kegel",
+    "aliases": [
+      "KEG"
+    ]
+  },
+  {
+    "real": "Kerne",
+    "aliases": [
+      "KER"
+    ]
+  },
+  {
+    "real": "Kinder- und Säuglings-Suppositorien",
+    "aliases": [
+      "KSS"
+    ]
+  },
+  {
+    "real": "Kinder-Suppositorien",
+    "aliases": [
+      "KSU"
+    ]
+  },
+  {
+    "real": "Kleinkinder-Suppositorien",
+    "aliases": [
+      "KKS"
+    ]
+  },
+  {
+    "real": "Klistier-Tabletten",
+    "aliases": [
+      "KLT"
+    ]
+  },
+  {
+    "real": "Klistiere",
+    "aliases": [
+      "KLI"
+    ]
+  },
+  {
+    "real": "Körperpflege",
+    "aliases": [
+      "XPK"
+    ]
+  },
+  {
+    "real": "Kombipackung",
+    "aliases": [
+      "KPG",
+      "KombiPg"
+    ]
+  },
+  {
+    "real": "Kompressen",
+    "aliases": [
+      "KOM"
+    ]
+  },
+  {
+    "real": "Kondome",
+    "aliases": [
+      "KOD"
+    ]
+  },
+  {
+    "real": "Konzentrat",
+    "aliases": [
+      "KON"
+    ]
+  },
+  {
+    "real": "Konzentrat zur Herstellung einer Infusionsdispersion",
+    "aliases": [
+      "KID"
+    ]
+  },
+  {
+    "real": "Konzentrat zur Herstellung einer Injektions- oder Infusionslösung",
+    "aliases": [
+      "KII"
+    ]
+  },
+  {
+    "real": "Kristallsuspension",
+    "aliases": [
+      "KRI"
+    ]
+  },
+  {
+    "real": "Lacktabletten",
+    "aliases": [
+      "LTA"
+    ]
+  },
+  {
+    "real": "Lanzetten",
+    "aliases": [
+      "LAN"
+    ]
+  },
+  {
+    "real": "Liquidum",
+    "aliases": [
+      "LIQ"
+    ]
+  },
+  {
+    "real": "Lösung",
+    "aliases": [
+      "LOE"
+    ]
+  },
+  {
+    "real": "Lösung für einen Vernebler",
+    "aliases": [
+      "LOV"
+    ]
+  },
+  {
+    "real": "Lösung zum Einnehmen",
+    "aliases": [
+      "LSE"
+    ]
+  },
+  {
+    "real": "Lösung zur Injektion, Infusion und Inhalation",
+    "aliases": [
+      "LII"
+    ]
+  },
+  {
+    "real": "Lotion",
+    "aliases": [
+      "LOT"
+    ]
+  },
+  {
+    "real": "Lutschpastillen",
+    "aliases": [
+      "LUP"
+    ]
+  },
+  {
+    "real": "Lutschtabletten",
+    "aliases": [
+      "LUT"
+    ]
+  },
+  {
+    "real": "Magensaftresistente Hartkapseln",
+    "aliases": [
+      "HKM"
+    ]
+  },
+  {
+    "real": "Magensaftresistente Pellets",
+    "aliases": [
+      "MRP"
+    ]
+  },
+  {
+    "real": "Magensaftresistente Weichkapseln",
+    "aliases": [
+      "WKM"
+    ]
+  },
+  {
+    "real": "Magensaftresistentes Retardgranulat",
+    "aliases": [
+      "MRG"
+    ]
+  },
+  {
+    "real": "Manteltabletten",
+    "aliases": [
+      "MTA"
+    ]
+  },
+  {
+    "real": "Milch",
+    "aliases": [
+      "MIL"
+    ]
+  },
+  {
+    "real": "Mischung",
+    "aliases": [
+      "MIS"
+    ]
+  },
+  {
+    "real": "Mixtur",
+    "aliases": [
+      "MIX"
+    ]
+  },
+  {
+    "real": "Mundwasser",
+    "aliases": [
+      "MUW"
+    ]
+  },
+  {
+    "real": "Nachtcreme",
+    "aliases": [
+      "XNC"
+    ]
+  },
+  {
+    "real": "Nasendosierspray",
+    "aliases": [
+      "NDS"
+    ]
+  },
+  {
+    "real": "Nasengel",
+    "aliases": [
+      "NAG"
+    ]
+  },
+  {
+    "real": "Nasenöl",
+    "aliases": [
+      "NAO"
+    ]
+  },
+  {
+    "real": "Nasensalbe",
+    "aliases": [
+      "NSA"
+    ]
+  },
+  {
+    "real": "Nasenspray",
+    "aliases": [
+      "NAS",
+      "NasSpr"
+    ]
+  },
+  {
+    "real": "Nasentropfen",
+    "aliases": [
+      "NTR"
+    ]
+  },
+  {
+    "real": "Ocusert",
+    "aliases": [
+      "OCU"
+    ]
+  },
+  {
+    "real": "Öl",
+    "aliases": [
+      "OEL"
+    ]
+  },
+  {
+    "real": "Ohrentropfen",
+    "aliases": [
+      "OHT"
+    ]
+  },
+  {
+    "real": "Ovula",
+    "aliases": [
+      "OVU"
+    ]
+  },
+  {
+    "real": "Packungsmasse",
+    "aliases": [
+      "PAM"
+    ]
+  },
+  {
+    "real": "Paste",
+    "aliases": [
+      "PST"
+    ]
+  },
+  {
+    "real": "Pastillen",
+    "aliases": [
+      "PAS"
+    ]
+  },
+  {
+    "real": "Pellets",
+    "aliases": [
+      "PEL"
+    ]
+  },
+  {
+    "real": "Perlen",
+    "aliases": [
+      "PER"
+    ]
+  },
+  {
+    "real": "Perlongetten",
+    "aliases": [
+      "PLG"
+    ]
+  },
+  {
+    "real": "Pflaster",
+    "aliases": [
+      "PFL"
+    ]
+  },
+  {
+    "real": "Pflaster transdermal",
+    "aliases": [
+      "PFT"
+    ]
+  },
+  {
+    "real": "Presslinge",
+    "aliases": [
+      "PRS"
+    ]
+  },
+  {
+    "real": "Puder",
+    "aliases": [
+      "PUD"
+    ]
+  },
+  {
+    "real": "Pulver",
+    "aliases": [
+      "PUL"
+    ]
+  },
+  {
+    "real": "Pulver für ein Konzentrat zur Herstellung einer Infusionslösung",
+    "aliases": [
+      "PKI"
+    ]
+  },
+  {
+    "real": "Pulver für ein Konzentrat zur Herstellung einer Infusions-lösung, Pulver zur Herstellung einer Lösung zum Einnehmen ",
+    "aliases": [
+      "PIE"
+    ]
+  },
+  {
+    "real": "Pulver und Lösungsmittel für ein Konzentrat zur Herstellung einer",
+    "aliases": [
+      "PLK"
+    ]
+  },
+  {
+    "real": "Pulver und Lösungsmittel zur Herstellung einer Infusionslösung",
+    "aliases": [
+      "PLF"
+    ]
+  },
+  {
+    "real": "Pulver und Lösungsmittel zur Herstellung einer Injektions- bzw.",
+    "aliases": [
+      "PLH"
+    ]
+  },
+  {
+    "real": "Pulver und Lösungsmittel zur Herstellung einer Injektionslösung",
+    "aliases": [
+      "PLI"
+    ]
+  },
+  {
+    "real": "Pulver und Lösungsmittel zur Herstellung einer Injektionssuspension",
+    "aliases": [
+      "PLS"
+    ]
+  },
+  {
+    "real": "Pulver und Lösungsmittel zur Herstellung einer Lösung zur intravesikalen Anwendung",
+    "aliases": [
+      "PLV"
+    ]
+  },
+  {
+    "real": "Pulver zur Herstellung einer Infusionslösung",
+    "aliases": [
+      "PIF"
+    ]
+  },
+  {
+    "real": "Pulver zur Herstellung eines Infusionslösungskonzentrates",
+    "aliases": [
+      "PIK"
+    ]
+  },
+  {
+    "real": "Pulver zur Herstellung einer Infusionssuspension",
+    "aliases": [
+      "PIS"
+    ]
+  },
+  {
+    "real": "Pulver zur Herstellung einer Injektionslösung",
+    "aliases": [
+      "PIJ"
+    ]
+  },
+  {
+    "real": "Pulver zur Herstellung einer Injektions- oder Infusionslösung",
+    "aliases": [
+      "PII"
+    ]
+  },
+  {
+    "real": "Pulver zur Herstellung einer Injektions-, Infusions- oder Inhalationslösung",
+    "aliases": [
+      "PHI"
+    ]
+  },
+  {
+    "real": "Pulver zur Herstellung einer Injektions- bzw. Infusionslösung oder einer Lösung zur intravesikalen Anwendung",
+    "aliases": [
+      "PIV"
+    ]
+  },
+  {
+    "real": "Pulver zur Herstellung einer Injektions- bzw. Infusionslösung oder Pulver und Lösungsmittel zur Herstellung einer Lösung zur intravesikalen Anwendung",
+    "aliases": [
+      "PHV"
+    ]
+  },
+  {
+    "real": "Pulver zur Herstellung einer Lösung zum Einnehmen",
+    "aliases": [
+      "PLE"
+    ]
+  },
+  {
+    "real": "Pulver zur Herstellung einer Suspension zum Einnehmen",
+    "aliases": [
+      "PSE"
+    ]
+  },
+  {
+    "real": "Pumplösung",
+    "aliases": [
+      "PPL"
+    ]
+  },
+  {
+    "real": "Rektalkapseln",
+    "aliases": [
+      "RKA"
+    ]
+  },
+  {
+    "real": "Rektalschaum",
+    "aliases": [
+      "RSC"
+    ]
+  },
+  {
+    "real": "Rektalsuspension",
+    "aliases": [
+      "RSU"
+    ]
+  },
+  {
+    "real": "Retard-Dragees",
+    "aliases": [
+      "RED"
+    ]
+  },
+  {
+    "real": "Retard-Granulat",
+    "aliases": [
+      "RGR"
+    ]
+  },
+  {
+    "real": "Retard-Kapseln",
+    "aliases": [
+      "REK",
+      "RetKaps"
+    ]
+  },
+  {
+    "real": "Retard-Tabletten",
+    "aliases": [
+      "RET",
+      "RetTabl"
+    ]
+  },
+  {
+    "real": "Retard-überzogene Tabletten",
+    "aliases": [
+      "RUT"
+    ]
+  },
+  {
+    "real": "Retardmikrokapseln und Suspensionsmittel",
+    "aliases": [
+      "RMS"
+    ]
+  },
+  {
+    "real": "Säuglings-Suppositorien",
+    "aliases": [
+      "SSU"
+    ]
+  },
+  {
+    "real": "Saft",
+    "aliases": [
+      "SAF"
+    ]
+  },
+  {
+    "real": "Salbe",
+    "aliases": [
+      "SAL"
+    ]
+  },
+  {
+    "real": "Salbe zur Anwendung in der Mundhöhle",
+    "aliases": [
+      "SAM"
+    ]
+  },
+  {
+    "real": "Salz",
+    "aliases": [
+      "SLZ"
+    ]
+  },
+  {
+    "real": "Schaum",
+    "aliases": [
+      "SCH"
+    ]
+  },
+  {
+    "real": "Schmelzfilm",
+    "aliases": [
+      "SMF"
+    ]
+  },
+  {
+    "real": "Schmelztabletten",
+    "aliases": [
+      "SMT"
+    ]
+  },
+  {
+    "real": "Schwämme",
+    "aliases": [
+      "SWA"
+    ]
+  },
+  {
+    "real": "Seife",
+    "aliases": [
+      "SEI"
+    ]
+  },
+  {
+    "real": "Shampoo",
+    "aliases": [
+      "SHA"
+    ]
+  },
+  {
+    "real": "Sirup",
+    "aliases": [
+      "SIR"
+    ]
+  },
+  {
+    "real": "Spray",
+    "aliases": [
+      "SPR"
+    ]
+  },
+  {
+    "real": "Spritzampullen",
+    "aliases": [
+      "SPA"
+    ]
+  },
+  {
+    "real": "Spritzen",
+    "aliases": [
+      "SRI"
+    ]
+  },
+  {
+    "real": "Sprühflasche",
+    "aliases": [
+      "SPF"
+    ]
+  },
+  {
+    "real": "Spüllösung",
+    "aliases": [
+      "SPL"
+    ]
+  },
+  {
+    "real": "Stäbchen",
+    "aliases": [
+      "STB"
+    ]
+  },
+  {
+    "real": "Stechampullen",
+    "aliases": [
+      "STA"
+    ]
+  },
+  {
+    "real": "Stifte",
+    "aliases": [
+      "STI"
+    ]
+  },
+  {
+    "real": "Streifen",
+    "aliases": [
+      "STR"
+    ]
+  },
+  {
+    "real": "Sublingualspray, Lösung",
+    "aliases": [
+      "SUL"
+    ]
+  },
+  {
+    "real": "Sublingualtabletten",
+    "aliases": [
+      "SUT"
+    ]
+  },
+  {
+    "real": "Substanz",
+    "aliases": [
+      "SUB"
+    ]
+  },
+  {
+    "real": "Suppositorien",
+    "aliases": [
+      "SUP",
+      "Supp"
+    ]
+  },
+  {
+    "real": "Suppositorien mit Mulleinlage",
+    "aliases": [
+      "SMU"
+    ]
+  },
+  {
+    "real": "Suspension",
+    "aliases": [
+      "SUS"
+    ]
+  },
+  {
+    "real": "Suspension für einen Vernebler",
+    "aliases": [
+      "SUV"
+    ]
+  },
+  {
+    "real": "Suspension zum Einnehmen",
+    "aliases": [
+      "SUE"
+    ]
+  },
+  {
+    "real": "Tabletten",
+    "aliases": [
+      "TAB",
+      "Tablett",
+      "Tbl",
+      "Tbl.",
+      "Tabl",
+      "Tab!"
+    ]
+  },
+  {
+    "real": "Tabletten in Kalenderpackung",
+    "aliases": [
+      "TKA"
+    ]
+  },
+  {
+    "real": "Tabletten magensaftresistent",
+    "aliases": [
+      "TMR",
+      "Tabl ma"
+    ]
+  },
+  {
+    "real": "Tablette mit veränderter Wirkstofffreisetzung",
+    "aliases": [
+      "TVW"
+    ]
+  },
+  {
+    "real": "Tablette zur Herstellung einer Lösung zum Einnehmen",
+    "aliases": [
+      "TLE"
+    ]
+  },
+  {
+    "real": "Tablette zur Herstellung einer Suspension zum Einnehmen",
+    "aliases": [
+      "TSE"
+    ]
+  },
+  {
+    "real": "Tabletten zur Herstellung einer Suspension zum Einnehmen für einen Dosierspender",
+    "aliases": [
+      "TSD"
+    ]
+  },
+  {
+    "real": "Täfelchen",
+    "aliases": [
+      "TAE"
+    ]
+  },
+  {
+    "real": "Tagescreme",
+    "aliases": [
+      "XTC"
+    ]
+  },
+  {
+    "real": "Tampon",
+    "aliases": [
+      "TPN"
+    ]
+  },
+  {
+    "real": "Tamponaden",
+    "aliases": [
+      "TPO"
+    ]
+  },
+  {
+    "real": "Tee",
+    "aliases": [
+      "TEE"
+    ]
+  },
+  {
+    "real": "Test",
+    "aliases": [
+      "TES"
+    ]
+  },
+  {
+    "real": "Teststäbchen",
+    "aliases": [
+      "TST"
+    ]
+  },
+  {
+    "real": "Teststreifen",
+    "aliases": [
+      "TTR"
+    ]
+  },
+  {
+    "real": "Tinktur",
+    "aliases": [
+      "TIN"
+    ]
+  },
+  {
+    "real": "Tonikum",
+    "aliases": [
+      "TON"
+    ]
+  },
+  {
+    "real": "Transdermales Spray",
+    "aliases": [
+      "SPT"
+    ]
+  },
+  {
+    "real": "Transdermales System",
+    "aliases": [
+      "TSY"
+    ]
+  },
+  {
+    "real": "Trinkampullen",
+    "aliases": [
+      "TRA"
+    ]
+  },
+  {
+    "real": "Trinktabletten",
+    "aliases": [
+      "TRT"
+    ]
+  },
+  {
+    "real": "Trituration",
+    "aliases": [
+      "TRI"
+    ]
+  },
+  {
+    "real": "Trockenampullen",
+    "aliases": [
+      "TAM"
+    ]
+  },
+  {
+    "real": "Trockensaft",
+    "aliases": [
+      "TSA"
+    ]
+  },
+  {
+    "real": "Trockensubstanz mit Lösungsmittel",
+    "aliases": [
+      "TRS"
+    ]
+  },
+  {
+    "real": "Trockensubstanz ohne Lösungsmittel",
+    "aliases": [
+      "TSS"
+    ]
+  },
+  {
+    "real": "Tropfen",
+    "aliases": [
+      "TRO",
+      "Tropfen"
+    ]
+  },
+  {
+    "real": "Tropfen zum Einnehmen",
+    "aliases": [
+      "TEI"
+    ]
+  },
+  {
+    "real": "Tube",
+    "aliases": [
+      "TUB"
+    ]
+  },
+  {
+    "real": "Tücher",
+    "aliases": [
+      "TUE"
+    ]
+  },
+  {
+    "real": "Tupfer",
+    "aliases": [
+      "TUP"
+    ]
+  },
+  {
+    "real": "Überzogene Tabletten",
+    "aliases": [
+      "UTA"
+    ]
+  },
+  {
+    "real": "Vaginalcreme",
+    "aliases": [
+      "VCR"
+    ]
+  },
+  {
+    "real": "Vaginalgel",
+    "aliases": [
+      "VGE"
+    ]
+  },
+  {
+    "real": "Vaginalkapseln",
+    "aliases": [
+      "VKA"
+    ]
+  },
+  {
+    "real": "Vaginallösung",
+    "aliases": [
+      "VAL"
+    ]
+  },
+  {
+    "real": "Vaginalovula",
+    "aliases": [
+      "VOV"
+    ]
+  },
+  {
+    "real": "Vaginalring",
+    "aliases": [
+      "VAR"
+    ]
+  },
+  {
+    "real": "Vaginalstäbchen",
+    "aliases": [
+      "VST"
+    ]
+  },
+  {
+    "real": "Vaginalsuppositorien",
+    "aliases": [
+      "VSU"
+    ]
+  },
+  {
+    "real": "Vaginaltabletten",
+    "aliases": [
+      "VTA"
+    ]
+  },
+  {
+    "real": "Verband",
+    "aliases": [
+      "VER"
+    ]
+  },
+  {
+    "real": "Vlies",
+    "aliases": [
+      "VLI"
+    ]
+  },
+  {
+    "real": "Watte",
+    "aliases": [
+      "WAT"
+    ]
+  },
+  {
+    "real": "Weichkapseln",
+    "aliases": [
+      "WKA"
+    ]
+  },
+  {
+    "real": "Wirkstoffhaltiger Nagellack",
+    "aliases": [
+      "NAW"
+    ]
+  },
+  {
+    "real": "Würfel",
+    "aliases": [
+      "WUE"
+    ]
+  },
+  {
+    "real": "Wundgaze",
+    "aliases": [
+      "WGA"
+    ]
+  },
+  {
+    "real": "Zahnbürste",
+    "aliases": [
+      "ZBU"
+    ]
+  },
+  {
+    "real": "Zahncreme",
+    "aliases": [
+      "ZCR"
+    ]
+  },
+  {
+    "real": "Zahngel",
+    "aliases": [
+      "ZGE"
+    ]
+  },
+  {
+    "real": "Zahnpasta",
+    "aliases": [
+      "ZPA"
+    ]
+  },
+  {
+    "real": "Zerbeisskapseln",
+    "aliases": [
+      "ZKA"
+    ]
+  },
+  {
+    "real": "Zylinderampullen",
+    "aliases": [
+      "ZAM"
+    ]
+  }
+]
