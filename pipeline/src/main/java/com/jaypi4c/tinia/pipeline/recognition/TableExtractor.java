@@ -15,7 +15,6 @@ import org.springframework.stereotype.Component;
 import java.awt.geom.Line2D;
 import java.awt.geom.Rectangle2D;
 import java.awt.image.BufferedImage;
-import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
@@ -52,7 +51,6 @@ public class TableExtractor {
     private Rectangle2D[][] table;
     @Getter
     private String date;
-    private boolean documentClosed = true;
 
     /**
      * Not in use. Maybe this will be part in Image preprocessing in the future.
@@ -92,17 +90,9 @@ public class TableExtractor {
         return outputImage;
     }
 
-    public void setCurrentFile(File file) {
-        if (!documentClosed) {
-            finish();
-        }
-        try {
-            document = PDDocument.load(file);
-            pdfRenderer = new PDFRenderer(document);
-            documentClosed = false;
-        } catch (IOException e) {
-            log.error("Error while loading pdf", e);
-        }
+    public void setDocument(PDDocument document) {
+        this.document = document;
+        pdfRenderer = new PDFRenderer(document);
     }
 
     /**
@@ -113,10 +103,6 @@ public class TableExtractor {
      * - labeling the intersections and finding the cells
      */
     public void processPage(int page) {
-        if (documentClosed) {
-            log.error("Document is closed. Probably the file was not set.");
-            return;
-        }
         date = null;
         table = null;
         try {
@@ -213,18 +199,6 @@ public class TableExtractor {
 
     public boolean wasSuccessful() {
         return table != null && table.length > 0;
-    }
-
-    /**
-     * Closes the pdf document
-     */
-    public void finish() {
-        try {
-            document.close();
-            documentClosed = true;
-        } catch (IOException e) {
-            log.error("Failed to close document: ", e);
-        }
     }
 
 }

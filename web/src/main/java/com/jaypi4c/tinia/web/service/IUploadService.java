@@ -4,6 +4,6 @@ import java.io.InputStream;
 
 public interface IUploadService {
 
-    String processFile(InputStream inputStream);
+    String processFile(InputStream inputStream, String filename);
 
 }

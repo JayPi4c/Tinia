@@ -14,8 +14,8 @@ public class UploadService implements IUploadService {
     private final Pipeline pipeline;
 
     @Override
-    public String processFile(InputStream inputStream) {
-        return pipeline.process(inputStream);
+    public String processFile(InputStream inputStream, String filename) {
+        return pipeline.process(inputStream, filename);
     }
 
 }

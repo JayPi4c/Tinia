@@ -9,15 +9,16 @@ import com.jaypi4c.tinia.pipeline.validation.IActiveIngredientValidator;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.pdfbox.pdmodel.PDDocument;
-import org.apache.pdfbox.text.PDFTextStripper;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
 import java.awt.geom.Rectangle2D;
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.Arrays;
+import java.util.Optional;
 
 @Slf4j
 @Component
@@ -34,7 +35,26 @@ public class Pipeline {
     @Value("${io.dataFolder}")
     private String ioFolder;
 
-    private static File[] getFiles(String path) {
+    private Optional<PDDocument> loadDocument(InputStream inputStream) {
+        try {
+            return Optional.of(PDDocument.load(inputStream));
+        } catch (IOException e) {
+            log.error("Failed to load document", e);
+            return Optional.empty();
+        }
+    }
+
+    /**
+     * <a href="https://www.geeksforgeeks.org/print-2-d-array-matrix-java/">source</a>
+     *
+     * @param mat 2D String array
+     */
+    public void print2D(String[][] mat) {
+        // Loop through all rows
+        for (String[] strings : mat) System.out.println(Arrays.toString(strings));
+    }
+
+    private File[] getFiles(String path) {
         File folder = new File(path);
         File[] entries = folder.listFiles();
         if (entries == null) {
@@ -46,56 +66,19 @@ public class Pipeline {
                 .toArray(File[]::new);
     }
 
-    private static int getNumberOfPages(File in) {
-        try (PDDocument document = PDDocument.load(in)) {
-            return document.getNumberOfPages();
-        } catch (IOException e) {
-            log.error("Failed to get number of pages", e);
-            return -1;
+    public String process(InputStream inputStream, String name) {
+        StringBuilder resultBuilder = new StringBuilder();
+
+        Optional<PDDocument> documentOpt = loadDocument(inputStream);
+        if (documentOpt.isEmpty()) {
+            log.error("Failed to load document");
+            return "Failed to load document";
         }
-    }
-
-    /**
-     * <a href="https://www.geeksforgeeks.org/print-2-d-array-matrix-java/">source</a>
-     *
-     * @param mat 2D String array
-     */
-    public static void print2D(String[][] mat) {
-        // Loop through all rows
-        for (String[] strings : mat) System.out.println(Arrays.toString(strings));
-    }
-
-    public String process(InputStream inputStream) {
-        try (PDDocument document = PDDocument.load(inputStream)) {
-            PDFTextStripper stripper = new PDFTextStripper();
-            int pages = document.getNumberOfPages();
-            StringBuilder text = new StringBuilder();
-            for (int page = 0; page < pages; page++) {
-                stripper.setStartPage(page + 1);
-                stripper.setEndPage(page + 1);
-                text.append(stripper.getText(document));
-                if (page < pages - 1) text.append("\n");
-            }
-            return text.toString();
-        } catch (IOException e) {
-            return "Reading PDF failed";
-        }
-    }
-
-    public void start() {
-
-        openEhrManager.checkForTemplate();
-
-        File[] files = getFiles(ioFolder);
-        for (int i = 0; i < files.length; i++) {
-            File file = files[i];
-            log.info("Starting with file {}", file.getName());
-
-            debugDrawer.setCurrentFilename(file.getName());
-            tableExtractor.setCurrentFile(file);
-            cellReader.setPdfFile(file);
-            openEhrManager.updateIDs();
-            int numberOfPages = getNumberOfPages(file);
+        try (PDDocument document = documentOpt.get()) {
+            tableExtractor.setDocument(document);
+            cellReader.setDocument(document);
+            // openEhrManager.updateIDs();
+            int numberOfPages = document.getNumberOfPages();
             for (int page = 0; page < numberOfPages; page++) {
                 debugDrawer.setCurrentPage(page);
 
@@ -108,22 +91,46 @@ public class Pipeline {
 
                     CellReader.ReadingResult result = cellReader.processPage(page, date, table);
                     if (result.hasTable()) {
+                        for (String[] strings : result.table())
+                            resultBuilder.append(Arrays.toString(strings)).append("\n");
+                        resultBuilder.append("\n");
                         print2D(result.table());
-                        outputSaver.saveTable(file.getName(), result.table(), page, date);
-                        boolean success = openEhrManager.sendNephroMedikationData(result);
-                        if (success)
-                            log.info("Successfully sent data to EHRBase");
-                        else
-                            log.error("Failed to send data to EHRBase");
+                        outputSaver.saveTable(name, result.table(), page, date);
+                        //  boolean success = openEhrManager.sendNephroMedikationData(result);
+                        //if (success)
+                        //     log.info("Successfully sent data to EHRBase");
+                        // else
+                        //     log.error("Failed to send data to EHRBase");
                     }
                 } else {
                     log.info("No medication table found");
                 }
                 log.info("Finished page {}, {}%", page + 1, (page + 1) * 100 / numberOfPages);
             }
+        } catch (IOException e) {
+            log.error("Error while reading pdf", e);
+        }
+        return resultBuilder.toString();
 
-            cellReader.finish();
-            tableExtractor.finish();
+    }
+
+    public void start() {
+
+        openEhrManager.checkForTemplate();
+
+        File[] files = getFiles(ioFolder);
+        for (int i = 0; i < files.length; i++) {
+            File file = files[i];
+            log.info("Starting with file {}", file.getName());
+
+            debugDrawer.setCurrentFilename(file.getName());
+
+            // create InputStream for file
+            try (InputStream inputStream = new FileInputStream(file)) {
+                process(inputStream, file.getName());
+            } catch (IOException e) {
+                log.error("Error while reading file", e);
+            }
             log.info("Finished file {}, {}%", file.getName(), (i + 1) * 100 / files.length);
         }
         validator.finish();

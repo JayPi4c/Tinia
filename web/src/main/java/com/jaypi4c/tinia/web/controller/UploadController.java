@@ -35,7 +35,7 @@ public class UploadController {
         }
         String output = "Error reading file";
         try (InputStream inputStream = file.getInputStream()) {
-            output = uploadService.processFile(inputStream);
+            output = uploadService.processFile(inputStream, file.getOriginalFilename());
             log.info("{} loaded.", file.getOriginalFilename());
         } catch (Exception e) {
             log.error("Error reading file", e);

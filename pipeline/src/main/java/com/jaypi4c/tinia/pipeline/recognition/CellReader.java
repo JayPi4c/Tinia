@@ -2,6 +2,7 @@ package com.jaypi4c.tinia.pipeline.recognition;
 
 import com.google.gson.JsonObject;
 import com.jaypi4c.tinia.pipeline.utils.WordUtils;
+import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.pdfbox.pdmodel.PDDocument;
 import org.apache.pdfbox.pdmodel.PDDocumentInformation;
@@ -11,7 +12,6 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
 import java.awt.geom.Rectangle2D;
-import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
@@ -24,7 +24,7 @@ public class CellReader {
     private static final String[] DEFAULT_HEADER = WordUtils.loadDictionary("/dictionaries/HeaderAllowlist.txt");
     @Value("${pdf.dpi}")
     private int DPI;
-    private boolean documentClosed = true;
+    @Setter
     private PDDocument document;
 
     /**
@@ -35,34 +35,8 @@ public class CellReader {
         return pixelVal * 72 / dpi;
     }
 
-    public void setPdfFile(File pdfFile) {
-        if (!documentClosed)
-            finish();
-        try {
-            document = PDDocument.load(pdfFile);
-            documentClosed = false;
-        } catch (IOException e) {
-            log.error("Error while loading pdf", e);
-        }
-    }
-
-    /**
-     * Closes the pdf document
-     */
-    public void finish() {
-        try {
-            document.close();
-            documentClosed = true;
-        } catch (IOException e) {
-            log.error("Failed to close document: ", e);
-        }
-    }
 
     public ReadingResult processPage(int page, String date, Rectangle2D[][] table) {
-        if (documentClosed) {
-            log.error("Document is closed. Probably the file was not set.");
-            return new ReadingResult(null, null, null);
-        }
         String[][] results = new String[table.length][];
         for (int i = 0; i < table.length; i++) {
             results[i] = new String[table[i].length];
