@@ -1,6 +1,7 @@
 package com.jaypi4c.tinia.pipeline;
 
 import com.jaypi4c.tinia.pipeline.openehr.OpenEhrManager;
+import com.jaypi4c.tinia.pipeline.openehr.compositions.nephromedikationcomposition.NephroMedikationComposition;
 import com.jaypi4c.tinia.pipeline.recognition.CellReader;
 import com.jaypi4c.tinia.pipeline.recognition.TableExtractor;
 import com.jaypi4c.tinia.pipeline.utils.DebugDrawer;
@@ -17,14 +18,12 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.util.Arrays;
-import java.util.Optional;
+import java.util.*;
 
 @Slf4j
 @Component
 @RequiredArgsConstructor
 public class Pipeline {
-
 
     private final OpenEhrManager openEhrManager;
     private final TableExtractor tableExtractor;
@@ -66,13 +65,13 @@ public class Pipeline {
                 .toArray(File[]::new);
     }
 
-    public String process(InputStream inputStream, String name) {
-        StringBuilder resultBuilder = new StringBuilder();
+    public List<String> process(InputStream inputStream, String name) {
+        List<String> compositionList = new ArrayList<>();
 
         Optional<PDDocument> documentOpt = loadDocument(inputStream);
         if (documentOpt.isEmpty()) {
             log.error("Failed to load document");
-            return "Failed to load document";
+            return Collections.emptyList();
         }
         try (PDDocument document = documentOpt.get()) {
             tableExtractor.setDocument(document);
@@ -91,12 +90,11 @@ public class Pipeline {
 
                     CellReader.ReadingResult result = cellReader.processPage(page, date, table);
                     if (result.hasTable()) {
-                        for (String[] strings : result.table())
-                            resultBuilder.append(Arrays.toString(strings)).append("\n");
-                        resultBuilder.append("\n");
                         print2D(result.table());
                         outputSaver.saveTable(name, result.table(), page, date);
-                        //  boolean success = openEhrManager.sendNephroMedikationData(result);
+                        NephroMedikationComposition composition = openEhrManager.createComposition(result);
+                        compositionList.add(openEhrManager.convertToJson(composition));
+                        //  boolean success = openEhrManager.sendNephroMedikationData(composition);
                         //if (success)
                         //     log.info("Successfully sent data to EHRBase");
                         // else
@@ -110,7 +108,7 @@ public class Pipeline {
         } catch (IOException e) {
             log.error("Error while reading pdf", e);
         }
-        return resultBuilder.toString();
+        return compositionList;
 
     }
 

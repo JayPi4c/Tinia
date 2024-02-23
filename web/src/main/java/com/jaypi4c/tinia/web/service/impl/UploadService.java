@@ -6,6 +6,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.io.InputStream;
+import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -15,7 +16,13 @@ public class UploadService implements IUploadService {
 
     @Override
     public String processFile(InputStream inputStream, String filename) {
-        return pipeline.process(inputStream, filename);
+        List<String> compositions = pipeline.process(inputStream, filename);
+        StringBuilder sb = new StringBuilder();
+        for (String composition : compositions) {
+            sb.append(composition).append("\n");
+            sb.append("------------------------\n");
+        }
+        return sb.toString();
     }
 
 }

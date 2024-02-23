@@ -4,6 +4,7 @@ package com.jaypi4c.tinia.pipeline.openehr;
 import com.jaypi4c.tinia.pipeline.openehr.compositions.nephromedikationcomposition.NephroMedikationComposition;
 import com.jaypi4c.tinia.pipeline.openehr.compositions.nephromedikationcomposition.NephroMedikationCompositionFactory;
 import com.jaypi4c.tinia.pipeline.recognition.CellReader;
+import com.nedap.archie.rm.RMObject;
 import com.nedap.archie.rm.datavalues.DvText;
 import com.nedap.archie.rm.ehr.EhrStatus;
 import com.nedap.archie.rm.generic.PartySelf;
@@ -13,7 +14,11 @@ import lombok.extern.slf4j.Slf4j;
 import org.ehrbase.openehr.sdk.client.openehrclient.CompositionEndpoint;
 import org.ehrbase.openehr.sdk.client.openehrclient.EhrEndpoint;
 import org.ehrbase.openehr.sdk.client.openehrclient.OpenEhrClient;
+import org.ehrbase.openehr.sdk.serialisation.dto.GeneratedDtoToRmConverter;
+import org.ehrbase.openehr.sdk.serialisation.jsonencoding.CanonicalJson;
+import org.ehrbase.openehr.sdk.serialisation.walker.defaultvalues.DefaultValues;
 import org.ehrbase.openehr.sdk.util.exception.WrongStatusCodeException;
+import org.ehrbase.openehr.sdk.webtemplate.templateprovider.TemplateProvider;
 import org.springframework.stereotype.Component;
 
 import java.util.UUID;
@@ -24,6 +29,7 @@ public class OpenEhrManager {
 
     // see https://ehrbase.readthedocs.io/en/latest/02_getting_started/04_create_ehr/index.html#client-library
     private final OpenEhrClient openEhrClient;
+    private final TemplateProvider templateProvider;
     private final EhrEndpoint ehrEndpoint;
     private final NephroMedikationCompositionFactory nephroMedikationCompositionFactory;
     private final String NEPHRO_TEMPLATE_ID = "Nephro_Medikation";
@@ -36,9 +42,10 @@ public class OpenEhrManager {
      */
     private UUID ehrID;
 
-    public OpenEhrManager(OpenEhrClient openEhrClient, NephroMedikationCompositionFactory factory) {
+    public OpenEhrManager(OpenEhrClient openEhrClient, NephroMedikationCompositionFactory factory, TemplateProvider templateProvider) {
         this.openEhrClient = openEhrClient;
         this.ehrEndpoint = openEhrClient.ehrEndpoint();
+        this.templateProvider = templateProvider;
         nephroMedikationCompositionFactory = factory;
     }
 
@@ -51,17 +58,25 @@ public class OpenEhrManager {
         ehrID = ehrEndpoint.createEhr(createEhrStatus(applicationUserID));
     }
 
-    public boolean sendNephroMedikationData(CellReader.ReadingResult medication) {
-        if (applicationUserID == null || ehrID == null) {
-            updateIDs();
-        }
+    public String convertToJson(NephroMedikationComposition composition) {
+        RMObject rmObject = new GeneratedDtoToRmConverter(templateProvider, o -> new DefaultValues())
+                .toRMObject(composition);
+        return new CanonicalJson().marshal(rmObject);
+    }
 
+
+    public NephroMedikationComposition createComposition(CellReader.ReadingResult medication) {
         String[][] medicationMatrix = medication.table();
         String date = medication.date();
         String metadataJson = medication.metadata();
+        return nephroMedikationCompositionFactory.createComposition(medicationMatrix, date, metadataJson);
+    }
 
-        NephroMedikationComposition composition = nephroMedikationCompositionFactory.createComposition(medicationMatrix, date, metadataJson);
 
+    public boolean sendNephroMedikationData(NephroMedikationComposition composition) {
+        if (applicationUserID == null || ehrID == null) {
+            updateIDs();
+        }
         try {
             CompositionEndpoint compositionEndpoint = openEhrClient.compositionEndpoint(ehrID);
             compositionEndpoint.mergeCompositionEntity(composition);
