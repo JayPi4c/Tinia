@@ -3,7 +3,7 @@ WORKDIR /opt/app
 COPY . .
 RUN mvn -P pipeline package -B -pl pipeline -am
 
-FROM openjdk:21-slim
+FROM openjdk:21
 WORKDIR /opt/app
 
 COPY --from=builder /opt/app/pipeline/target/tinia-pipeline.jar .

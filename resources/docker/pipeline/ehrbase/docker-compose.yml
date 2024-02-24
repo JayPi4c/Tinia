@@ -3,7 +3,6 @@ version: '3'
 services:
   ehrbase:
     image: ehrbase/ehrbase:0.30.0
-    # image: ehrbase/ehrbase:0.27.0
     ports:
       - 8080:8080
     networks:
@@ -28,8 +27,6 @@ services:
       ADMIN_API_ACTIVE: true
       ADMINAPI_ALLOWDELETEALL: true
     restart: on-failure
-    depends_on:
-      - ehrdb
 
   ehrdb:
     image: ehrbase/ehrbase-postgres:13.4.v2
@@ -48,4 +45,5 @@ services:
       EHRBASE_PASSWORD: ehrbase_restricted
 
 networks:
-  ehrbase-net: { }
+  ehrbase-net:
+    name: ehrbase_net

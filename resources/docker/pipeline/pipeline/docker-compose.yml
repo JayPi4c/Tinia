@@ -1,0 +1,21 @@
+version: '3'
+
+services:
+  pipeline:
+    image: ghcr.io/jaypi4c/tinia/pipeline
+    volumes:
+      - ../../../../data:/io/data
+      - ./debug:/io/debug
+      - ./logs:/io/logs
+    environment:
+      OPENEHR_URL: http://ehrbase:8080/ehrbase/
+      DEBUG_DRAWIMAGES: true
+      LOGGING_LEVEL_COM_JAYPI4C_TINIA_PIPELINE: INFO
+      VALIDATION_ACTIVE: true
+    networks:
+      - ehrbase-net
+
+networks:
+  ehrbase-net:
+    external: true
+    name: ehrbase_net

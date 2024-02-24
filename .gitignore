@@ -12,6 +12,7 @@ logs/
 debug/
 application-dev.properties
 log4j2-dev.xml
+data/
 
 ### Eclipse ###
 .apt_generated
