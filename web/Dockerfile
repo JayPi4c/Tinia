@@ -3,7 +3,7 @@ WORKDIR /opt/app
 COPY . .
 RUN mvn -P web package -B -pl web -am
 
-FROM openjdk:21-slim
+FROM openjdk:21
 WORKDIR /opt/app
 
 COPY --from=builder /opt/app/web/target/tinia-web.jar .
