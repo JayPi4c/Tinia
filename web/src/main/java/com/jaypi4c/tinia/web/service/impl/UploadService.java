@@ -20,7 +20,7 @@ public class UploadService implements IUploadService {
         StringBuilder sb = new StringBuilder();
         for (String composition : compositions) {
             sb.append(composition).append("\n");
-            sb.append("------------------------\n");
+            //sb.append("------------------------\n");
         }
         return sb.toString();
     }

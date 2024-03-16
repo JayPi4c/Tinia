@@ -21,18 +21,29 @@
             </div>
             <button class="btn btn-primary mt-3" type="submit">Upload</button>
         </form>
+        <div class="d-none ratio ratio-16x9" id="previewContainer">
+            <embed id="filePreview" type="application/pdf">
+        </div>
+        <script th:src="@{/js/upload/preview.js}"></script>
     </div>
-    <div class="d-none ratio ratio-16x9" id="previewContainer">
-        <embed id="filePreview" type="application/pdf">
-    </div>
+
     <div th:if="${output != null}">
         <h1>Converted File</h1>
+
         <div>
-            <textarea class="form-control" cols="100" id="myTextArea" rows="20" th:text="${output}"></textarea>
-            <label for="myTextArea">Converted Text</label>
+            <!--https://github.com/pgrabovets/json-view/-->
+            <script th:src="@{/js/libs/jsonview.js}"></script>
+            <div class="tree"></div>
+            <script th:inline="javascript">
+                const data = [[${output}]];
+                // create json tree object
+                const tree = jsonview.create(data);
+
+                // render tree into dom element
+                jsonview.render(tree, document.querySelector('.tree'));
+            </script>
         </div>
     </div>
-    <script th:src="@{/js/preview.js}"></script>
 </div>
 </body>
 </html>
