@@ -1,17 +1,11 @@
 package com.jaypi4c.tinia.core;
 
-import lombok.extern.slf4j.Slf4j;
-import org.springframework.boot.SpringApplication;
-import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.context.ApplicationContext;
-import org.springframework.context.annotation.PropertySource;
-
-@Slf4j
-@SpringBootApplication
-@PropertySource("classpath:pipeline.properties")
+//@Slf4j
+//@SpringBootApplication
+//@PropertySource("classpath:pipeline.properties")
 public class Launcher {
 
-    public static void main(String[] args) {
+ /*   public static void main(String[] args) {
         ApplicationContext app = SpringApplication.run(Launcher.class, args);
         log.info("Application started");
 
@@ -20,6 +14,6 @@ public class Launcher {
 
         log.info("Application finished");
     }
-
+*/
 
 }

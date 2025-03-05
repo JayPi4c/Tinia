@@ -18,6 +18,16 @@ Eine Anmeldung erfolgt mit den folgenden Informationen:<br>
 
 Da die neueren Versionen von Ehrbase Probleme mit Swagger haben, wurde die Version 0.30.0 verwendet.
 
+### Build with Docker
+
+#### Build core image
+
+In root of the project run:
+
+```bash
+docker build -t tinia/core:local -f core/Dockerfile .
+```
+
 ## Hochladen eines Templates
 
 Wähle ein Template in OPT Form (XML) von einem CKM aus.
@@ -33,14 +43,17 @@ Start, ob das Template noch in EHRBase vorhanden ist.
 
 ## OpenEHR SDK Nutzung
 
+> **NOTE** Deprecated: Converting the opt files is now done via the maven plugin inside the core module.
+
+
 Um Compositions zu EhrBase zu schicken, wird das OpenEHR SDK verwendet. Hierzu muss zunächst das bereits hochgeladene
 Template in eine Java-Klasse umgewandelt werden. Dies kann mit dem generator von EhrBase gemacht werden. Als wichtige
 Anleitung für die Nutzung des SDK wurde dieses [Tutorial-Video](https://www.youtube.com/watch?v=3SykJkbnT34) verwendet.
 Der Generator ist Teil des openEHR_SDKs und kann selbst kompiliert werden. Hierzu muss das Projekt von
 [GitHub](https://github.com/ehrbase/openEHR_SDK) geklont werden. Anschließend kann im Verzeichnis `generator` der Befehl
 `mvn clean install` ausgeführt werden. Im Unterverzeichnis `target` wird dann `generator-2.x.y.jar` erstellt. Diese
-Jar-Datei kann anschließend mit dem
-Befehl `java -jar generator-2.x.y.jar -opt /path/to/template/Nephro_Medikation.opt -out /path/to/save/folder -package com.jaypi4c.ba.pipeline.medicationplan.openehr.compositions`
+Jar-Datei kann anschließend mit dem Befehl
+`java -jar generator-2.x.y.jar -opt /path/to/template/Nephro_Medikation.opt -out /path/to/save/folder -package com.jaypi4c.ba.pipeline.medicationplan.openehr.compositions`
 ausgeführt werden und erzeugt dabei die Java-Klassen für das Template.
 
 Die generierten Klassen können dem Package entsprechend dem Projekt hinzugefügt werden.
