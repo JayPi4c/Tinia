@@ -11,12 +11,9 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.pdfbox.pdmodel.PDDocument;
 import org.ehrbase.openehr.sdk.generator.commons.interfaces.CompositionEntity;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
 import java.awt.geom.Rectangle2D;
-import java.io.File;
-import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.*;
@@ -32,8 +29,6 @@ public class Pipeline {
     private final DebugDrawer debugDrawer;
     private final OutputSaver outputSaver;
     private final IActiveIngredientValidator validator;
-    @Value("${io.dataFolder}")
-    private String ioFolder;
 
     private Optional<PDDocument> loadDocument(InputStream inputStream) {
         try {
@@ -54,19 +49,11 @@ public class Pipeline {
         for (String[] strings : mat) System.out.println(Arrays.toString(strings));
     }
 
-    private File[] getFiles(String path) {
-        File folder = new File(path);
-        File[] entries = folder.listFiles();
-        if (entries == null) {
-            log.error("Could not find folder {}", path);
-            System.exit(-1);
-        }
-        return Arrays.stream(entries)
-                .filter(file -> file.getName().endsWith(".pdf"))
-                .toArray(File[]::new);
-    }
-
     public List<CompositionEntity> process(InputStream inputStream, String name) {
+        // openEhrManager.checkForTemplate();
+        debugDrawer.setCurrentFilename(name);
+
+
         List<CompositionEntity> compositionList = new ArrayList<>();
 
         Optional<PDDocument> documentOpt = loadDocument(inputStream);
@@ -109,30 +96,9 @@ public class Pipeline {
         } catch (IOException e) {
             log.error("Error while reading pdf", e);
         }
-        return compositionList;
-
-    }
-
-    public void start() {
-
-        openEhrManager.checkForTemplate();
-
-        File[] files = getFiles(ioFolder);
-        for (int i = 0; i < files.length; i++) {
-            File file = files[i];
-            log.info("Starting with file {}", file.getName());
-
-            debugDrawer.setCurrentFilename(file.getName());
-
-            // create InputStream for file
-            try (InputStream inputStream = new FileInputStream(file)) {
-                process(inputStream, file.getName());
-            } catch (IOException e) {
-                log.error("Error while reading file", e);
-            }
-            log.info("Finished file {}, {}%", file.getName(), (i + 1) * 100 / files.length);
-        }
         validator.finish();
         outputSaver.save("output");
+        return compositionList;
+
     }
 }
