@@ -1,8 +1,10 @@
 package com.jaypi4c.tinia.core.api;
 
 import com.jaypi4c.tinia.core.Pipeline;
+import com.jaypi4c.tinia.core.model.ExtractBmpRequestOptionsDTO;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.ehrbase.openehr.sdk.generator.commons.interfaces.CompositionEntity;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
@@ -19,11 +21,11 @@ public class BmpService implements BmpApiDelegate {
     private final Pipeline pipeline;
 
     @Override
-    public ResponseEntity<Void> extractBmp(List<MultipartFile> files) {
+    public ResponseEntity<Void> extractBmp(List<MultipartFile> files, ExtractBmpRequestOptionsDTO options) {
         try {
             for (MultipartFile file : files) {
                 String name = file.getOriginalFilename();
-                pipeline.process(file.getInputStream(), name);
+                List<CompositionEntity> results = pipeline.process(file.getInputStream(), name);
             }
             return new ResponseEntity<>(HttpStatus.OK);
         } catch (IOException e) {

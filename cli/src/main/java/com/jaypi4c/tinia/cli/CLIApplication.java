@@ -12,7 +12,7 @@ public class CLIApplication {
 
         File f = new File("/home/jonas/Downloads/BA Abschluss.pdf");
 
-        ApiResponse<?> resp = api.extractBmpWithHttpInfo(List.of(f));
+        ApiResponse<?> resp = api.extractBmpWithHttpInfo(List.of(f), null);
         System.out.println(resp.getStatusCode());
     }
 

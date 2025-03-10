@@ -14,15 +14,37 @@ paths:
       description: Extracts BMPs (Bundeseinheitlicher Medikationsplan) from PDF files
       operationId: extractBmp
       requestBody:
+        required: true
         content:
           multipart/form-data:
             schema:
+              type: object
               properties:
                 files:
                   type: array
                   items:
                     type: string
                     format: binary
+                options:
+                  type: object
+                  properties:
+                    skipWhenNoHeaderFound:
+                      type: boolean
+                    openEhrConfig:
+                      type: object
+                      properties:
+                        url:
+                          type: string
+                        username:
+                          type: string
+                        password:
+                          type: string
+                      required:
+                        - url
+                        - username
+                        - password
+              required:
+                - files
       responses:
         '200':
           description: extraction successful

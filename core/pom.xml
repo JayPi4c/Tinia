@@ -154,6 +154,8 @@
                                 <configPackage>com.jaypi4c.tinia.core.config</configPackage>
                                 <useSpringBoot3>true</useSpringBoot3>
                                 <delegatePattern>true</delegatePattern>
+                                <useOptional>false</useOptional>
+                                <!-- I would love to set this to true, there is an issue: https://github.com/OpenAPITools/openapi-generator/pull/20793  -->
                             </configOptions>
                         </configuration>
                     </execution>

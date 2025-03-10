@@ -10,6 +10,7 @@ import com.jaypi4c.tinia.core.validation.IActiveIngredientValidator;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.pdfbox.pdmodel.PDDocument;
+import org.ehrbase.openehr.sdk.generator.commons.interfaces.CompositionEntity;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
@@ -65,8 +66,8 @@ public class Pipeline {
                 .toArray(File[]::new);
     }
 
-    public List<String> process(InputStream inputStream, String name) {
-        List<String> compositionList = new ArrayList<>();
+    public List<CompositionEntity> process(InputStream inputStream, String name) {
+        List<CompositionEntity> compositionList = new ArrayList<>();
 
         Optional<PDDocument> documentOpt = loadDocument(inputStream);
         if (documentOpt.isEmpty()) {
@@ -93,7 +94,7 @@ public class Pipeline {
                         print2D(result.table());
                         outputSaver.saveTable(name, result.table(), page, date);
                         NephroMedikationComposition composition = openEhrManager.createComposition(result);
-                        compositionList.add(openEhrManager.convertToJson(composition));
+                        compositionList.add(composition);
                         //  boolean success = openEhrManager.sendNephroMedikationData(composition);
                         //if (success)
                         //     log.info("Successfully sent data to EHRBase");

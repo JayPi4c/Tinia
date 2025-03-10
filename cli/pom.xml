@@ -73,7 +73,7 @@
                             <apiPackage>com.jaypi4c.tinia.cli.api</apiPackage>
                             <modelPackage>com.jaypi4c.tinia.cli.model</modelPackage>
                             <supportingFilesToGenerate>
-                                DefaultApi.java,SearchResultDTO.java,ApiClient.java,ApiException.java,ApiResponse.java,Pair.java,pom.xml
+                                DefaultApi.java,SearchResultDTO.java,ApiClient.java,ApiException.java,ApiResponse.java,Pair.java,Configuration.java
                             </supportingFilesToGenerate>
                             <configOptions>
                                 <configPackage>com.jaypi4c.tinia.cli.config</configPackage>
