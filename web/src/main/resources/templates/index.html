@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html data-bs-theme="dark" lang="de" xmlns:th="http://www.thymeleaf.org">
+<head>
+	<meta charset="UTF-8">
+	<title>Upload PDF or Image</title>
+	<!-- Bootstrap CSS -->
+	<link href="/webjars/bootstrap/css/bootstrap.min.css" rel="stylesheet" type="text/css">
+	<script>
+        const BACKEND_URL = "[[${@environment.getProperty('backend.url')}]]";
+	</script>
+</head>
+<body>
+<div class="container mt-5">
+	<h1 class="mb-4">Upload PDF or Image</h1>
+
+	<!-- Alert messages -->
+	<div id="alertPlaceholder"></div>
+
+	<!-- Upload form -->
+	<form class="border p-4 rounded" id="uploadForm">
+		<div class="mb-3">
+			<label class="form-label" for="file">Select file (PDF or image)</label>
+			<input accept=".pdf,image/*" class="form-control" id="file" name="file" required type="file">
+		</div>
+
+		<div class="form-check mb-3">
+			<input class="form-check-input" id="processOcr" name="processOcr" type="checkbox">
+			<label class="form-check-label" for="processOcr">Process with OCR</label>
+		</div>
+
+		<button class="btn btn-primary" type="submit">Upload</button>
+	</form>
+</div>
+
+<!-- Bootstrap JS -->
+<script src="/webjars/bootstrap/js/bootstrap.min.js"></script>
+
+<!-- Your JS to perform API call -->
+<script>
+    document.getElementById('uploadForm').addEventListener('submit', async function (e) {
+        e.preventDefault(); // prevent page reload
+
+        const fileInput = document.getElementById('file');
+        const processOcrCheckbox = document.getElementById('processOcr');
+        const alertPlaceholder = document.getElementById('alertPlaceholder');
+
+        if (fileInput.files.length === 0) {
+            showAlert('Please select a file.', 'danger');
+            return;
+        }
+
+        const formData = new FormData();
+        formData.append('file', fileInput.files[0]);
+        formData.append('processOcr', processOcrCheckbox.checked);
+
+        try {
+            const response = await fetch('http://localhost:8081/api/v1/bmp/upload', {
+                method: 'POST',
+                body: formData
+            });
+
+            if (response.status === 202) {
+                showAlert('✅ File uploaded successfully and accepted for processing.', 'success');
+            } else if (response.status === 400) {
+                const text = await response.text();
+                showAlert('❌ Invalid input: ' + text, 'danger');
+            } else {
+                const text = await response.text();
+                showAlert('❌ Unexpected response: ' + response.status + ' ' + text, 'warning');
+            }
+        } catch (error) {
+            showAlert('❌ Network error: ' + error, 'danger');
+        }
+
+        function showAlert(message, type) {
+            alertPlaceholder.innerHTML = `
+            <div class="alert alert-${type}" role="alert">
+                ${message}
+            </div>
+        `;
+        }
+    });
+</script>
+</body>
+</html>

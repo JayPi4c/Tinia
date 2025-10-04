@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<body>
+<!-- Add Book Tab -->
+<div aria-labelledby="add-tab" class="tab-pane fade" id="add" role="tabpanel" th:fragment="addBookContent">
+	<div class="card">
+		<div class="card-body">
+			<h5 class="card-title">[[#{tab.add}]]</h5>
+			<form id="add-book-form">
+				<div class="mb-3">
+					<label class="form-label" for="book-name">[[#{tab.add.name}]]</label>
+					<input class="form-control" id="book-name" required type="text">
+				</div>
+				<div class="mb-3">
+					<label class="form-label" for="book-author">[[#{tab.add.author}]]</label>
+					<input class="form-control" id="book-author" required type="text">
+				</div>
+				<button class="btn btn-primary" type="submit">[[#{tab.add.submit}]]</button>
+			</form>
+		</div>
+	</div>
+	<div class="alert alert-success mt-3" id="add-success" style="display: none;">
+		[[#{tab.add.success}]]
+	</div>
+</div>
+</body>
+</html>
