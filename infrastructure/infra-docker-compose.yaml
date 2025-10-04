@@ -1,0 +1,22 @@
+services:
+  redis:
+    image: redis:7.0
+    ports:
+      - "6379:6379"
+
+  rabbitmq:
+    image: rabbitmq:3-management
+    ports:
+      - "5672:5672"   # broker
+      - "15672:15672" # management UI
+  database:
+    image: postgres:17.4-alpine
+    ports:
+      - "5432:5432"
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: postgres
+      PGUSER: postgres
+    # volumes:
+    #   - ./data:/var/lib/postgresql/data

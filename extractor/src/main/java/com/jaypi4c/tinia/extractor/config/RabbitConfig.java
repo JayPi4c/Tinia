@@ -1,4 +1,4 @@
-package com.jaypi4c.tinia.backend.config;
+package com.jaypi4c.tinia.extractor.config;
 
 import org.springframework.amqp.core.Queue;
 import org.springframework.amqp.support.converter.Jackson2JsonMessageConverter;

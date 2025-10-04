@@ -1,0 +1,107 @@
+<project xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://maven.apache.org/POM/4.0.0"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+    <parent>
+        <groupId>com.jaypi4c</groupId>
+        <artifactId>tinia</artifactId>
+        <version>${revision}</version>
+    </parent>
+
+    <groupId>com.jaypi4c.tinia</groupId>
+    <artifactId>openehr</artifactId>
+    <packaging>jar</packaging>
+
+    <name>openehr</name>
+    <url>https://github.com/JayPi4c/Tinia</url>
+
+    <properties>
+        <ehrbase.openehr.sdk.version>2.26.0</ehrbase.openehr.sdk.version>
+    </properties>
+    <dependencies>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-amqp</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.ehrbase.openehr.sdk</groupId>
+            <artifactId>client</artifactId>
+            <version>${ehrbase.openehr.sdk.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>com.google.code.gson</groupId>
+            <artifactId>gson</artifactId>
+            <version>2.13.2</version>
+        </dependency>
+    </dependencies>
+
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.ehrbase.openehr.sdk</groupId>
+                <artifactId>generator-maven-plugin</artifactId>
+                <version>${ehrbase.openehr.sdk.version}</version>
+                <configuration>
+                    <!-- mandatory to have at least one template file configured -->
+                    <templateFiles>
+                        <templateFile>
+                            openehr/src/main/resources/templates/Nephro_Medikation.opt
+                        </templateFile>
+                    </templateFiles>
+                    <!-- mandatory -->
+                    <packageName>
+                        com.jaypi4c.tinia.openehr.entities
+                    </packageName>
+                </configuration>
+                <executions>
+                    <execution>
+                        <id>openehr</id>
+                        <goals>
+                            <goal>codegen</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+            <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>build-helper-maven-plugin</artifactId>
+                <version>3.6.0</version>
+                <executions>
+                    <execution>
+                        <phase>generate-sources</phase>
+                        <goals>
+                            <goal>add-source</goal>
+                        </goals>
+                        <configuration>
+                            <sources>
+                                <source>
+                                    ${project.build.directory}/generated-sources/ehrbase-generator
+                                </source>
+                            </sources>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+            </plugin>
+            <plugin>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-maven-plugin</artifactId>
+                <configuration>
+                    <mainClass>com.jaypi4c.tinia.openehr.OpenehrApp</mainClass>
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
+
+    <profiles>
+        <profile>
+            <id>docker</id>
+            <build>
+                <finalName>openehr</finalName>
+            </build>
+        </profile>
+    </profiles>
+</project>

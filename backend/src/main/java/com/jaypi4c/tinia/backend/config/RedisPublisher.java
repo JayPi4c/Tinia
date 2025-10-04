@@ -11,8 +11,8 @@ public class RedisPublisher {
         this.template = template;
     }
 
-    public void publishBookUpdate(String bookName, String status) {
-        String msg = String.format("{\"bookId\":\"%s\",\"status\":\"%s\"}", bookName, status);
-        template.convertAndSend("book-updates", msg);
+    public void publishProcessingResult(String status) {
+        String msg = String.format("{\"status\":\"%s\"}", status);
+        template.convertAndSend("processing-results", msg);
     }
 }

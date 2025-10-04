@@ -1,9 +1,9 @@
 package com.jaypi4c.tinia.backend.controller;
 
 import com.jaypi4c.tinia.backend.api.BmpApiDelegate;
+import com.jaypi4c.tinia.backend.service.UploadService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.multipart.MultipartFile;
@@ -15,13 +15,15 @@ import java.util.Optional;
 @RequiredArgsConstructor
 public class UploadController implements BmpApiDelegate {
 
-    private final RabbitTemplate rabbitTemplate;
+    private final UploadService uploadService;
 
     @Override
     public ResponseEntity<Void> bmpUploadPost(MultipartFile file,
                                               Optional<Boolean> processOcr) {
-        log.info("Received file: {}, processOcr: {}", file.getOriginalFilename(), processOcr.orElse(false));
-        // TODO: implement me
+        boolean ocr = processOcr.orElse(false);
+        log.info("Received file: {}, ocr: {}", file.getOriginalFilename(), ocr);
+        uploadService.process(file, ocr);
+
         return ResponseEntity.accepted().build();
     }
 }

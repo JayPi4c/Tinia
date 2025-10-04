@@ -27,7 +27,7 @@ paths:
                 processOcr:
                   type: boolean
                   description: Whether to process the uploaded file via OCR.
-                  default: false
+                  default: true
               required:
                 - file
       responses:
