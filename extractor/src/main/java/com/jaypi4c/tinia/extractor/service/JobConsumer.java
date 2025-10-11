@@ -42,6 +42,8 @@ public class JobConsumer {
         UUID fileId = extractorJob.fileId();
 
         String[][] resultTable = null;
+        String date = null;
+        String metadata = null;
 
         try (PDDocument document = PDDocument.load(documentBytes)) {
 
@@ -60,11 +62,12 @@ public class JobConsumer {
 
             if (extractionResult.hasContent()) {
                 Rectangle2D[][] table = extractionResult.table();
-                String date = extractionResult.date();
+                date = extractionResult.date();
 
                 CellReader.ReadingResult result = cellReader.processPage(page, date, table, document);
                 if (result.hasTable()) {
                     resultTable = result.table();
+                    metadata = result.metadata();
                     print2D(resultTable);
                 }
             } else {
@@ -73,7 +76,7 @@ public class JobConsumer {
         } catch (IOException e) {
             log.error("Failed to process job {}", extractorJob, e);
         }
-        rabbitTemplate.convertAndSend(RabbitConfig.EXTRACTOR_RESULTS_QUEUE, new ExtractorResult(fileId, page, resultTable));
+        rabbitTemplate.convertAndSend(RabbitConfig.EXTRACTOR_RESULTS_QUEUE, new ExtractorResult(fileId, page, resultTable, date, metadata));
     }
 
     /**

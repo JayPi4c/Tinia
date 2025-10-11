@@ -2,5 +2,5 @@ package com.jaypi4c.tinia.extractor.dto.internal;
 
 import java.util.UUID;
 
-public record ExtractorResult(UUID fileId, int page, String[][] result) {
+public record ExtractorResult(UUID fileId, int page, String[][] result, String date, String metadata) {
 }

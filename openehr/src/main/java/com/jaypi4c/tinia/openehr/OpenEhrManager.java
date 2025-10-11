@@ -32,14 +32,6 @@ public class OpenEhrManager {
     private final EhrEndpoint ehrEndpoint;
     private final NephroMedikationCompositionFactory nephroMedikationCompositionFactory;
     private final String NEPHRO_TEMPLATE_ID = "Nephro_Medikation";
-    /**
-     * the ID for the Arztbrief on application level
-     */
-    private UUID applicationUserID;
-    /**
-     * The ID for the EHR returned from EHRBase
-     */
-    private UUID ehrID;
 
     public OpenEhrManager(OpenEhrClient openEhrClient, NephroMedikationCompositionFactory factory, TemplateProvider templateProvider) {
         this.openEhrClient = openEhrClient;
@@ -50,11 +42,6 @@ public class OpenEhrManager {
 
     public void checkForTemplate() {
         this.openEhrClient.templateEndpoint().ensureExistence(NEPHRO_TEMPLATE_ID);
-    }
-
-    public void updateIDs() {
-        applicationUserID = UUID.randomUUID();
-        ehrID = ehrEndpoint.createEhr(createEhrStatus(applicationUserID));
     }
 
     public String convertToJson(NephroMedikationComposition composition) {
@@ -72,9 +59,9 @@ public class OpenEhrManager {
 
 
     public boolean sendNephroMedikationData(NephroMedikationComposition composition) {
-        if (applicationUserID == null || ehrID == null) {
-            updateIDs();
-        }
+        // TODO: implement logic to only create one EHR per patient
+        UUID applicationUserID = UUID.randomUUID(); // TODO: change to jobID
+        UUID ehrID = ehrEndpoint.createEhr(createEhrStatus(applicationUserID));
         try {
             CompositionEndpoint compositionEndpoint = openEhrClient.compositionEndpoint(ehrID);
             compositionEndpoint.mergeCompositionEntity(composition);
