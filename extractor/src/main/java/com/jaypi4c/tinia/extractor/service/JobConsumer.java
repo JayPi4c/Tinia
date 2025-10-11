@@ -3,6 +3,7 @@ package com.jaypi4c.tinia.extractor.service;
 import com.jaypi4c.tinia.extractor.autoconfigure.ExtractorProperties;
 import com.jaypi4c.tinia.extractor.config.RabbitConfig;
 import com.jaypi4c.tinia.extractor.dto.internal.ExtractorJob;
+import com.jaypi4c.tinia.extractor.dto.internal.ExtractorResult;
 import com.jaypi4c.tinia.extractor.recognition.CellReader;
 import com.jaypi4c.tinia.extractor.recognition.TableExtractor;
 import lombok.RequiredArgsConstructor;
@@ -36,10 +37,13 @@ public class JobConsumer {
     @RabbitListener(queues = RabbitConfig.EXTRACTOR_JOBS_QUEUE)
     public void consume(ExtractorJob extractorJob) {
         byte[] documentBytes = extractorJob.document();
-        try (PDDocument document = PDDocument.load(documentBytes)) {
 
-            int page = extractorJob.page();
-            UUID fileId = extractorJob.fileId();
+        int page = extractorJob.page();
+        UUID fileId = extractorJob.fileId();
+
+        String[][] resultTable = null;
+
+        try (PDDocument document = PDDocument.load(documentBytes)) {
 
             PDFTextStripper stripper = new PDFTextStripper();
 
@@ -60,7 +64,8 @@ public class JobConsumer {
 
                 CellReader.ReadingResult result = cellReader.processPage(page, date, table, document);
                 if (result.hasTable()) {
-                    print2D(result.table());
+                    resultTable = result.table();
+                    print2D(resultTable);
                 }
             } else {
                 log.debug("No medication table found on page {}", page);
@@ -68,6 +73,7 @@ public class JobConsumer {
         } catch (IOException e) {
             log.error("Failed to process job {}", extractorJob, e);
         }
+        rabbitTemplate.convertAndSend(RabbitConfig.EXTRACTOR_RESULTS_QUEUE, new ExtractorResult(fileId, page, resultTable));
     }
 
     /**
