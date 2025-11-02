@@ -131,7 +131,7 @@
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
                 <configuration>
-                    <mainClass>com.jaypi4c.tinia.backend.BackendApp</mainClass>
+                    <mainClass>de.jaypi4c.tinia.backend.BackendApp</mainClass>
                 </configuration>
             </plugin>
         </plugins>

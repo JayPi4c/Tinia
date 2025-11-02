@@ -9,7 +9,7 @@
         <relativePath/>
     </parent>
 
-    <groupId>com.jaypi4c</groupId>
+    <groupId>de.jaypi4c</groupId>
     <artifactId>tinia</artifactId>
     <version>${revision}</version>
     <packaging>pom</packaging>
