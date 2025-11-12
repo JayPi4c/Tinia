@@ -2,11 +2,11 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
     <parent>
-        <groupId>com.jaypi4c</groupId>
+        <groupId>de.jaypi4c</groupId>
         <artifactId>tinia</artifactId>
         <version>${revision}</version>
     </parent>
-    <groupId>com.jaypi4c.tinia</groupId>
+    <groupId>de.jaypi4c.tinia</groupId>
     <artifactId>backend</artifactId>
     <packaging>jar</packaging>
 
@@ -101,8 +101,8 @@
                                 ./openapi.yaml
                             </inputSpec>
                             <generatorName>spring</generatorName>
-                            <apiPackage>com.jaypi4c.tinia.backend.api</apiPackage>
-                            <modelPackage>com.jaypi4c.tinia.backend.dto</modelPackage>
+                            <apiPackage>de.jaypi4c.tinia.backend.api</apiPackage>
+                            <modelPackage>de.jaypi4c.tinia.backend.dto</modelPackage>
                             <generateModelTests>false</generateModelTests>
                             <generateApiTests>false</generateApiTests>
                             <addTestCompileSourceRoot>false</addTestCompileSourceRoot>
@@ -111,7 +111,7 @@
                             </supportingFilesToGenerate>
                             <modelNameSuffix>Dto</modelNameSuffix>
                             <configOptions>
-                                <configPackage>com.jaypi4c.tinia.backend.config</configPackage>
+                                <configPackage>de.jaypi4c.tinia.backend.config</configPackage>
                                 <enumUnknownDefaultCase>true</enumUnknownDefaultCase>
                                 <useSpringBoot3>true</useSpringBoot3>
                                 <delegatePattern>true</delegatePattern>
