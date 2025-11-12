@@ -41,3 +41,9 @@ build/
 
 ### VS Code ###
 .vscode/
+
+
+### Project specific ###
+io/
+application-*.yaml
+!application-docker.yaml

@@ -1,12 +1,60 @@
 <!DOCTYPE html>
-<html lang="de" xmlns:th="http://www.thymeleaf.org">
-
+<html xmlns:th="http://www.thymeleaf.org">
 <body>
+<div th:fragment="appFooter">
+	<footer class="bg-body-tertiary text-center py-3 mt-auto border-top">
+		<div class="container d-flex justify-content-between align-items-center flex-wrap">
 
-<footer class="footer" th:fragment="footer">
-    <p>BMP to openEHR Konverter</p>
-</footer>
+			<!-- Left side: copyright text -->
+			<span class="text-muted">&copy; 2025 [[#{footer.text}]]</span>
 
+			<!-- Middle: language selector -->
+			<form class="d-flex align-items-center me-3" id="lang-form">
+				<label class="me-2 mb-0" for="lang-select">[[#{footer.language}]]</label>
+				<select class="form-select form-select-sm w-auto" id="lang-select" name="lang">
+					<option th:selected="${#locale.language == 'en'}" value="en">English</option>
+					<option th:selected="${#locale.language == 'de'}" value="de">Deutsch</option>
+				</select>
+			</form>
+
+			<!-- Right side: dark mode toggle -->
+			<div class="form-check form-switch">
+				<input class="form-check-input" id="darkModeSwitch" type="checkbox">
+				<label class="form-check-label" for="darkModeSwitch">[[#{footer.darkmode}]]</label>
+			</div>
+		</div>
+	</footer>
+	<script>
+        document.getElementById('lang-select').addEventListener('change', function () {
+            const selectedLang = this.value;
+            const currentUrl = window.location.pathname; // keep path
+            window.location.href = currentUrl + '?lang=' + selectedLang;
+        });
+
+        // Dark mode toggle
+        const themeSwitch = document.getElementById('darkModeSwitch');
+        const htmlTag = document.documentElement;
+
+        // Load saved mode from localStorage
+        if (localStorage.getItem('theme') === 'dark') {
+            htmlTag.setAttribute('data-bs-theme', 'dark');
+            themeSwitch.checked = true;
+        } else {
+            htmlTag.setAttribute('data-bs-theme', 'light');
+            themeSwitch.checked = false;
+        }
+
+        themeSwitch.addEventListener('change', function () {
+            console.log("Dark mode toggled");
+            if (this.checked) {
+                htmlTag.setAttribute('data-bs-theme', 'dark');
+                localStorage.setItem('theme', 'dark');
+            } else {
+                htmlTag.setAttribute('data-bs-theme', 'light');
+                localStorage.setItem('theme', 'light');
+            }
+        });
+	</script>
+</div>
 </body>
-
 </html>

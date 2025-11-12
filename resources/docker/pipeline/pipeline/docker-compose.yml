@@ -10,7 +10,7 @@ services:
     environment:
       OPENEHR_URL: http://ehrbase:8080/ehrbase/
       DEBUG_DRAWIMAGES: true
-      LOGGING_LEVEL_COM_JAYPI4C_TINIA_PIPELINE: INFO
+      LOGGING_LEVEL_DE_JAYPI4C_TINIA_PIPELINE: INFO
       VALIDATION_ACTIVE: true
     networks:
       - ehrbase-net

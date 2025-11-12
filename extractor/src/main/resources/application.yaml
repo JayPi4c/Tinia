@@ -1,0 +1,8 @@
+tinia:
+  debug.drawImages: true
+  pdf.dpi: 300
+  skipWhenNoHeaderFound: true
+  validation.active: true
+  io:
+    dataFolder: ./io/data/
+    debugFolder: ./io/debug/
