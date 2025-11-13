@@ -22,7 +22,7 @@ public class JobConsumer {
     @RabbitListener(queues = RabbitConfig.OPENEHR_JOBS_QUEUE)
     public void consume(OpenEhrJob openEhrJob) {
         log.info("Received openehr job content: {}", openEhrJob);
-        if (openEhrManager.sendNephroMedikationData(openEhrManager.createComposition(openEhrJob.tableData(), openEhrJob.date(), openEhrJob.metadata())))
+        if (openEhrManager.sendData(openEhrManager.createComposition(openEhrJob.tableData(), openEhrJob.date(), openEhrJob.metadata())))
             log.info("Successfully sent data to openEHR server");
         else
             log.error("Error sending data to openEHR server");

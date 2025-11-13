@@ -1,7 +1,6 @@
 package de.jaypi4c.tinia.openehr.config;
 
 import de.jaypi4c.tinia.openehr.autoconfigure.OpenEhrProperties;
-import de.jaypi4c.tinia.openehr.util.NephroMedikationTemplateProvider;
 import lombok.RequiredArgsConstructor;
 import org.apache.http.auth.AuthScope;
 import org.apache.http.auth.UsernamePasswordCredentials;
@@ -24,11 +23,6 @@ import java.net.URISyntaxException;
 @RequiredArgsConstructor
 public class RestConfig {
     private final OpenEhrProperties openEhrProperties;
-
-    @Bean
-    public TemplateProvider getTemplateProvider() {
-        return new NephroMedikationTemplateProvider();
-    }
 
     @Bean
     public OpenEhrClientConfig getOpenEhrClientConfig() {

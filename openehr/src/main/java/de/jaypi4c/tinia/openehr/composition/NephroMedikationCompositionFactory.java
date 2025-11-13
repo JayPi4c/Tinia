@@ -1,27 +1,14 @@
-package de.jaypi4c.tinia.openehr.util;
+package de.jaypi4c.tinia.openehr.composition;
 
-import com.google.gson.Gson;
 import com.nedap.archie.rm.archetyped.FeederAudit;
-import com.nedap.archie.rm.archetyped.FeederAuditDetails;
-import com.nedap.archie.rm.datavalues.encapsulated.DvEncapsulated;
-import com.nedap.archie.rm.datavalues.encapsulated.DvParsable;
-import com.nedap.archie.rm.generic.PartyIdentified;
-import de.jaypi4c.tinia.openehr.composition.ICompositionFactory;
 import de.jaypi4c.tinia.openehr.entities.nephromedikationcomposition.NephroMedikationComposition;
 import de.jaypi4c.tinia.openehr.entities.nephromedikationcomposition.definition.FallidentifikationCluster;
 import de.jaypi4c.tinia.openehr.entities.nephromedikationcomposition.definition.VerordnungVonArzneimittelInstruction;
+import de.jaypi4c.tinia.openehr.util.CombinedDosisschemaParser;
+import de.jaypi4c.tinia.openehr.util.StandardDosisschemaFactory;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.ehrbase.openehr.sdk.generator.commons.shareddefinition.Language;
-import org.ehrbase.openehr.sdk.generator.commons.shareddefinition.Setting;
-import org.ehrbase.openehr.sdk.generator.commons.shareddefinition.Territory;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
 
-import java.io.BufferedReader;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.nio.charset.StandardCharsets;
-import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -37,61 +24,13 @@ import java.util.Map;
  * @see <a href="https://ckm.highmed.org/ckm/templates/1246.169.1019">Nephro_Medikation in CKM</a> for more information.
  */
 @Slf4j
-@Component
-public class NephroMedikationCompositionFactory implements ICompositionFactory<NephroMedikationComposition> {
+@RequiredArgsConstructor
+public class NephroMedikationCompositionFactory implements CompositionFactory<NephroMedikationComposition> {
 
     private final CombinedDosisschemaParser combinedDosisschemaParser;
     private final StandardDosisschemaFactory standardDosisschemaParser;
 
-    @Autowired
-    public NephroMedikationCompositionFactory(CombinedDosisschemaParser cdp, StandardDosisschemaFactory sdp) {
-        this.combinedDosisschemaParser = cdp;
-        this.standardDosisschemaParser = sdp;
-    }
-
-    /**
-     * Prepare composition with default values that are mandatory but always the same.
-     *
-     * @param composition to prepare
-     * @return prepared composition
-     */
-    private static NephroMedikationComposition prepareComposition(NephroMedikationComposition composition) {
-        composition.setLanguage(Language.DE);
-        PartyIdentified composer = new PartyIdentified();
-        composer.setName("Medication Plan Pipeline (automated)");
-        composition.setComposer(composer);
-        composition.setTerritory(Territory.DE);
-
-        composition.setStartTimeValue(LocalDateTime.now());
-        composition.setEndTimeValue(LocalDateTime.now());
-        composition.setSettingDefiningCode(Setting.HOME);
-
-        // TODO Hardcoded Krankenhaus?
-        PartyIdentified healthCareFacility = new PartyIdentified();
-        healthCareFacility.setName("Krankenhaus");
-        composition.setHealthCareFacility(healthCareFacility);
-
-        return composition;
-    }
-
-    /**
-     * Create FeederAudit object with metadata.
-     *
-     * @param metadataJson json string with pdf metadata
-     * @return FeederAudit object
-     * @see <a href="https://specifications.openehr.org/releases/RM/latest/data_types.html#_examples">OpenEHR Examples</a>
-     */
-    private static FeederAudit createFeederAudit(String metadataJson) {
-        FeederAudit feederAudit = new FeederAudit();
-        FeederAuditDetails feederAuditDetails = new FeederAuditDetails();
-        feederAuditDetails.setSystemId("Medication Plan Pipeline (automated)");
-        feederAudit.setOriginatingSystemAudit(feederAuditDetails);
-        DvEncapsulated originalContent = new DvParsable(metadataJson, "json");
-        feederAudit.setOriginalContent(originalContent);
-
-        return feederAudit;
-    }
-
+/*
     public static Map<String, String> loadAliases(String path) {
         try (InputStream is = WordUtils.class.getResourceAsStream(path);
              BufferedReader br = new BufferedReader(new InputStreamReader(is, StandardCharsets.UTF_8))) {
@@ -111,7 +50,7 @@ public class NephroMedikationCompositionFactory implements ICompositionFactory<N
             log.error("Error while loading aliases", e);
         }
         return new HashMap<>();
-    }
+    }*/
 
     @Override
     public NephroMedikationComposition createComposition(String[][] medicationMatrix, String date, String metadataJson) {
@@ -142,6 +81,11 @@ public class NephroMedikationCompositionFactory implements ICompositionFactory<N
         composition.setVerordnungVonArzneimittel(list);
 
         return composition;
+    }
+
+    @Override
+    public String getTemplateId() {
+        return "Nephro_Medikation";
     }
 
     private record Aliases(String real, String[] aliases) {
