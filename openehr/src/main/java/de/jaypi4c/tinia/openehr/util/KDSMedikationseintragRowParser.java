@@ -40,6 +40,10 @@ public class KDSMedikationseintragRowParser extends AbstractRowParser<Medikation
         // active ingredient
         WirkstoffCluster wirkstoffCluster = new WirkstoffCluster();
         wirkstoffCluster.setWirkstoffNameValue(row.activeIngredient());
+        WirkstoffCodeAskSnomedCtUniiCasCluster wirkstoffCodeAskSnomedCtUniiCasCluster = new WirkstoffCodeAskSnomedCtUniiCasCluster();
+        // FIXME: determine wirkstoff Code
+        wirkstoffCodeAskSnomedCtUniiCasCluster.setWirkstoffCodeValue("tbd");
+        wirkstoffCluster.setWirkstoffCodeAskSnomedCtUniiCas(List.of(wirkstoffCodeAskSnomedCtUniiCasCluster));
         // name
         arzneimittelCluster.setArzneimittelNameValue(row.name());
         // strength
