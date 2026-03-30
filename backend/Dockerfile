@@ -1,9 +1,9 @@
-FROM maven:3.9.6-eclipse-temurin-21-alpine AS builder
+FROM eclipse-temurin:25-jdk-alpine-3.23 AS builder
 WORKDIR /opt/app
 COPY . .
-RUN mvn -P pipeline package -B -pl pipeline -am
+RUN ./mvnw -P pipeline package -B -pl pipeline -am
 
-FROM eclipse-temurin:21-jre-alpine
+FROM eclipse-temurin:25-jre-alpine-3.23
 WORKDIR /opt/app
 
 # Create a group and user

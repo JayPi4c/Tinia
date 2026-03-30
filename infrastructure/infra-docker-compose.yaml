@@ -1,16 +1,16 @@
 services:
   redis:
-    image: redis:7.0
+    image: redis:8.6.2-alpine3.23
     ports:
       - "6379:6379"
 
   rabbitmq:
-    image: rabbitmq:3-management
+    image: rabbitmq:4.2.5-management-alpine
     ports:
       - "5672:5672"   # broker
       - "15672:15672" # management UI
   database:
-    image: postgres:17.4-alpine
+    image: postgres:18.3-alpine3.23
     ports:
       - "5432:5432"
     environment:
