@@ -66,7 +66,7 @@ public class KDSMedikationseintragRowParser extends AbstractRowParser<Medikation
 
         // required fields
         observation.setStartzeitpunktEinnahmeValue(LocalDateTime.now()); // TODO use date from source
-        observation.setDauerDerEinnahmeValue(Period.ofYears(0)); // zero period means unspecified duration // TODO adjust to correct value
+        observation.setDauerDerEinnahmeValue(Period.ZERO);// zero period means unspecified duration // TODO adjust to correct value
         observation.setLanguage(Language.DE);
         StatusCluster statusCluster = new StatusCluster();
         statusCluster.setStatusDefiningCode(StatusDefiningCode.UNBEKANNT);
@@ -77,7 +77,7 @@ public class KDSMedikationseintragRowParser extends AbstractRowParser<Medikation
         observation.setOriginValue(LocalDateTime.now());
         observation.setTimeValue(LocalDateTime.now());
         PartyIdentified subject = new PartyIdentified();
-        subject.setName("Tinia (automated)");
+        subject.setName("Jon Doe");
         observation.setSubject(subject);
         return observation;
     }

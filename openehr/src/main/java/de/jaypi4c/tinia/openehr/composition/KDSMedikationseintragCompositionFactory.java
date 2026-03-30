@@ -1,6 +1,7 @@
 package de.jaypi4c.tinia.openehr.composition;
 
 import com.nedap.archie.rm.archetyped.FeederAudit;
+import com.nedap.archie.rm.generic.PartyIdentified;
 import de.jaypi4c.tinia.openehr.entities.kdsmedikationseintragcomposition.KDSMedikationseintragComposition;
 import de.jaypi4c.tinia.openehr.entities.kdsmedikationseintragcomposition.definition.FallidentifikationCluster;
 import de.jaypi4c.tinia.openehr.entities.kdsmedikationseintragcomposition.definition.MedikationseintragObservation;
@@ -22,7 +23,6 @@ public class KDSMedikationseintragCompositionFactory implements CompositionFacto
     @Override
     public KDSMedikationseintragComposition createComposition(String[][] medicationMatrix, String date, String metadata) {
         KDSMedikationseintragComposition composition = prepareComposition(new KDSMedikationseintragComposition());
-
         FeederAudit feederAudit = createFeederAudit(metadata);
         composition.setFeederAudit(feederAudit);
 
@@ -30,6 +30,11 @@ public class KDSMedikationseintragCompositionFactory implements CompositionFacto
         FallidentifikationCluster fallidentifikation = new FallidentifikationCluster();
         fallidentifikation.setFallKennungValue(getCaseID());
         composition.setFallidentifikation(fallidentifikation);
+
+        PartyIdentified healthCareFacility = new PartyIdentified();
+        healthCareFacility.setName("Zuhause");
+        composition.setHealthCareFacility(healthCareFacility);
+
 
         List<MedikationseintragObservation> medikationseintragList = new ArrayList<>();
         // start with one to skip header
