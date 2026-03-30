@@ -1,0 +1,14 @@
+server:
+  port: 8081
+spring.servlet.multipart:
+  max-file-size: 50MB
+  max-request-size: 50MB
+tinia:
+  openehr:
+    username: ehrbase-user
+    password: SuperSecretPassword
+    url: http://ehrbase:8080/ehrbase/
+  debug.drawImages: false
+  pdf.dpi: 300
+  skipWhenNoHeaderFound: true
+  validation.active: true

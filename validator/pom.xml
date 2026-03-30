@@ -7,32 +7,23 @@
         <version>${revision}</version>
     </parent>
     <groupId>de.jaypi4c.tinia</groupId>
-    <artifactId>web</artifactId>
+    <artifactId>validator</artifactId>
+    <version>0.0.1-SNAPSHOT</version>
     <packaging>jar</packaging>
 
-    <name>Frontend</name>
-    <description>Frontend implementation for Tinia</description>
+    <name>Validator</name>
+    <url>http://maven.apache.org</url>
+
 
     <dependencies>
         <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-web</artifactId>
+            <groupId>org.jsoup</groupId>
+            <artifactId>jsoup</artifactId>
+            <version>1.16.1</version>
         </dependency>
         <dependency>
             <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-thymeleaf</artifactId>
-        </dependency>
-
-        <!-- frontend dependencies -->
-        <dependency>
-            <groupId>org.webjars</groupId>
-            <artifactId>webjars-locator</artifactId>
-            <version>0.52</version>
-        </dependency>
-        <dependency>
-            <groupId>org.webjars</groupId>
-            <artifactId>bootstrap</artifactId>
-            <version>5.3.8</version>
+            <artifactId>spring-boot-starter-amqp</artifactId>
         </dependency>
     </dependencies>
 
@@ -46,7 +37,7 @@
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
                 <configuration>
-                    <mainClass>de.jaypi4c.tinia.frontend.FrontendApp</mainClass>
+                    <mainClass>de.jaypi4c.tinia.validator.ValidatorApp</mainClass>
                 </configuration>
             </plugin>
         </plugins>
@@ -56,7 +47,7 @@
         <profile>
             <id>docker</id>
             <build>
-                <finalName>frontend</finalName>
+                <finalName>validator</finalName>
             </build>
         </profile>
     </profiles>

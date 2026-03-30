@@ -6,33 +6,44 @@
         <artifactId>tinia</artifactId>
         <version>${revision}</version>
     </parent>
+
     <groupId>de.jaypi4c.tinia</groupId>
-    <artifactId>web</artifactId>
+    <artifactId>extractor</artifactId>
+    <version>0.0.1-SNAPSHOT</version>
     <packaging>jar</packaging>
 
-    <name>Frontend</name>
-    <description>Frontend implementation for Tinia</description>
+    <name>Extractor</name>
+    <url>http://maven.apache.org</url>
+
+    <properties>
+        <pdfbox.version>2.0.29</pdfbox.version>
+    </properties>
 
     <dependencies>
         <dependency>
             <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-web</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-thymeleaf</artifactId>
+            <artifactId>spring-boot-starter-amqp</artifactId>
         </dependency>
 
-        <!-- frontend dependencies -->
         <dependency>
-            <groupId>org.webjars</groupId>
-            <artifactId>webjars-locator</artifactId>
-            <version>0.52</version>
+            <groupId>org.apache.pdfbox</groupId>
+            <artifactId>pdfbox</artifactId>
+            <version>${pdfbox.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>com.google.code.gson</groupId>
+            <artifactId>gson</artifactId>
+            <version>2.13.2</version>
         </dependency>
         <dependency>
-            <groupId>org.webjars</groupId>
-            <artifactId>bootstrap</artifactId>
-            <version>5.3.8</version>
+            <groupId>org.apache.commons</groupId>
+            <artifactId>commons-text</artifactId>
+            <version>1.14.0</version>
+        </dependency>
+        <dependency>
+            <groupId>com.fasterxml.jackson.core</groupId>
+            <artifactId>jackson-databind</artifactId>
         </dependency>
     </dependencies>
 
@@ -46,7 +57,7 @@
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
                 <configuration>
-                    <mainClass>de.jaypi4c.tinia.frontend.FrontendApp</mainClass>
+                    <mainClass>de.jaypi4c.tinia.extractor.ExtractorApp</mainClass>
                 </configuration>
             </plugin>
         </plugins>
@@ -56,7 +67,7 @@
         <profile>
             <id>docker</id>
             <build>
-                <finalName>frontend</finalName>
+                <finalName>extractor</finalName>
             </build>
         </profile>
     </profiles>

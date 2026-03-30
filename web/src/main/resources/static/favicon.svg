@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Abstract Tinia – Creation & Order -->
+<svg
+        xmlns="http://www.w3.org/2000/svg"
+        width="200"
+        height="200"
+        viewBox="0 0 200 200"
+        role="img"
+        aria-label="Abstract logo representing Tinia, god of creation and order">
+
+    <!-- Background (optional, can be removed) -->
+    <rect width="100%" height="100%" fill="none"/>
+
+    <!-- 1️⃣ Cosmic Circle – the ordered universe -->
+    <circle cx="100" cy="100" r="80"
+            fill="none"
+            stroke="#1A3D7A"
+            stroke-width="8"/>
+
+    <!-- 2️⃣ Creation Triangle – the primal spark of form -->
+    <polygon points="100,30 140,130 60,130"
+             fill="none"
+             stroke="#1A3D7A"
+             stroke-width="6"
+             stroke-linejoin="round"/>
+
+    <!-- 3️⃣ Lightning Bolt – Tinia’s power to shape and command -->
+    <path d="M100 45 L115 80 L95 80 L110 115 L90 115 L105 150"
+          fill="none"
+          stroke="#F2C94C"
+          stroke-width="8"
+          stroke-linecap="round"
+          stroke-linejoin="round"/>
+
+    <!-- 4️⃣ Stylised Eagle Wing – the soaring order of the sky -->
+    <path d="M70 70 C55 55, 45 85, 60 100
+           S80 115, 70 130"
+          fill="none"
+          stroke="#F2C94C"
+          stroke-width="6"
+          stroke-linecap="round"/>
+
+</svg>
