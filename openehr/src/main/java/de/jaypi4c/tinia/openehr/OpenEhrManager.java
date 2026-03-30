@@ -7,12 +7,13 @@ import com.nedap.archie.rm.ehr.EhrStatus;
 import com.nedap.archie.rm.generic.PartySelf;
 import com.nedap.archie.rm.support.identification.GenericId;
 import com.nedap.archie.rm.support.identification.PartyRef;
+import de.jaypi4c.tinia.openehr.composition.CompositionFactory;
 import de.jaypi4c.tinia.openehr.entities.nephromedikationcomposition.NephroMedikationComposition;
-import de.jaypi4c.tinia.openehr.util.NephroMedikationCompositionFactory;
 import lombok.extern.slf4j.Slf4j;
 import org.ehrbase.openehr.sdk.client.openehrclient.CompositionEndpoint;
 import org.ehrbase.openehr.sdk.client.openehrclient.EhrEndpoint;
 import org.ehrbase.openehr.sdk.client.openehrclient.OpenEhrClient;
+import org.ehrbase.openehr.sdk.generator.commons.interfaces.CompositionEntity;
 import org.ehrbase.openehr.sdk.serialisation.dto.GeneratedDtoToRmConverter;
 import org.ehrbase.openehr.sdk.serialisation.jsonencoding.CanonicalJson;
 import org.ehrbase.openehr.sdk.serialisation.walker.defaultvalues.DefaultValues;
@@ -30,18 +31,18 @@ public class OpenEhrManager {
     private final OpenEhrClient openEhrClient;
     private final TemplateProvider templateProvider;
     private final EhrEndpoint ehrEndpoint;
-    private final NephroMedikationCompositionFactory nephroMedikationCompositionFactory;
-    private final String NEPHRO_TEMPLATE_ID = "Nephro_Medikation";
+    private final CompositionFactory<?> compositionFactory;
 
-    public OpenEhrManager(OpenEhrClient openEhrClient, NephroMedikationCompositionFactory factory, TemplateProvider templateProvider) {
+
+    public OpenEhrManager(OpenEhrClient openEhrClient, CompositionFactory<?> factory, TemplateProvider templateProvider) {
         this.openEhrClient = openEhrClient;
         this.ehrEndpoint = openEhrClient.ehrEndpoint();
         this.templateProvider = templateProvider;
-        nephroMedikationCompositionFactory = factory;
+        compositionFactory = factory;
     }
 
     public void checkForTemplate() {
-        this.openEhrClient.templateEndpoint().ensureExistence(NEPHRO_TEMPLATE_ID);
+        this.openEhrClient.templateEndpoint().ensureExistence(compositionFactory.getTemplateId());
     }
 
     public String convertToJson(NephroMedikationComposition composition) {
@@ -51,14 +52,14 @@ public class OpenEhrManager {
     }
 
 
-    public NephroMedikationComposition createComposition(String[][] medicationMatrix,
-                                                         String date,
-                                                         String metadataJson) {
-        return nephroMedikationCompositionFactory.createComposition(medicationMatrix, date, metadataJson);
+    public CompositionEntity createComposition(String[][] medicationMatrix,
+                                               String date,
+                                               String metadataJson) {
+        return compositionFactory.createComposition(medicationMatrix, date, metadataJson);
     }
 
 
-    public boolean sendNephroMedikationData(NephroMedikationComposition composition) {
+    public boolean sendData(CompositionEntity composition) {
         // TODO: implement logic to only create one EHR per patient
         UUID applicationUserID = UUID.randomUUID(); // TODO: change to jobID
         UUID ehrID = ehrEndpoint.createEhr(createEhrStatus(applicationUserID));

@@ -15,7 +15,7 @@
     <url>https://github.com/JayPi4c/Tinia</url>
 
     <properties>
-        <ehrbase.openehr.sdk.version>2.26.0</ehrbase.openehr.sdk.version>
+        <ehrbase.openehr.sdk.version>2.27.0</ehrbase.openehr.sdk.version>
     </properties>
     <dependencies>
         <dependency>
@@ -46,6 +46,9 @@
                     <templateFiles>
                         <templateFile>
                             openehr/src/main/resources/templates/Nephro_Medikation.opt
+                        </templateFile>
+                        <templateFile>
+                            openehr/src/main/resources/templates/KDS_Medikationseintrag.opt
                         </templateFile>
                     </templateFiles>
                     <!-- mandatory -->
