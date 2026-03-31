@@ -1,14 +1,15 @@
 package de.jaypi4c.tinia.extractor.config;
 
 import org.springframework.amqp.core.Queue;
-import org.springframework.amqp.support.converter.Jackson2JsonMessageConverter;
+import org.springframework.amqp.support.converter.JacksonJsonMessageConverter;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
+import static de.jaypi4c.tinia.common.config.RabbitConfig.EXTRACTOR_JOBS_QUEUE;
+import static de.jaypi4c.tinia.common.config.RabbitConfig.EXTRACTOR_RESULTS_QUEUE;
+
 @Configuration
 public class RabbitConfig {
-    public static final String EXTRACTOR_JOBS_QUEUE = "extractor-jobs";
-    public static final String EXTRACTOR_RESULTS_QUEUE = "extractor-results";
 
     @Bean
     public Queue extractorJobsQueue() {
@@ -21,7 +22,7 @@ public class RabbitConfig {
     }
 
     @Bean
-    public Jackson2JsonMessageConverter jsonMessageConverter() {
-        return new Jackson2JsonMessageConverter();
+    public JacksonJsonMessageConverter jsonMessageConverter() {
+        return new JacksonJsonMessageConverter();
     }
 }

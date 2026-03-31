@@ -25,6 +25,7 @@
         <module>openehr</module>
         <module>extractor</module>
         <module>validator</module>
+        <module>common</module>
     </modules>
 
     <properties>
@@ -58,6 +59,16 @@
             <scope>test</scope>
         </dependency>
     </dependencies>
+
+    <dependencyManagement>
+        <dependencies>
+            <dependency>
+                <groupId>de.jaypi4c.tinia</groupId>
+                <artifactId>common</artifactId>
+                <version>${revision}</version>
+            </dependency>
+        </dependencies>
+    </dependencyManagement>
 
     <build>
         <pluginManagement>

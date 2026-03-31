@@ -11,9 +11,16 @@ public class ExtractorProperties {
 
     private Pdf pdf = new Pdf();
 
+    private IO io = new IO();
+
     @Data
     public static class Pdf {
         private int dpi = 300;
+    }
+
+    @Data
+    public static class IO {
+        private String dataFolder = "./io/data";
     }
 
 }

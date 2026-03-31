@@ -1,9 +1,8 @@
 package de.jaypi4c.tinia.extractor.service;
 
+import de.jaypi4c.tinia.common.dto.internal.ExtractorJob;
+import de.jaypi4c.tinia.common.dto.internal.ExtractorResult;
 import de.jaypi4c.tinia.extractor.autoconfigure.ExtractorProperties;
-import de.jaypi4c.tinia.extractor.config.RabbitConfig;
-import de.jaypi4c.tinia.extractor.dto.internal.ExtractorJob;
-import de.jaypi4c.tinia.extractor.dto.internal.ExtractorResult;
 import de.jaypi4c.tinia.extractor.recognition.CellReader;
 import de.jaypi4c.tinia.extractor.recognition.TableExtractor;
 import lombok.RequiredArgsConstructor;
@@ -21,6 +20,9 @@ import java.io.IOException;
 import java.util.Arrays;
 import java.util.UUID;
 
+import static de.jaypi4c.tinia.common.config.RabbitConfig.EXTRACTOR_JOBS_QUEUE;
+import static de.jaypi4c.tinia.common.config.RabbitConfig.EXTRACTOR_RESULTS_QUEUE;
+
 
 @Slf4j
 @Service
@@ -34,7 +36,7 @@ public class JobConsumer {
 
     private final ExtractorProperties extractorProperties;
 
-    @RabbitListener(queues = RabbitConfig.EXTRACTOR_JOBS_QUEUE)
+    @RabbitListener(queues = EXTRACTOR_JOBS_QUEUE)
     public void consume(ExtractorJob extractorJob) {
         byte[] documentBytes = extractorJob.document();
 
@@ -76,7 +78,7 @@ public class JobConsumer {
         } catch (IOException e) {
             log.error("Failed to process job {}", extractorJob, e);
         }
-        rabbitTemplate.convertAndSend(RabbitConfig.EXTRACTOR_RESULTS_QUEUE, new ExtractorResult(fileId, page, resultTable, date, metadata));
+        rabbitTemplate.convertAndSend(EXTRACTOR_RESULTS_QUEUE, new ExtractorResult(fileId, page, resultTable, date, metadata));
     }
 
     /**
