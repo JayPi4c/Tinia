@@ -1,4 +1,4 @@
-package de.jaypi4c.tinia.openehr;
+package de.jaypi4c.tinia.openehr.service;
 
 
 import com.nedap.archie.rm.RMObject;
@@ -14,17 +14,17 @@ import org.ehrbase.openehr.sdk.client.openehrclient.CompositionEndpoint;
 import org.ehrbase.openehr.sdk.client.openehrclient.EhrEndpoint;
 import org.ehrbase.openehr.sdk.client.openehrclient.OpenEhrClient;
 import org.ehrbase.openehr.sdk.generator.commons.interfaces.CompositionEntity;
+import org.ehrbase.openehr.sdk.serialisation.RMDataFormat;
 import org.ehrbase.openehr.sdk.serialisation.dto.GeneratedDtoToRmConverter;
-import org.ehrbase.openehr.sdk.serialisation.jsonencoding.CanonicalJson;
 import org.ehrbase.openehr.sdk.serialisation.walker.defaultvalues.DefaultValues;
 import org.ehrbase.openehr.sdk.util.exception.WrongStatusCodeException;
 import org.ehrbase.openehr.sdk.webtemplate.templateprovider.TemplateProvider;
-import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
 
 import java.util.UUID;
 
 @Slf4j
-@Component
+@Service
 public class OpenEhrManager {
 
     // see https://ehrbase.readthedocs.io/en/latest/02_getting_started/04_create_ehr/index.html#client-library
@@ -46,9 +46,9 @@ public class OpenEhrManager {
     }
 
     public String convertToJson(NephroMedikationComposition composition) {
-        RMObject rmObject = new GeneratedDtoToRmConverter(templateProvider, o -> new DefaultValues())
+        RMObject rmObject = new GeneratedDtoToRmConverter(templateProvider, _ -> new DefaultValues())
                 .toRMObject(composition);
-        return new CanonicalJson().marshal(rmObject);
+        return RMDataFormat.canonicalJSON().marshal(rmObject);
     }
 
 

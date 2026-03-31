@@ -1,15 +1,13 @@
 package de.jaypi4c.tinia.openehr.service;
 
-import de.jaypi4c.tinia.openehr.OpenEhrManager;
 import de.jaypi4c.tinia.openehr.config.RabbitConfig;
 import de.jaypi4c.tinia.openehr.dto.internal.OpenEhrJob;
+import jakarta.annotation.PostConstruct;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.amqp.rabbit.annotation.RabbitListener;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.stereotype.Service;
-
-import javax.annotation.PostConstruct;
 
 @Slf4j
 @Service
