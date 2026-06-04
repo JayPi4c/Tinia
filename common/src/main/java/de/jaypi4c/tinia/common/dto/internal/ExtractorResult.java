@@ -1,4 +1,4 @@
-package de.jaypi4c.tinia.backend.dto.internal;
+package de.jaypi4c.tinia.common.dto.internal;
 
 import java.util.UUID;
 

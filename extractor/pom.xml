@@ -16,10 +16,14 @@
     <url>http://maven.apache.org</url>
 
     <properties>
-        <pdfbox.version>2.0.29</pdfbox.version>
+        <pdfbox.version>2.0.36</pdfbox.version>
     </properties>
 
     <dependencies>
+        <dependency>
+            <groupId>de.jaypi4c.tinia</groupId>
+            <artifactId>common</artifactId>
+        </dependency>
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-amqp</artifactId>
@@ -34,12 +38,12 @@
         <dependency>
             <groupId>com.google.code.gson</groupId>
             <artifactId>gson</artifactId>
-            <version>2.13.2</version>
+            <version>2.14.0</version>
         </dependency>
         <dependency>
             <groupId>org.apache.commons</groupId>
             <artifactId>commons-text</artifactId>
-            <version>1.14.0</version>
+            <version>1.15.0</version>
         </dependency>
         <dependency>
             <groupId>com.fasterxml.jackson.core</groupId>

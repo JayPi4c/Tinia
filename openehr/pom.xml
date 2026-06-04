@@ -15,9 +15,13 @@
     <url>https://github.com/JayPi4c/Tinia</url>
 
     <properties>
-        <ehrbase.openehr.sdk.version>2.27.0</ehrbase.openehr.sdk.version>
+        <ehrbase.openehr.sdk.version>2.31.0</ehrbase.openehr.sdk.version>
     </properties>
     <dependencies>
+        <dependency>
+            <groupId>de.jaypi4c.tinia</groupId>
+            <artifactId>common</artifactId>
+        </dependency>
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-amqp</artifactId>
@@ -27,11 +31,10 @@
             <artifactId>client</artifactId>
             <version>${ehrbase.openehr.sdk.version}</version>
         </dependency>
-
         <dependency>
-            <groupId>com.google.code.gson</groupId>
-            <artifactId>gson</artifactId>
-            <version>2.13.2</version>
+            <groupId>com.fasterxml.jackson.core</groupId>
+            <artifactId>jackson-databind</artifactId>
+            <version>2.19.4</version>
         </dependency>
     </dependencies>
 
