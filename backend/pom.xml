@@ -12,7 +12,7 @@
 
     <name>Backend</name>
     <properties>
-        <springdoc.version>3.0.2</springdoc.version>
+        <springdoc.version>3.0.3</springdoc.version>
         <pdfbox.version>2.0.36</pdfbox.version>
     </properties>
 

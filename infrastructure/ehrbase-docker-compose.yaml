@@ -1,7 +1,7 @@
 # https://docs.ehrbase.org/docs/EHRbase/Installation
 services:
   ehrbase:
-    image: ehrbase/ehrbase:2.30.0
+    image: ehrbase/ehrbase:2.31.0
     ports:
       - "8082:8080"
     environment:

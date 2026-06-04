@@ -1,9 +1,9 @@
-FROM maven:3.9.6-eclipse-temurin-21-alpine AS builder
+FROM maven:3.9.16-eclipse-temurin-25-alpine AS builder
 WORKDIR /opt/app
 COPY . .
 RUN mvn -P web package -B -pl web -am
 
-FROM eclipse-temurin:21-jre-alpine
+FROM eclipse-temurin:25-jre-alpine
 WORKDIR /opt/app
 
 # Create a group and user

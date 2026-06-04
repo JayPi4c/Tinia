@@ -5,7 +5,7 @@
     <parent>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-starter-parent</artifactId>
-        <version>4.0.5</version>
+        <version>4.0.6</version>
         <relativePath/>
     </parent>
 
@@ -17,7 +17,7 @@
     <name>Tinia</name>
     <description>BMP Converter</description>
 
-    <url>https://github.com/JayPi4c/Tinia</url>
+    <url>https://git.jaypi4c.de/JayPi4c/Tinia</url>
 
     <modules>
         <module>web</module>
@@ -32,7 +32,7 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <revision>0.0.1-SNAPSHOT</revision>
         <java.version>25</java.version>
-        <org.mockito.version>5.10.0</org.mockito.version>
+        <org.mockito.version>5.23.0</org.mockito.version>
     </properties>
 
     <dependencies>
@@ -55,7 +55,6 @@
         <dependency>
             <groupId>junit</groupId>
             <artifactId>junit</artifactId>
-            <version>3.8.1</version>
             <scope>test</scope>
         </dependency>
     </dependencies>
