@@ -70,6 +70,6 @@ services:
       - backend
 
   redis:
-    image: redis:7.0
+    image: redis:7.4
   rabbitmq:
     image: rabbitmq:3
