@@ -1,4 +1,4 @@
-package de.jaypi4c.tinia.web.config;
+package de.jaypi4c.tinia.frontend.config;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

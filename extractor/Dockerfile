@@ -5,11 +5,12 @@ FROM eclipse-temurin:25-jdk-alpine AS build
 WORKDIR /app
 
 COPY . .
+
 # Ensure Maven wrapper is executable
 RUN chmod +x ./mvnw
 
 # Build the application
-RUN ./mvnw clean package -pl backend -am -DskipTests --activate-profiles docker
+RUN ./mvnw clean package -pl extractor -am -DskipTests --activate-profiles docker
 
 # Phase 2: Runtime
 FROM eclipse-temurin:25-jre-alpine
@@ -23,13 +24,11 @@ RUN addgroup -S tinia && \
     chown -R tinia:tinia /app
 
 # Copy the JAR from the build stage
-COPY --from=build /app/backend/target/backend.jar backend.jar
+COPY --from=build /app/extractor/target/extractor.jar extractor.jar
 
-# Change to 'tinia' user
+# Change to 'demo' user
 USER tinia
-
-EXPOSE 8081
 
 # Run the application
 ENV SPRING_PROFILES_ACTIVE=docker
-CMD java -jar backend.jar
+CMD java -jar extractor.jar

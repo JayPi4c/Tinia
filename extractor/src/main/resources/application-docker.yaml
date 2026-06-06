@@ -1,1 +1,2 @@
 tinia.extractor.io.data-folder: /io/data/
+spring.rabbitmq.host: rabbitmq

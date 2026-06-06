@@ -9,7 +9,6 @@
 
     <groupId>de.jaypi4c.tinia</groupId>
     <artifactId>extractor</artifactId>
-    <version>0.0.1-SNAPSHOT</version>
     <packaging>jar</packaging>
 
     <name>Extractor</name>
@@ -46,7 +45,7 @@
             <version>1.15.0</version>
         </dependency>
         <dependency>
-            <groupId>com.fasterxml.jackson.core</groupId>
+            <groupId>tools.jackson.core</groupId>
             <artifactId>jackson-databind</artifactId>
         </dependency>
     </dependencies>

@@ -20,7 +20,7 @@
     <url>https://git.jaypi4c.de/JayPi4c/Tinia</url>
 
     <modules>
-        <module>web</module>
+        <module>frontend</module>
         <module>backend</module>
         <module>openehr</module>
         <module>extractor</module>

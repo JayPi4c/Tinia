@@ -6,7 +6,7 @@
 	<!-- Bootstrap CSS -->
 	<link href="/webjars/bootstrap/css/bootstrap.min.css" rel="stylesheet" type="text/css">
 	<script>
-        const BACKEND_URL = "[[${@environment.getProperty('backend.url')}]]";
+        const BACKEND_URL = "[[${@environment.getProperty('tinia.backend.url')}]]";
 	</script>
 	<link href="/favicon.svg" rel="icon" type="image/svg+xml">
 </head>
@@ -55,7 +55,7 @@
         formData.append('processOcr', processOcrCheckbox.checked);
 
         try {
-            const response = await fetch('http://localhost:8081/api/v1/bmp/upload', {
+            const response = await fetch(`${BACKEND_URL}/api/v1/bmp/upload`, {
                 method: 'POST',
                 body: formData
             });

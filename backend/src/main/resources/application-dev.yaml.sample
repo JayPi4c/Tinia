@@ -1,0 +1,2 @@
+# declare frontend URL for CORS
+tinia.security.allowed-origins: "http://localhost:8080"
