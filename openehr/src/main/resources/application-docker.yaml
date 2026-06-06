@@ -1,0 +1,6 @@
+tinia:
+  openehr:
+    username: ehrbase-user
+    password: SuperSecretPassword
+    url: http://ehrbase:8080/ehrbase/
+spring.rabbitmq.host: rabbitmq
