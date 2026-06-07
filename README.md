@@ -1,46 +1,42 @@
-# Medikations-Pipeline
+# Tinia
 
-## Docker setup
+Based on a bachelor thesis, Tinia is a software to extract table based medication plans from PDF files and store them in
+an interoperable format (openEHR).
 
-Ehrbase per Docker starten:
+## Quickstart
 
-```bash
-cd resources/docker/ehrbase
-docker compose up -d
-```
+Tinia provides a `docker-compose.yaml` file which can be used to quickly set up all services. Simply enter the
+`infrastructure` folder and execute `docker compose up`
 
-Swagger kann anschließend
-unter [localhost:8080/ehrbase/swagger-ui/index.html](localhost:8080/ehrbase/swagger-ui/index.html) aufgerufen werden.
+Once all services are started, you can open a browser at http://localhost and upload a PDF. Once processing is done, you
+can start exploring the data either directly within EHRbase (http://localhost/ehrbase) with swagger or any other tool of
+your choice or use the dedicated frontend at http://localhost/openehr.
 
-Eine Anmeldung erfolgt mit den folgenden Informationen:<br>
-**Username:** ehrbase-user<br>
-**Password:** SuperSecretPassword
+## Templates
 
-Da die neueren Versionen von Ehrbase Probleme mit Swagger haben, wurde die Version 0.30.0 verwendet.
+The required template is provided by the project and upon start Tinia will check if it is present in the EHR repository.
+If not, it automatically uploads the template.
 
-## Hochladen eines Templates
+## Architecture
 
-Wähle ein Template in OPT Form (XML) von einem CKM aus.
+Tinia uses a microservice architecture. Currently, the following services are present:
 
-Mit beispielsweise Postman kann anschließend eine Post-Request
-an http://localhost:8080/ehrbase/rest/openehr/v1/definition/template/adl1.4
-gesendet werden. Hier muss im Header der Parameter "Content-Type" auf "application/xml" gesetzt werden. Im Body muss das
-Template eingefügt werden. Außerdem muss bei Authorization der Type Basic Auth mit den oben genannten Credentials
-ausgewählt werden.
+- **Backend:** The Entry / Management node of the app. It will handle the requests and distribution to other services
+- **Frontend:** The Frontend node for easier user experience with Tinia
+- **Extractor:** Worker node to analyze image files and extract table data from the uploaded image
+- **Validator:** Worker node to validate extracted information with external databases/services
+- **OpenEHR:** Worker node to upload parsed medication data to an EHR repository
 
-Für das Template des Medikationsplans übernimmt die Pipeline diese Aufgabe automatisch und überprüft bei jeden neuen
-Start, ob das Template noch in EHRBase vorhanden ist.
+Due to the architecture, any node can be deployed multiple times and the work will be distributed to the workers as
+need.
+That being said, especially multiple Extractor nodes are advised, as they have the biggest workload to handle.
 
-## OpenEHR SDK Nutzung
+## Open Tasks
 
-Um Compositions zu EhrBase zu schicken, wird das OpenEHR SDK verwendet. Hierzu muss zunächst das bereits hochgeladene
-Template in eine Java-Klasse umgewandelt werden. Dies kann mit dem generator von EhrBase gemacht werden. Als wichtige
-Anleitung für die Nutzung des SDK wurde dieses [Tutorial-Video](https://www.youtube.com/watch?v=3SykJkbnT34) verwendet.
-Der Generator ist Teil des openEHR_SDKs und kann selbst kompiliert werden. Hierzu muss das Projekt von
-[GitHub](https://github.com/ehrbase/openEHR_SDK) geklont werden. Anschließend kann im Verzeichnis `generator` der Befehl
-`mvn clean install` ausgeführt werden. Im Unterverzeichnis `target` wird dann `generator-2.x.y.jar` erstellt. Diese
-Jar-Datei kann anschließend mit dem
-Befehl `java -jar generator-2.x.y.jar -opt /path/to/template/Nephro_Medikation.opt -out /path/to/save/folder -package com.jaypi4c.ba.pipeline.medicationplan.openehr.compositions`
-ausgeführt werden und erzeugt dabei die Java-Klassen für das Template.
-
-Die generierten Klassen können dem Package entsprechend dem Projekt hinzugefügt werden.
+- [ ] Provide proper docker swarm setup
+- [ ] Extend Wiki
+- [ ] Add OCR node to not rely on OCR preprocessed data
+- [ ] Add proper CI/CD workflow to build and push docker images upon releases
+- [ ] Add SSE Updating process once processing is done
+- [ ] Finish frontend page about compositions
+- [ ] ...
