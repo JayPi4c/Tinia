@@ -1,5 +1,5 @@
 # Phase 1: Build
-FROM eclipse-temurin:25-jdk-alpine AS build
+FROM eclipse-temurin:26-jdk-alpine AS build
 
 # Set work directory
 WORKDIR /app
@@ -13,7 +13,7 @@ RUN chmod +x ./mvnw
 RUN ./mvnw clean package -pl frontend -am -DskipTests --activate-profiles docker
 
 # Phase 2: Runtime
-FROM eclipse-temurin:25-jre-alpine
+FROM eclipse-temurin:26-jre-alpine
 
 # Set work directory
 WORKDIR /app
