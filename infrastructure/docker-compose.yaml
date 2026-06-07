@@ -72,4 +72,4 @@ services:
   redis:
     image: redis:7.4
   rabbitmq:
-    image: rabbitmq:3
+    image: rabbitmq:4
