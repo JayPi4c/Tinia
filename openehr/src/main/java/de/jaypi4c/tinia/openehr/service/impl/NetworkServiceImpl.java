@@ -1,13 +1,11 @@
 package de.jaypi4c.tinia.openehr.service.impl;
 
-import com.nedap.archie.rm.RMObject;
 import com.nedap.archie.rm.datavalues.DvText;
 import com.nedap.archie.rm.ehr.EhrStatus;
 import com.nedap.archie.rm.generic.PartySelf;
 import com.nedap.archie.rm.support.identification.GenericId;
 import com.nedap.archie.rm.support.identification.PartyRef;
 import de.jaypi4c.tinia.openehr.composition.CompositionFactory;
-import de.jaypi4c.tinia.openehr.entities.nephromedikationcomposition.NephroMedikationComposition;
 import de.jaypi4c.tinia.openehr.service.NetworkService;
 import jakarta.annotation.PostConstruct;
 import lombok.RequiredArgsConstructor;
@@ -16,11 +14,7 @@ import org.ehrbase.openehr.sdk.client.openehrclient.CompositionEndpoint;
 import org.ehrbase.openehr.sdk.client.openehrclient.EhrEndpoint;
 import org.ehrbase.openehr.sdk.client.openehrclient.OpenEhrClient;
 import org.ehrbase.openehr.sdk.generator.commons.interfaces.CompositionEntity;
-import org.ehrbase.openehr.sdk.serialisation.RMDataFormat;
-import org.ehrbase.openehr.sdk.serialisation.dto.GeneratedDtoToRmConverter;
-import org.ehrbase.openehr.sdk.serialisation.walker.defaultvalues.DefaultValues;
 import org.ehrbase.openehr.sdk.util.exception.WrongStatusCodeException;
-import org.ehrbase.openehr.sdk.webtemplate.templateprovider.TemplateProvider;
 import org.springframework.stereotype.Service;
 
 import java.util.UUID;
@@ -31,7 +25,6 @@ import java.util.UUID;
 public class NetworkServiceImpl implements NetworkService {
 
     private final OpenEhrClient ehrClient;
-    private final TemplateProvider templateProvider;
     private final CompositionFactory<?> compositionFactory;
     private EhrEndpoint ehrEndpoint;
 
@@ -39,12 +32,6 @@ public class NetworkServiceImpl implements NetworkService {
     private void init() {
         ehrEndpoint = ehrClient.ehrEndpoint();
         ehrClient.templateEndpoint().ensureExistence(compositionFactory.getTemplateId());
-    }
-
-    public String convertToJson(NephroMedikationComposition composition) {
-        RMObject rmObject = new GeneratedDtoToRmConverter(templateProvider, _ -> new DefaultValues())
-                .toRMObject(composition);
-        return RMDataFormat.canonicalJSON().marshal(rmObject);
     }
 
     @Override

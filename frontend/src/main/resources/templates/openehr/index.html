@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html data-bs-theme="dark" lang="de" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>OpenEHR</title>
+    <!-- Bootstrap CSS -->
+    <link href="/webjars/bootstrap/css/bootstrap.min.css" rel="stylesheet" type="text/css">
+    <link href="/favicon.svg" rel="icon" type="image/svg+xml">
+</head>
+<body>
+<div class="container mt-5">
+    <h1 class="mb-4">View all data</h1>
+
+    <!-- Alert messages -->
+    <div id="alertPlaceholder"></div>
+
+    <table style="width:80%" border="1"
+           class="table table-striped table-responsive-md">
+        <thead>
+        <tr>
+            <th>EHR ID</th>
+            <th>Composition ID</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="entry:${entries}">
+            <td th:text="${entry.ehrId}"></td>
+            <td>
+                <a th:href="@{/openehr/ehr/{ehrId}/composition/{compositionID}(
+                        ehrId=${entry.ehrId},
+                        compositionID=${entry.compositionId}
+                      )}"
+                   th:text="${entry.compositionId}">
+                </a>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+
+
+</div>
+</body>
+</html>
