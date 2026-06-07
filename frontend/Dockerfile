@@ -32,4 +32,5 @@ EXPOSE 8080
 
 
 # Run the application
+ENV SPRING_PROFILES_ACTIVE=docker
 CMD java -jar frontend.jar
