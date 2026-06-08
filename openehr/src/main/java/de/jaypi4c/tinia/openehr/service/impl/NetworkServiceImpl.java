@@ -5,13 +5,10 @@ import com.nedap.archie.rm.ehr.EhrStatus;
 import com.nedap.archie.rm.generic.PartySelf;
 import com.nedap.archie.rm.support.identification.GenericId;
 import com.nedap.archie.rm.support.identification.PartyRef;
-import de.jaypi4c.tinia.openehr.composition.CompositionFactory;
 import de.jaypi4c.tinia.openehr.service.NetworkService;
-import jakarta.annotation.PostConstruct;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.ehrbase.openehr.sdk.client.openehrclient.CompositionEndpoint;
-import org.ehrbase.openehr.sdk.client.openehrclient.EhrEndpoint;
 import org.ehrbase.openehr.sdk.client.openehrclient.OpenEhrClient;
 import org.ehrbase.openehr.sdk.generator.commons.interfaces.CompositionEntity;
 import org.ehrbase.openehr.sdk.util.exception.WrongStatusCodeException;
@@ -25,20 +22,12 @@ import java.util.UUID;
 public class NetworkServiceImpl implements NetworkService {
 
     private final OpenEhrClient ehrClient;
-    private final CompositionFactory<?> compositionFactory;
-    private EhrEndpoint ehrEndpoint;
-
-    @PostConstruct
-    private void init() {
-        ehrEndpoint = ehrClient.ehrEndpoint();
-        ehrClient.templateEndpoint().ensureExistence(compositionFactory.getTemplateId());
-    }
 
     @Override
     public CompositionEntity sendData(CompositionEntity composition) {
         // TODO: implement logic to only create one EHR per patient
         UUID applicationUserID = UUID.randomUUID(); // TODO: change to jobID
-        UUID ehrID = ehrEndpoint.createEhr(createEhrStatus(applicationUserID));
+        UUID ehrID = ehrClient.ehrEndpoint().createEhr(createEhrStatus(applicationUserID));
         try {
             CompositionEndpoint compositionEndpoint = ehrClient.compositionEndpoint(ehrID);
             return compositionEndpoint.mergeCompositionEntity(composition);
