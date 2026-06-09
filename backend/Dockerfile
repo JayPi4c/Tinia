@@ -32,4 +32,4 @@ EXPOSE 8081
 
 # Run the application
 ENV SPRING_PROFILES_ACTIVE=docker
-CMD java -jar backend.jar
+CMD ["java", "-jar", "backend.jar"]

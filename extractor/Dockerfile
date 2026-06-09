@@ -31,4 +31,4 @@ USER tinia
 
 # Run the application
 ENV SPRING_PROFILES_ACTIVE=docker
-CMD java -jar extractor.jar
+CMD ["java", "-jar", "extractor.jar"]
