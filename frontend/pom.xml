@@ -14,7 +14,7 @@
     <description>Frontend implementation for Tinia</description>
 
     <properties>
-        <ehrbase.openehr.sdk.version>2.31.0</ehrbase.openehr.sdk.version>
+        <ehrbase.openehr.sdk.version>2.32.0</ehrbase.openehr.sdk.version>
     </properties>
 
     <dependencies>
