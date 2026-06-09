@@ -31,4 +31,4 @@ USER tinia
 
 # Run the application
 ENV SPRING_PROFILES_ACTIVE=docker
-CMD java -jar openehr.jar
+CMD ["java", "-jar", "openehr.jar"]
