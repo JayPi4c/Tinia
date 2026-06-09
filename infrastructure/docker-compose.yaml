@@ -38,7 +38,7 @@ services:
        - rabbitmq
 
   ehrbase:
-    image: ehrbase/ehrbase:2.31.0
+    image: ehrbase/ehrbase:2.32.0
     environment:
       DB_URL: jdbc:postgresql://ehrdb:5432/ehrbase
       DB_USER_ADMIN: ehrbase
