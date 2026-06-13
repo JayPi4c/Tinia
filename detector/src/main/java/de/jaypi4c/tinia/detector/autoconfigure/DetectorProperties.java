@@ -1,11 +1,13 @@
-package de.jaypi4c.tinia.extractor.autoconfigure;
+package de.jaypi4c.tinia.detector.autoconfigure;
 
 import lombok.Data;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 
 @Data
-@ConfigurationProperties(prefix = "tinia.extractor")
-public class ExtractorProperties {
+@ConfigurationProperties(prefix = "tinia.detector")
+public class DetectorProperties {
+
+    private boolean skipWhenNoHeaderFound = true;
 
     private Pdf pdf = new Pdf();
 

@@ -1,4 +1,4 @@
-package de.jaypi4c.tinia.extractor.recognition.preprocessing;
+package de.jaypi4c.tinia.detector.recognition;
 
 import lombok.extern.slf4j.Slf4j;
 

@@ -10,7 +10,7 @@ COPY . .
 RUN chmod +x ./mvnw
 
 # Build the application
-RUN ./mvnw clean package -pl extractor -am -DskipTests --activate-profiles docker
+RUN ./mvnw clean package -pl detector -am -DskipTests --activate-profiles docker
 
 # Phase 2: Runtime
 FROM eclipse-temurin:25-jre-alpine
@@ -24,11 +24,11 @@ RUN addgroup -S tinia && \
     chown -R tinia:tinia /app
 
 # Copy the JAR from the build stage
-COPY --from=build /app/extractor/target/extractor.jar extractor.jar
+COPY --from=build /app/detector/target/detector.jar detector.jar
 
 # Change to 'demo' user
 USER tinia
 
 # Run the application
 ENV SPRING_PROFILES_ACTIVE=docker
-CMD ["java", "-jar", "extractor.jar"]
+CMD ["java", "-jar", "detector.jar"]

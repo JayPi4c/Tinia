@@ -1,9 +1,6 @@
-package de.jaypi4c.tinia.extractor.recognition;
+package de.jaypi4c.tinia.detector.recognition;
 
-import de.jaypi4c.tinia.extractor.autoconfigure.ExtractorProperties;
-import de.jaypi4c.tinia.extractor.recognition.preprocessing.CellIdentifier;
-import de.jaypi4c.tinia.extractor.recognition.preprocessing.ImageUtils;
-import de.jaypi4c.tinia.extractor.recognition.preprocessing.LineExtractor;
+import de.jaypi4c.tinia.detector.autoconfigure.DetectorProperties;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
@@ -22,25 +19,17 @@ import java.util.regex.Pattern;
 @RequiredArgsConstructor
 public class TableExtractor {
 
-    /*
-       for (int y = 0; y < image.getHeight(); y++) {
-            for (int x = 0; x < image.getWidth(); x++) {
-        If possible use always this order as it's faster:
-        https://stackoverflow.com/a/7750416
-     */
-
-
     private static final Pattern DATE_PATTERN = Pattern.compile("\\d{1,2}[.,]\\d{1,2}[.,]\\d{2,4}");
     private static final String TITLE = "Medikationsplan";
-    private final LineExtractor le;
-    private final CellIdentifier ci;
+    private final LineExtractor lineExtractor;
+    private final CellIdentifier cellIdentifier;
 
-    private final ExtractorProperties extractorProperties;
+    private final DetectorProperties detectorProperties;
 
 
     /**
      * Starts the execution of the subtasks
-     * - load image from pdf page
+     * - load image from PDF page
      * - extracting the Lines
      * - finding the intersections
      * - labeling the intersections and finding the cells
@@ -52,7 +41,7 @@ public class TableExtractor {
         // Check if title is present
         if (!rawPageText.contains(TITLE)) {
             log.debug("No title found.");
-            if (extractorProperties.isSkipWhenNoHeaderFound()) {
+            if (detectorProperties.isSkipWhenNoHeaderFound()) {
                 log.debug("Skipping page because no header was found.");
                 return new ExtractionResult(null, null);
             }
@@ -72,11 +61,11 @@ public class TableExtractor {
         int imageHeight = originalImage.getHeight();
         String filename = fileId.toString();
 
-        List<Line2D> lines = le.execute(originalImage, filename, page);
+        List<Line2D> lines = lineExtractor.execute(originalImage, filename, page);
 
         BufferedImage imgInEdit = ImageUtils.createImageWithLines(imageWidth, imageHeight, lines);
 
-        List<Rectangle2D> rawCells = ci.execute(imgInEdit, lines, filename, page);
+        List<Rectangle2D> rawCells = cellIdentifier.execute(imgInEdit, lines, filename, page);
 
         table = createTable(rawCells);
         return new ExtractionResult(table, date);

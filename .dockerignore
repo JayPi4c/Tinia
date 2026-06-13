@@ -1,6 +1,7 @@
 .forgejo/
 .idea/
 renovate.json
+target/
 
 application-*.yaml
 !application-docker.yaml

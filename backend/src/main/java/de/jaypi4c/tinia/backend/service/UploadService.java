@@ -1,6 +1,6 @@
 package de.jaypi4c.tinia.backend.service;
 
-import de.jaypi4c.tinia.common.dto.internal.ExtractorJob;
+import de.jaypi4c.tinia.common.dto.internal.DetectorJob;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.pdfbox.pdmodel.PDDocument;
@@ -12,7 +12,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.UUID;
 
-import static de.jaypi4c.tinia.common.config.RabbitConfig.EXTRACTOR_JOBS_QUEUE;
+import static de.jaypi4c.tinia.common.config.RabbitConfig.DETECTOR_JOBS_QUEUE;
 
 @Slf4j
 @Service
@@ -22,13 +22,18 @@ public class UploadService {
     private final RabbitTemplate rabbitTemplate;
 
     public void process(MultipartFile file, boolean ocr) {
-        UUID fileId = UUID.randomUUID();
+        UUID jobId = UUID.randomUUID();
         String filename = file.getOriginalFilename();
+
+        if (ocr) {
+            log.info("User requested OCR preprocessing. This is not implemented yet, so we just continue with default processing, which will not work. Anyway, cells can still be detected, but no text can be extracted as of yet.");
+        }
+
         try {
             PDDocument document = loadDocument(file.getInputStream());
 
             for (int page = 0; page < document.getNumberOfPages(); page++) {
-                rabbitTemplate.convertAndSend(EXTRACTOR_JOBS_QUEUE, new ExtractorJob(fileId, page, file.getBytes()));
+                rabbitTemplate.convertAndSend(DETECTOR_JOBS_QUEUE, new DetectorJob(jobId, page, file.getBytes()));
             }
         } catch (IOException e) {
             log.error("Failed to load document", e);
