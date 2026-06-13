@@ -1,0 +1,6 @@
+.forgejo/
+.idea/
+renovate.json
+
+application-*.yaml
+!application-docker.yaml
