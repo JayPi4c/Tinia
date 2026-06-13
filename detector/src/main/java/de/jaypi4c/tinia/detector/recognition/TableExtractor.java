@@ -19,6 +19,13 @@ import java.util.regex.Pattern;
 @RequiredArgsConstructor
 public class TableExtractor {
 
+    /*
+       for (int y = 0; y < image.getHeight(); y++) {
+            for (int x = 0; x < image.getWidth(); x++) {
+        If possible use always this order as it's faster:
+        https://stackoverflow.com/a/7750416
+     */
+
     private static final Pattern DATE_PATTERN = Pattern.compile("\\d{1,2}[.,]\\d{1,2}[.,]\\d{2,4}");
     private static final String TITLE = "Medikationsplan";
     private final LineExtractor lineExtractor;
