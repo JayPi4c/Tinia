@@ -35,4 +35,14 @@ public class RabbitConfig {
         return new Queue(OPENEHR_RESULTS_QUEUE, true);
     }
 
+    @Bean
+    public Queue detectorJobQueue() {
+        return new Queue(DETECTOR_JOBS_QUEUE, true);
+    }
+
+    @Bean
+    public Queue detectorResultsQueue() {
+        return new Queue(DETECTOR_RESULTS_QUEUE, true);
+    }
+
 }

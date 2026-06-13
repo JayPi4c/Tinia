@@ -30,5 +30,6 @@ build_and_push() {
 
 build_and_push backend backend/Dockerfile
 build_and_push frontend frontend/Dockerfile
+build_and_push detector detector/Dockerfile
 build_and_push extractor extractor/Dockerfile
 build_and_push openehr openehr/Dockerfile

@@ -1,7 +1,6 @@
-package de.jaypi4c.tinia.extractor.utils;
+package de.jaypi4c.tinia.detector.recognition;
 
-import de.jaypi4c.tinia.extractor.autoconfigure.DebugProperties;
-import de.jaypi4c.tinia.extractor.recognition.preprocessing.ImageUtils;
+import de.jaypi4c.tinia.detector.autoconfigure.DebugProperties;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;

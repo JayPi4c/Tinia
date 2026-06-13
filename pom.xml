@@ -23,6 +23,7 @@
         <module>frontend</module>
         <module>backend</module>
         <module>openehr</module>
+        <module>detector</module>
         <module>extractor</module>
         <module>validator</module>
         <module>common</module>
@@ -33,6 +34,7 @@
         <revision>0.0.1-SNAPSHOT</revision>
         <java.version>25</java.version>
         <org.mockito.version>5.23.0</org.mockito.version>
+        <pdfbox.version>2.0.36</pdfbox.version>
     </properties>
 
     <dependencies>
@@ -65,6 +67,12 @@
                 <groupId>de.jaypi4c.tinia</groupId>
                 <artifactId>common</artifactId>
                 <version>${revision}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>org.apache.pdfbox</groupId>
+                <artifactId>pdfbox</artifactId>
+                <version>${pdfbox.version}</version>
             </dependency>
         </dependencies>
     </dependencyManagement>

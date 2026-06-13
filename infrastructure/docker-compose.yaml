@@ -13,29 +13,38 @@ services:
     environment:
       TINIA_SECURITY_ALLOWED_ORIGINS: "http://localhost"
     depends_on:
-      - redis
-      - rabbitmq
+      rabbitmq:
+        condition: service_healthy
+  detector:
+    build:
+      context: ..
+      dockerfile: detector/Dockerfile
+    depends_on:
+      rabbitmq:
+        condition: service_healthy
+
   extractor:
     build:
       context: ..
       dockerfile: extractor/Dockerfile
     depends_on:
-      - backend
-      - rabbitmq
-#  extractor2:
-#    build:
-#      context: ..
-#      dockerfile: extractor/Dockerfile
-#    depends_on:
-#      - backend
-#      - rabbitmq
+      rabbitmq:
+        condition: service_healthy
+  #  extractor2:
+  #    build:
+  #      context: ..
+  #      dockerfile: extractor/Dockerfile
+  #    depends_on:
+  #      rabbitmq:
+  #        condition: service_healthy
+
   openehr:
     build:
       context: ..
       dockerfile: openehr/Dockerfile
     depends_on:
-       - backend
-       - rabbitmq
+      rabbitmq:
+        condition: service_healthy
 
   ehrbase:
     image: ehrbase/ehrbase:2.32.0
@@ -69,7 +78,10 @@ services:
       - frontend
       - backend
 
-  redis:
-    image: redis:7.4
   rabbitmq:
     image: rabbitmq:3
+    healthcheck:
+      test: rabbitmq-diagnostics -q ping
+      interval: 10s
+      timeout: 10s
+      retries: 3

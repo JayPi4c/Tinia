@@ -16,15 +16,14 @@ import static de.jaypi4c.tinia.common.config.RabbitConfig.OPENEHR_JOBS_QUEUE;
 @RequiredArgsConstructor
 public class ExtractorController {
 
-
     private final RabbitTemplate rabbitTemplate;
 
     @RabbitListener(queues = EXTRACTOR_RESULTS_QUEUE)
     public void consume(ExtractorResult extractorResult) {
 
         if (extractorResult.hasResult()) {
-            log.info("Got successful result from extractor");
-            rabbitTemplate.convertAndSend(OPENEHR_JOBS_QUEUE, new OpenEhrJob(extractorResult.fileId(), extractorResult.page(), extractorResult.result(), extractorResult.date(), extractorResult.metadata()));
+            log.info("Got successful result from extractor. Forwarding to OpenEHR");
+            rabbitTemplate.convertAndSend(OPENEHR_JOBS_QUEUE, new OpenEhrJob(extractorResult.jobId(), extractorResult.page(), extractorResult.result(), extractorResult.date(), extractorResult.metadata()));
         } else log.info("Got unsuccessful result from extractor");
 
         // TODO: send to validation Service, if validation services are installed (ie reachable by rabbit Mq)
