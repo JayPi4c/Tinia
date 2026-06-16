@@ -3,11 +3,16 @@ package de.jaypi4c.tinia.detector.autoconfigure;
 import lombok.Data;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @Data
 @ConfigurationProperties(prefix = "tinia.detector")
 public class DetectorProperties {
 
     private boolean skipWhenNoHeaderFound = true;
+
+    private List<String> titles = new ArrayList<>();
 
     private Pdf pdf = new Pdf();
 

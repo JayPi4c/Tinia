@@ -3,5 +3,6 @@
 renovate.json
 target/
 
+io/
 application-*.yaml
 !application-docker.yaml

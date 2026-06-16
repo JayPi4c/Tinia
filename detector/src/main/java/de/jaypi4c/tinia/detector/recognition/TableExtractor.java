@@ -27,7 +27,6 @@ public class TableExtractor {
      */
 
     private static final Pattern DATE_PATTERN = Pattern.compile("\\d{1,2}[.,]\\d{1,2}[.,]\\d{2,4}");
-    private static final String TITLE = "Medikationsplan";
     private final LineExtractor lineExtractor;
     private final CellIdentifier cellIdentifier;
 
@@ -46,7 +45,7 @@ public class TableExtractor {
         Rectangle2D[][] table = null;
 
         // Check if title is present
-        if (!rawPageText.contains(TITLE)) {
+        if (detectorProperties.getTitles().stream().noneMatch(rawPageText::contains)) {
             log.debug("No title found.");
             if (detectorProperties.isSkipWhenNoHeaderFound()) {
                 log.debug("Skipping page because no header was found.");
@@ -98,21 +97,11 @@ public class TableExtractor {
             }
         }
 
+        // convert row list to row array
         List<Rectangle2D[]> tableRows = new ArrayList<>();
-
-        final int EXPECTED_NUM_CELLS_DOSISSCHEMA_SEPARATED = 11;
-        final int EXPECTED_NUM_CELLS_DOSISSCHEMA_COMBINED = 8;
         for (List<Rectangle2D> row : rows) {
-            if (row.size() == EXPECTED_NUM_CELLS_DOSISSCHEMA_SEPARATED || row.size() == EXPECTED_NUM_CELLS_DOSISSCHEMA_COMBINED) {
-                row.sort((o1, o2) -> (int) (o1.getX() - o2.getX()));
-                tableRows.add(row.toArray(new Rectangle2D[0]));
-            } else if (Math.abs(row.size() - EXPECTED_NUM_CELLS_DOSISSCHEMA_SEPARATED) > 3) {
-                continue; // skip the row as there are too many or too few cells
-            } else {
-                log.debug("Row does not match expected number of cells. Maybe some cells have not been detected? Found: {}", row.size());
-                // TODO find missing cells
-            }
-
+            row.sort((o1, o2) -> (int) (o1.getX() - o2.getX()));
+            tableRows.add(row.toArray(new Rectangle2D[0]));
         }
 
         return tableRows.toArray(new Rectangle2D[0][0]);

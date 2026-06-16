@@ -43,22 +43,22 @@ public class CellReader {
 
         try {
             PDFTextStripperByArea textStripper = new PDFTextStripperByArea();
-            for (int i = 0; i < table.length; i++) {
-                for (int j = 0; j < table[i].length; j++) {
-                    Rectangle2D rect = transformToPDFRectangle(table, i, j);
+            for (int row = 0; row < table.length; row++) {
+                for (int cell = 0; cell < table[row].length; cell++) {
+                    Rectangle2D rect = transformToPDFRectangle(table, row, cell);
 
-                    textStripper.addRegion(i + "_" + j, rect);
+                    textStripper.addRegion(row + "_" + cell, rect);
                 }
             }
 
 
             textStripper.extractRegions(docPage);
 
-            for (int i = 0; i < table.length; i++) {
-                for (int j = 0; j < table[i].length; j++) {
-                    String textForRegion = textStripper.getTextForRegion(i + "_" + j);
+            for (int row = 0; row < table.length; row++) {
+                for (int cell = 0; cell < table[row].length; cell++) {
+                    String textForRegion = textStripper.getTextForRegion(row + "_" + cell);
                     textForRegion = textForRegion.replace("\n", " ").replace("\r", " ");
-                    results[i][j] = textForRegion;
+                    results[row][cell] = textForRegion;
                 }
             }
         } catch (IOException e) {
@@ -102,6 +102,8 @@ public class CellReader {
     }
 
     private boolean verifyHeader(String[] header) {
+        if (header.length < 4) // less than 4 columns is likely not a table we can use
+            return false;
         int totalDistance = 0;
         int totalMatches = 0;
         for (String word : header) {
@@ -114,6 +116,11 @@ public class CellReader {
     }
 
     private boolean verifyRow(String[] row) {
+        String rowString = String.join(" ", row);
+        return rowString.replace(" ", "").length() >= 10; // less than 10 characters is probably an almost empty row with no information
+    }
+
+    private boolean verifyBMPRow(String[] row) {
         if (row.length != 11 && row.length != 8) {
             return false;
         }
@@ -123,7 +130,6 @@ public class CellReader {
         }
         return !row[3].isBlank(); // Darreichungsform darf nicht leer sein.
     }
-
 
     private Rectangle2D transformToPDFRectangle(Rectangle2D[][] table, int i, int j) {
         final int DPI = extractorProperties.getPdf().getDpi();
