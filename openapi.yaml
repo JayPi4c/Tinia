@@ -8,9 +8,9 @@ servers:
   - url: http://localhost:8080/api/v1
 
 paths:
-  /bmp/upload:
+  /upload:
     post:
-      summary: Upload a file containing BMP
+      summary: Upload a file containing a medication plan
       description:
         tbd
       requestBody:
@@ -33,5 +33,49 @@ paths:
       responses:
         '202':
           description: File accepted for processing
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Task'
         '400':
           description: Invalid input
+
+  /upload/jobs/{jobId}/pages/{pageNumber}/image:
+    get:
+      summary: Retrieve a rendered page image
+      description: Returns the rendered image of a page belonging to a processing job.
+      parameters:
+        - name: jobId
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+        - name: pageNumber
+          in: path
+          required: true
+          schema:
+            type: integer
+            minimum: 0
+      responses:
+        '200':
+          description: Rendered page image
+          content:
+            image/png:
+              schema:
+                type: string
+                format: binary
+        '404':
+          description: Job or page not found
+        '410':
+          description: Job results no longer available
+components:
+  schemas:
+    Task:
+      type: object
+      properties:
+        jobId:
+          type: string
+          format: uuid
+      required:
+        - jobId

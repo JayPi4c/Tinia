@@ -1,38 +1,63 @@
 <!DOCTYPE html>
 <html data-bs-theme="dark" lang="de" xmlns:th="http://www.thymeleaf.org">
 <head>
-	<meta charset="UTF-8">
-	<title>Upload PDF or Image</title>
-	<!-- Bootstrap CSS -->
-	<link href="/webjars/bootstrap/css/bootstrap.min.css" rel="stylesheet" type="text/css">
-	<script>
+    <meta charset="UTF-8">
+    <title>Upload PDF or Image</title>
+    <!-- Bootstrap CSS -->
+    <link href="/webjars/bootstrap/css/bootstrap.min.css" rel="stylesheet" type="text/css">
+    <script>
         const BACKEND_URL = "[[${@environment.getProperty('tinia.backend.url')}]]";
-	</script>
-	<link href="/favicon.svg" rel="icon" type="image/svg+xml">
+    </script>
+    <link href="/favicon.svg" rel="icon" type="image/svg+xml">
 </head>
 <body>
 <div class="container mt-5">
-	<h1 class="mb-4">Upload PDF or Image</h1>
+    <h1 class="mb-4">Upload PDF or Image</h1>
 
-	<!-- Alert messages -->
-	<div id="alertPlaceholder"></div>
+    <!-- Alert messages -->
+    <div id="alertPlaceholder"></div>
 
-	<!-- Upload form -->
-	<form class="border p-4 rounded" id="uploadForm">
-		<div class="mb-3">
-			<label class="form-label" for="file">Select file (PDF or image)</label>
-			<input accept=".pdf,image/*" class="form-control" id="file" name="file" required type="file">
-		</div>
+    <!-- Upload form -->
+    <form class="border p-4 rounded" id="uploadForm">
+        <div class="mb-3">
+            <label class="form-label" for="file">Select file (PDF or image)</label>
+            <input accept=".pdf,image/*" class="form-control" id="file" name="file" required type="file">
+        </div>
 
-		<div class="form-check mb-3">
-			<input class="form-check-input" id="processOcr" name="processOcr" type="checkbox">
-			<label class="form-check-label" for="processOcr">Process with OCR</label>
-		</div>
+        <div class="form-check mb-3">
+            <input class="form-check-input" id="processOcr" name="processOcr" type="checkbox">
+            <label class="form-check-label" for="processOcr">Process with OCR</label>
+        </div>
 
-		<button class="btn btn-primary" type="submit">Upload</button>
-	</form>
+        <button class="btn btn-primary" type="submit">Upload</button>
+    </form>
+</div>
+<div id="processingView" class="text-center mt-5 d-none">
+    <div class="spinner-border text-primary" role="status">
+        <span class="visually-hidden">Loading...</span>
+    </div>
+
+    <p class="mt-3">
+        Analyzing PDF...
+    </p>
 </div>
 
+<div id="viewerView" class="d-none mt-4 text-center">
+
+    <div id="pdfContainer"
+         class="position-relative d-inline-block">
+
+        <img id="pdfImage"
+             style="max-width: 800px; width: 100%; height: auto;"
+             src="">
+
+        <svg id="overlaySvg"
+             class="position-absolute top-0 start-0 w-100 h-100">
+        </svg>
+
+    </div>
+
+</div>
 <!-- Bootstrap JS -->
 <script src="/webjars/bootstrap/js/bootstrap.min.js"></script>
 
@@ -43,7 +68,6 @@
 
         const fileInput = document.getElementById('file');
         const processOcrCheckbox = document.getElementById('processOcr');
-        const alertPlaceholder = document.getElementById('alertPlaceholder');
 
         if (fileInput.files.length === 0) {
             showAlert('Please select a file.', 'danger');
@@ -55,32 +79,155 @@
         formData.append('processOcr', processOcrCheckbox.checked);
 
         try {
-            const response = await fetch(`${BACKEND_URL}/api/v1/bmp/upload`, {
+            const response = await fetch(`${BACKEND_URL}/api/v1/upload`, {
                 method: 'POST',
                 body: formData
             });
 
-            if (response.status === 202) {
-                showAlert('✅ File uploaded successfully and accepted for processing.', 'success');
-            } else if (response.status === 400) {
+            if (response.status !== 202) {
                 const text = await response.text();
                 showAlert('❌ Invalid input: ' + text, 'danger');
-            } else {
-                const text = await response.text();
-                showAlert('❌ Unexpected response: ' + response.status + ' ' + text, 'warning');
             }
+
+            const uploadResult = await response.json();
+            startJob(uploadResult.jobId);
         } catch (error) {
             showAlert('❌ Network error: ' + error, 'danger');
         }
 
-        function showAlert(message, type) {
-            alertPlaceholder.innerHTML = `
+
+    });
+
+    function showAlert(message, type) {
+        const alertPlaceholder = document.getElementById('alertPlaceholder');
+        alertPlaceholder.innerHTML = `
             <div class="alert alert-${type}" role="alert">
                 ${message}
             </div>
         `;
-        }
-    });
+    }
+
+    function startJob(jobId) {
+
+        document.getElementById("uploadForm").classList.add("d-none");
+        document.getElementById("processingView").classList.remove("d-none");
+
+        const eventSource =
+            new EventSource(
+                `${BACKEND_URL}/api/v1/upload/jobs/${jobId}/updates`
+            );
+
+        eventSource.onmessage = event => {
+
+            const data = JSON.parse(event.data);
+
+            console.log("Got event data");
+            console.log(data);
+
+            showPdfResult(data);
+            document
+                .getElementById("processingView")
+                .classList.add("d-none");
+            document
+                .getElementById("viewerView")
+                .classList.remove("d-none");
+        };
+
+        eventSource.onerror = error => {
+            console.error(error);
+            showAlert(
+                "Connection to processing job lost",
+                "danger"
+            );
+            eventSource.close();
+        };
+    }
+
+    const selectedCells = new Set();
+
+    function showPdfResult(result) {
+
+        const image = document.getElementById("pdfImage");
+
+        image.src = `${BACKEND_URL}${result.imageUrl}`;
+
+        image.onload = () => {
+
+            renderCells(
+                result.cells,
+                image.naturalWidth,
+                image.naturalHeight
+            );
+        };
+    }
+
+    function renderCells(cells, pageWidth, pageHeight) {
+
+        const svg = document.getElementById("overlaySvg");
+
+        svg.innerHTML = "";
+
+        svg.setAttribute(
+            "viewBox",
+            `0 0 ${pageWidth} ${pageHeight}`
+        );
+
+        cells.forEach((row, rowIndex) => {
+
+            row.forEach((cell, colIndex) => {
+
+                const rect = document.createElementNS(
+                    "http://www.w3.org/2000/svg",
+                    "rect"
+                );
+
+                rect.setAttribute("x", cell.x);
+                rect.setAttribute("y", cell.y);
+                rect.setAttribute("width", cell.width);
+                rect.setAttribute("height", cell.height);
+
+                rect.setAttribute(
+                    "fill",
+                    "rgba(0,123,255,0.25)"
+                );
+
+                rect.setAttribute(
+                    "stroke",
+                    "#0d6efd"
+                );
+
+                rect.style.cursor = "pointer";
+
+                const key = `${rowIndex}-${colIndex}`;
+
+                rect.addEventListener("click", () => {
+
+                    if (selectedCells.has(key)) {
+
+                        selectedCells.delete(key);
+
+                        rect.setAttribute(
+                            "fill",
+                            "rgba(0,123,255,0.25)"
+                        );
+
+                    } else {
+
+                        selectedCells.add(key);
+
+                        rect.setAttribute(
+                            "fill",
+                            "rgba(25,135,84,0.45)"
+                        );
+                    }
+
+                    console.log([...selectedCells]);
+                });
+
+                svg.appendChild(rect);
+            });
+        });
+    }
 </script>
 </body>
 </html>

@@ -1,4 +1,4 @@
-package de.jaypi4c.tinia.backend.controller;
+package de.jaypi4c.tinia.backend.controller.internal;
 
 import de.jaypi4c.tinia.common.dto.internal.ExtractorResult;
 import de.jaypi4c.tinia.common.dto.internal.OpenEhrJob;

@@ -1,5 +1,6 @@
 package de.jaypi4c.tinia.backend.service;
 
+import de.jaypi4c.tinia.backend.registry.DocumentRegistry;
 import de.jaypi4c.tinia.common.dto.internal.DetectorJob;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -20,9 +21,9 @@ import static de.jaypi4c.tinia.common.config.RabbitConfig.DETECTOR_JOBS_QUEUE;
 public class UploadService {
 
     private final RabbitTemplate rabbitTemplate;
+    private final DocumentRegistry documentRegistry;
 
-    public void process(MultipartFile file, boolean ocr) {
-        UUID jobId = UUID.randomUUID();
+    public void process(UUID jobId, MultipartFile file, boolean ocr) {
         String filename = file.getOriginalFilename();
 
         if (ocr) {
@@ -31,7 +32,7 @@ public class UploadService {
 
         try {
             PDDocument document = loadDocument(file.getInputStream());
-
+            documentRegistry.register(jobId, document);
             for (int page = 0; page < document.getNumberOfPages(); page++) {
                 rabbitTemplate.convertAndSend(DETECTOR_JOBS_QUEUE, new DetectorJob(jobId, page, file.getBytes()));
             }
