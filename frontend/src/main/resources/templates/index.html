@@ -32,6 +32,8 @@
         <button class="btn btn-primary" type="submit">Upload</button>
     </form>
 </div>
+
+<!-- spinner while there is no result yet to be displayed -->
 <div id="processingView" class="text-center mt-5 d-none">
     <div class="spinner-border text-primary" role="status">
         <span class="visually-hidden">Loading...</span>
@@ -42,6 +44,7 @@
     </p>
 </div>
 
+<!-- View to validate results -->
 <div id="viewerView" class="d-none mt-4 text-center">
 
     <div id="pdfContainer"
@@ -62,172 +65,6 @@
 <script src="/webjars/bootstrap/js/bootstrap.min.js"></script>
 
 <!-- Your JS to perform API call -->
-<script>
-    document.getElementById('uploadForm').addEventListener('submit', async function (e) {
-        e.preventDefault(); // prevent page reload
-
-        const fileInput = document.getElementById('file');
-        const processOcrCheckbox = document.getElementById('processOcr');
-
-        if (fileInput.files.length === 0) {
-            showAlert('Please select a file.', 'danger');
-            return;
-        }
-
-        const formData = new FormData();
-        formData.append('file', fileInput.files[0]);
-        formData.append('processOcr', processOcrCheckbox.checked);
-
-        try {
-            const response = await fetch(`${BACKEND_URL}/api/v1/upload`, {
-                method: 'POST',
-                body: formData
-            });
-
-            if (response.status !== 202) {
-                const text = await response.text();
-                showAlert('❌ Invalid input: ' + text, 'danger');
-            }
-
-            const uploadResult = await response.json();
-            startJob(uploadResult.jobId);
-        } catch (error) {
-            showAlert('❌ Network error: ' + error, 'danger');
-        }
-
-
-    });
-
-    function showAlert(message, type) {
-        const alertPlaceholder = document.getElementById('alertPlaceholder');
-        alertPlaceholder.innerHTML = `
-            <div class="alert alert-${type}" role="alert">
-                ${message}
-            </div>
-        `;
-    }
-
-    function startJob(jobId) {
-
-        document.getElementById("uploadForm").classList.add("d-none");
-        document.getElementById("processingView").classList.remove("d-none");
-
-        const eventSource =
-            new EventSource(
-                `${BACKEND_URL}/api/v1/upload/jobs/${jobId}/updates`
-            );
-
-        eventSource.onmessage = event => {
-
-            const data = JSON.parse(event.data);
-
-            console.log("Got event data");
-            console.log(data);
-
-            showPdfResult(data);
-            document
-                .getElementById("processingView")
-                .classList.add("d-none");
-            document
-                .getElementById("viewerView")
-                .classList.remove("d-none");
-        };
-
-        eventSource.onerror = error => {
-            console.error(error);
-            showAlert(
-                "Connection to processing job lost",
-                "danger"
-            );
-            eventSource.close();
-        };
-    }
-
-    const selectedCells = new Set();
-
-    function showPdfResult(result) {
-
-        const image = document.getElementById("pdfImage");
-
-        image.src = `${BACKEND_URL}${result.imageUrl}`;
-
-        image.onload = () => {
-
-            renderCells(
-                result.cells,
-                image.naturalWidth,
-                image.naturalHeight
-            );
-        };
-    }
-
-    function renderCells(cells, pageWidth, pageHeight) {
-
-        const svg = document.getElementById("overlaySvg");
-
-        svg.innerHTML = "";
-
-        svg.setAttribute(
-            "viewBox",
-            `0 0 ${pageWidth} ${pageHeight}`
-        );
-
-        cells.forEach((row, rowIndex) => {
-
-            row.forEach((cell, colIndex) => {
-
-                const rect = document.createElementNS(
-                    "http://www.w3.org/2000/svg",
-                    "rect"
-                );
-
-                rect.setAttribute("x", cell.x);
-                rect.setAttribute("y", cell.y);
-                rect.setAttribute("width", cell.width);
-                rect.setAttribute("height", cell.height);
-
-                rect.setAttribute(
-                    "fill",
-                    "rgba(0,123,255,0.25)"
-                );
-
-                rect.setAttribute(
-                    "stroke",
-                    "#0d6efd"
-                );
-
-                rect.style.cursor = "pointer";
-
-                const key = `${rowIndex}-${colIndex}`;
-
-                rect.addEventListener("click", () => {
-
-                    if (selectedCells.has(key)) {
-
-                        selectedCells.delete(key);
-
-                        rect.setAttribute(
-                            "fill",
-                            "rgba(0,123,255,0.25)"
-                        );
-
-                    } else {
-
-                        selectedCells.add(key);
-
-                        rect.setAttribute(
-                            "fill",
-                            "rgba(25,135,84,0.45)"
-                        );
-                    }
-
-                    console.log([...selectedCells]);
-                });
-
-                svg.appendChild(rect);
-            });
-        });
-    }
-</script>
+<script src="/js/sse.js"></script>
 </body>
 </html>
