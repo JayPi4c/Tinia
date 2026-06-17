@@ -20,7 +20,8 @@ export class Cell {
                     width,
                     height,
                     row = -1,
-                    column = -1
+                    column = -1,
+                    type = "DATA"
                 }) {
 
         this.id = id;
@@ -31,6 +32,12 @@ export class Cell {
 
         this.row = row;
         this.column = column;
+
+        /**
+         * HEADER
+         * DATA
+         */
+        this.type = type;
     }
 
     /**
@@ -47,7 +54,8 @@ export class Cell {
             width: this.width,
             height: this.height,
             row: this.row,
-            column: this.column
+            column: this.column,
+            type: this.type
         });
     }
 }

@@ -21,6 +21,7 @@ export class Toolbox {
             draw: document.getElementById("drawBtn"),
             delete: document.getElementById("deleteBtn"),
             mapping: document.getElementById("mappingBtn"),
+            header: document.getElementById("headerBtn"),
             undo: document.getElementById("undoBtn"),
             redo: document.getElementById("redoBtn")
         };
@@ -52,6 +53,9 @@ export class Toolbox {
 
         this.buttons.mapping?.addEventListener("click", () =>
             this.changeMode(EditorModes.MAPPING)
+        );
+        this.buttons.header?.addEventListener("click", () =>
+            this.changeMode(EditorModes.HEADER)
         );
 
         this.buttons.undo?.addEventListener("click", () =>
@@ -88,6 +92,9 @@ export class Toolbox {
                 break;
             case EditorModes.DELETE:
                 this.buttons.delete?.classList.add("active");
+                break;
+            case EditorModes.HEADER:
+                this.buttons.header?.classList.add("active");
                 break;
             case EditorModes.MAPPING:
                 this.buttons.mapping?.classList.add("active");

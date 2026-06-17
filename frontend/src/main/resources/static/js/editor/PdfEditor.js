@@ -2,6 +2,7 @@ import {EditorState} from "./EditorState.js";
 import {HistoryManager} from "./HistoryManager.js";
 import {CellOperations} from "./CellOperations.js";
 import {EditorModes} from "./EditorModes.js";
+import {TemplateDesigner} from "../mapping/TemplateDesigner.js";
 
 import {SvgRenderer} from "../rendering/SvgRenderer.js";
 import {PreviewRenderer} from "../rendering/PreviewRenderer.js";
@@ -25,6 +26,7 @@ export class PdfEditor {
         this.state = new EditorState();
 
         this.history = new HistoryManager();
+        this.templateDesigner = new TemplateDesigner();
 
         this.toolbox = toolbox;
 
@@ -167,8 +169,15 @@ export class PdfEditor {
                 this.updateHistoryUi();
                 break;
             case EditorModes.MAPPING:
-                console.log("Mapping cell", cell);
+                this.templateDesigner.assignCell(cell);
 
+                this.rerender();
+                break;
+            case EditorModes.HEADER:
+                this.history.push(this.state.cells);
+                this.state.cells = CellOperations.toggleHeader(this.state.cells, cell.id);
+
+                this.rerender();
                 break;
         }
     }

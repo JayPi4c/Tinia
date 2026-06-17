@@ -80,7 +80,16 @@ export class SvgRenderer {
 
         rect.setAttribute("stroke", "#0d6efd");
         rect.setAttribute("stroke-width", "1");
-        rect.setAttribute("fill", cell.id === selectedCellId ? "rgba(25,135,84,0.45)" : "rgba(0,123,255,0.25)");
+
+        let fill = "rgba(0,123,255,0.25)";
+        if (cell.id === selectedCellId) {
+            fill = "rgba(25,135,84,0.45)";
+        } else if (cell.type === "HEADER") {
+            fill = "rgba(255,193,7,0.45)";
+        } else if (cell.mapping) {
+            fill = "rgba(13,202,240,0.45)";
+        }
+        rect.setAttribute("fill", fill);
 
         rect.style.cursor = "pointer";
 

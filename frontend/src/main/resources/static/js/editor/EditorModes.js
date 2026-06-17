@@ -12,5 +12,7 @@ export const EditorModes = Object.freeze({
 
     DELETE: "delete",
 
-    MAPPING: "mapping"
+    MAPPING: "mapping",
+
+    HEADER: "header"
 });

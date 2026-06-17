@@ -158,4 +158,23 @@ export class CellOperations {
 
         return result;
     }
+
+    /**
+     * Toggles header state.
+     *
+     * @param {Array<Cell>} cells
+     * @param {string} cellId
+     * @returns {Array<Cell>}
+     */
+    static toggleHeader(cells, cellId) {
+        return cells.map(cell => {
+            if (cell.id !== cellId) {
+                return cell;
+            }
+            return {
+                ...cell,
+                type: cell.type === "HEADER" ? "DATA" : "HEADER"
+            };
+        });
+    }
 }
