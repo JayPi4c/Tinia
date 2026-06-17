@@ -77,12 +77,21 @@ function startJob(jobId) {
 
 const editorState = {
     mode: "select",
+
     cells: [],
+
     selectedCellId: null,
+
     history: [],
     redoStack: [],
+
     pageWidth: 0,
-    pageHeight: 0
+    pageHeight: 0,
+
+    drawing: false,
+
+    drawStartX: null,
+    drawStartY: null
 };
 
 /*****************************************************************
@@ -142,6 +151,10 @@ document
 document
     .getElementById("splitVerticalBtn")
     .addEventListener("click", () => setMode("splitVertical"));
+
+document
+    .getElementById("drawBtn")
+    .addEventListener("click", () => setMode("draw"));
 
 document
     .getElementById("deleteBtn")
@@ -237,6 +250,18 @@ function rerender() {
         editorState.pageWidth,
         editorState.pageHeight
     );
+
+    initializeSvgDrawing();
+}
+
+function initializeSvgDrawing() {
+
+    const svg =
+        document.getElementById("overlaySvg");
+
+    svg.onmousedown = startDrawing;
+    svg.onmousemove = drawingMove;
+    svg.onmouseup = finishDrawing;
 }
 
 function renderCells(cells, pageWidth, pageHeight) {
@@ -352,6 +377,213 @@ function attachCellHandlers(
         () => removePreviewLine(svg)
     );
 }
+
+/****************************************************************
+ * DRAWING
+ *****************************************************************/
+function startDrawing(event) {
+
+    if (editorState.mode !== "draw")
+        return;
+
+    const svg =
+        document.getElementById("overlaySvg");
+
+    const point =
+        svgMousePoint(svg, event);
+
+    editorState.drawing = true;
+
+    editorState.drawStartX = point.x;
+    editorState.drawStartY = point.y;
+}
+
+function drawingMove(event) {
+
+    const svg =
+        document.getElementById("overlaySvg");
+
+    const point =
+        svgMousePoint(svg, event);
+
+    //
+    // split preview
+    //
+    if (
+        editorState.mode === "splitVertical" ||
+        editorState.mode === "splitHorizontal"
+    ) {
+        renderSplitPreview(
+            point
+        );
+    }
+
+    //
+    // draw preview
+    //
+    if (
+        editorState.mode === "draw" &&
+        editorState.drawing
+    ) {
+
+        renderDrawPreview(
+            svg,
+            point
+        );
+    }
+}
+
+function renderDrawPreview(
+    svg,
+    point
+) {
+
+    removeDrawPreview();
+
+    const rect =
+        document.createElementNS(
+            "http://www.w3.org/2000/svg",
+            "rect"
+        );
+
+    rect.id = "drawPreview";
+
+    const x =
+        Math.min(
+            editorState.drawStartX,
+            point.x
+        );
+
+    const y =
+        Math.min(
+            editorState.drawStartY,
+            point.y
+        );
+
+    const width =
+        Math.abs(
+            point.x -
+            editorState.drawStartX
+        );
+
+    const height =
+        Math.abs(
+            point.y -
+            editorState.drawStartY
+        );
+
+    rect.setAttribute("x", x);
+    rect.setAttribute("y", y);
+
+    rect.setAttribute(
+        "width",
+        width
+    );
+
+    rect.setAttribute(
+        "height",
+        height
+    );
+
+    rect.setAttribute(
+        "fill",
+        "rgba(25,135,84,0.2)"
+    );
+
+    rect.setAttribute(
+        "stroke",
+        "green"
+    );
+
+    rect.setAttribute(
+        "stroke-width",
+        "2"
+    );
+
+    svg.appendChild(rect);
+}
+
+function finishDrawing(event) {
+
+    if (
+        editorState.mode !== "draw" ||
+        !editorState.drawing
+    ) {
+        return;
+    }
+
+    editorState.drawing = false;
+
+    const svg =
+        document.getElementById("overlaySvg");
+
+    const point =
+        svgMousePoint(svg, event);
+
+    const x =
+        Math.min(
+            editorState.drawStartX,
+            point.x
+        );
+
+    const y =
+        Math.min(
+            editorState.drawStartY,
+            point.y
+        );
+
+    const width =
+        Math.abs(
+            point.x -
+            editorState.drawStartX
+        );
+
+    const height =
+        Math.abs(
+            point.y -
+            editorState.drawStartY
+        );
+
+    if (
+        width < 10 ||
+        height < 10
+    ) {
+        removeDrawPreview();
+        return;
+    }
+
+    pushHistory();
+
+    editorState.cells.push({
+
+        id: crypto.randomUUID(),
+
+        row: -1,
+        column: -1,
+
+        x,
+        y,
+
+        width,
+        height
+    });
+
+    removeDrawPreview();
+
+    rerender();
+}
+
+function removeDrawPreview() {
+
+    const existing =
+        document.getElementById(
+            "drawPreview"
+        );
+
+    if (existing)
+        existing.remove();
+}
+
 
 /*****************************************************************
  * SELECTION
