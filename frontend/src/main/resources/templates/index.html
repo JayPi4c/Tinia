@@ -45,22 +45,82 @@
 </div>
 
 <!-- View to validate results -->
-<div id="viewerView" class="d-none mt-4 text-center">
+<div id="viewerView" class="container-fluid d-none">
 
-    <div id="pdfContainer"
-         class="position-relative d-inline-block">
+    ```
+    <div class="row">
 
-        <img id="pdfImage"
-             style="max-width: 800px; width: 100%; height: auto;"
-             src="">
+        <!-- PDF VIEWER -->
+        <div class="col-lg-9">
 
-        <svg id="overlaySvg"
-             class="position-absolute top-0 start-0 w-100 h-100">
-        </svg>
+            <div id="pdfContainer"
+                 class="position-relative d-inline-block">
 
+                <img id="pdfImage"
+                     src=""
+                     style="max-width:100%;width:100%;height:auto;">
+
+                <svg id="overlaySvg"
+                     class="position-absolute top-0 start-0 w-100 h-100">
+                </svg>
+
+            </div>
+
+        </div>
+
+        <!-- TOOLBOX -->
+        <div class="col-lg-3">
+
+            <div class="card sticky-top">
+
+                <div class="card-header">
+                    Cell Editor
+                </div>
+
+                <div class="card-body">
+
+                    <h6>Mode</h6>
+
+                    <div class="d-grid gap-2">
+
+                        <button id="selectModeBtn"
+                                class="btn btn-outline-primary active">
+                            Select
+                        </button>
+                        <button id="splitHorizontalBtn" class="btn btn-outline-primary">
+                            Split Horizontal
+                        </button>
+                        <button id="splitVerticalBtn" class="btn btn-outline-primary">
+                            Split Vertical
+                        </button>
+                        <button id="deleteBtn" class="btn btn-outline-danger">
+                            Delete
+                        </button>
+                        <button id="mappingBtn" class="btn btn-outline-success">
+                            Mapping
+                        </button>
+                    </div>
+                    <hr>
+                    <h6>Selection</h6>
+                    <div id="selectionInfo">
+                        No cell selected
+                    </div>
+                    <hr>
+                    <h6>History</h6>
+                    <div class="d-grid gap-2">
+                        <button id="undoBtn" class="btn btn-outline-secondary">
+                            Undo
+                        </button>
+                        <button id="redoBtn" class="btn btn-outline-secondary">
+                            Redo
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
-
 </div>
+
 <!-- Bootstrap JS -->
 <script src="/webjars/bootstrap/js/bootstrap.min.js"></script>
 

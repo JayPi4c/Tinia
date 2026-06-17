@@ -1,7 +1,7 @@
-openapi: 3.0.3
+openapi: 3.1.0
 info:
   title: Tinia public API
-  version: 0.0.1
+  version: 0.0.1-SNAPSHOT
   description: API to interact with Tinia services.
 
 servers:

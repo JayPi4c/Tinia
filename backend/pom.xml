@@ -102,7 +102,7 @@
                             <configOptions>
                                 <configPackage>de.jaypi4c.tinia.backend.config</configPackage>
                                 <enumUnknownDefaultCase>true</enumUnknownDefaultCase>
-                                <useSpringBoot3>true</useSpringBoot3>
+                                <useSpringBoot4>true</useSpringBoot4>
                                 <delegatePattern>true</delegatePattern>
                                 <booleanGetterPrefix>is</booleanGetterPrefix>
                                 <useOptional>true</useOptional>
