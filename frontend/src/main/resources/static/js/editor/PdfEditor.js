@@ -1,0 +1,300 @@
+import {EditorState} from "./EditorState.js";
+import {HistoryManager} from "./HistoryManager.js";
+import {CellOperations} from "./CellOperations.js";
+import {EditorModes} from "./EditorModes.js";
+
+import {SvgRenderer} from "../rendering/SvgRenderer.js";
+import {PreviewRenderer} from "../rendering/PreviewRenderer.js";
+
+/**
+ * Main PDF editor controller.
+ *
+ * Coordinates:
+ * - state
+ * - rendering
+ * - editing
+ * - history
+ * - toolbox
+ */
+export class PdfEditor {
+
+    /**
+     * @param {Toolbox} toolbox
+     */
+    constructor(toolbox) {
+        this.state = new EditorState();
+
+        this.history = new HistoryManager();
+
+        this.toolbox = toolbox;
+
+        this.image = document.getElementById("pdfImage");
+
+        this.svg = document.getElementById("overlaySvg");
+
+        this.renderer = new SvgRenderer(this.svg);
+
+        this.previewRenderer = new PreviewRenderer(this.svg);
+
+        this.registerSvgHandlers();
+    }
+
+    /**
+     * Loads backend result.
+     *
+     * @param {Object} result
+     * @param {Array} cells
+     */
+    loadResult(result, cells) {
+        this.state.cells = cells;
+
+        this.image.src = `${BACKEND_URL}${result.imageUrl}`;
+
+        this.image.onload = () => {
+
+            this.state.pageWidth = this.image.naturalWidth;
+
+            this.state.pageHeight = this.image.naturalHeight;
+
+            this.renderer.updateViewBox(
+                this.state.pageWidth,
+                this.state.pageHeight
+            );
+
+            this.rerender();
+        };
+    }
+
+    /**
+     * Sets editor mode.
+     *
+     * @param {string} mode
+     */
+    setMode(mode) {
+        this.state.mode = mode;
+    }
+
+    /**
+     * Performs undo.
+     */
+    undo() {
+        this.state.cells = this.history.undo(
+            this.state.cells
+        );
+
+        this.rerender();
+        this.updateHistoryUi();
+    }
+
+    /**
+     * Performs redo.
+     */
+    redo() {
+        this.state.cells = this.history.redo(
+            this.state.cells
+        );
+
+        this.rerender();
+        this.updateHistoryUi();
+    }
+
+    /**
+     * Re-renders editor.
+     */
+    rerender() {
+        this.renderer.renderCells(
+            this.state.cells,
+            this.state.selectedCellId,
+            this.onCellClick.bind(this),
+            this.onCellMove.bind(this),
+            this.onCellLeave.bind(this)
+        );
+
+        this.toolbox.updateSelectionInfo(
+            this.state.getSelectedCell()
+        );
+    }
+
+    /**
+     * Updates undo/redo buttons.
+     */
+    updateHistoryUi() {
+        this.toolbox.updateHistoryState(
+            this.history.undoStack.length,
+            this.history.redoStack.length
+        );
+    }
+
+    /**
+     * Handles cell click.
+     *
+     * @param {Object} cell
+     * @param {MouseEvent} event
+     */
+    onCellClick(cell, event) {
+        const point = this.renderer.svgMousePoint(event);
+
+        switch (this.state.mode) {
+            case EditorModes.SELECT:
+                this.state.selectCell(cell.id);
+
+                this.rerender();
+                break;
+            case EditorModes.DELETE:
+                this.history.push(this.state.cells);
+                this.state.cells = CellOperations.delete(
+                    this.state.cells,
+                    cell.id
+                );
+
+                this.rerender();
+                this.updateHistoryUi();
+                break;
+            case EditorModes.SPLIT_VERTICAL:
+                this.history.push(this.state.cells);
+                this.state.cells = CellOperations.splitVertical(this.state.cells, cell, point.x);
+                this.previewRenderer.clear();
+
+                this.rerender();
+                this.updateHistoryUi();
+                break;
+            case EditorModes.SPLIT_HORIZONTAL:
+                this.history.push(this.state.cells);
+                this.state.cells = CellOperations.splitHorizontal(this.state.cells, cell, point.y);
+                this.previewRenderer.clear();
+
+                this.rerender();
+                this.updateHistoryUi();
+                break;
+            case EditorModes.MAPPING:
+                console.log("Mapping cell", cell);
+
+                break;
+        }
+    }
+
+    /**
+     * Handles mouse movement over cells.
+     *
+     * @param {Object} cell
+     * @param {MouseEvent} event
+     */
+    onCellMove(cell, event) {
+        const point = this.renderer.svgMousePoint(event);
+
+        if (this.state.mode === EditorModes.SPLIT_VERTICAL) {
+            this.previewRenderer.showSplitPreview(
+                EditorModes.SPLIT_VERTICAL,
+                cell,
+                point.x,
+                point.y
+            );
+        }
+
+        if (this.state.mode === EditorModes.SPLIT_HORIZONTAL) {
+            this.previewRenderer.showSplitPreview(
+                EditorModes.SPLIT_HORIZONTAL,
+                cell,
+                point.x,
+                point.y
+            );
+        }
+    }
+
+    /**
+     * Handles leaving a cell.
+     */
+    onCellLeave() {
+        this.previewRenderer.removeSplitPreview();
+    }
+
+    /**
+     * Registers SVG level handlers.
+     */
+    registerSvgHandlers() {
+        this.svg.addEventListener("mousedown", event =>
+            this.onMouseDown(event)
+        );
+
+        this.svg.addEventListener("mousemove", event =>
+            this.onMouseMove(event)
+        );
+
+        this.svg.addEventListener("mouseup", event =>
+            this.onMouseUp(event)
+        );
+    }
+
+    /**
+     * Starts drawing.
+     */
+    onMouseDown(event) {
+        if (this.state.mode !== EditorModes.DRAW) {
+            return;
+        }
+
+        const point = this.renderer.svgMousePoint(event);
+        this.state.drawing = true;
+        this.state.drawStartX = point.x;
+        this.state.drawStartY = point.y;
+    }
+
+    /**
+     * Draw preview.
+     */
+    onMouseMove(event) {
+        if (!this.state.drawing) {
+            return;
+        }
+
+        const point = this.renderer.svgMousePoint(event);
+
+        this.previewRenderer.showDrawPreview(
+            this.state.drawStartX,
+            this.state.drawStartY,
+            point.x,
+            point.y
+        );
+    }
+
+    /**
+     * Finishes drawing.
+     */
+    onMouseUp(event) {
+        if (!this.state.drawing) {
+            return;
+        }
+
+        this.state.drawing = false;
+
+        const point = this.renderer.svgMousePoint(event);
+
+        const x = Math.min(this.state.drawStartX, point.x);
+
+        const y = Math.min(this.state.drawStartY, point.y);
+
+        const width = Math.abs(point.x - this.state.drawStartX);
+
+        const height = Math.abs(point.y - this.state.drawStartY);
+
+        if (width < 10 || height < 10) {
+            this.previewRenderer.clear();
+            return;
+        }
+
+        this.history.push(this.state.cells);
+
+        this.state.cells = CellOperations.create(
+            this.state.cells,
+            x,
+            y,
+            width,
+            height
+        );
+
+        this.previewRenderer.clear();
+
+        this.rerender();
+        this.updateHistoryUi();
+    }
+}
