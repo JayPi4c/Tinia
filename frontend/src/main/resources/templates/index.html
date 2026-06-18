@@ -66,67 +66,71 @@
             </div>
 
         </div>
+        <div class="col">
+            <div id="editorSidebar">
+                <!-- TOOLBOX -->
+                <div id="editorToolbox">
 
-        <!-- TOOLBOX -->
-        <div class="col-lg-3">
+                    <div class="card sticky-top">
 
-            <div class="card sticky-top">
+                        <div class="card-header">
+                            Cell Editor
+                        </div>
 
-                <div class="card-header">
-                    Cell Editor
+                        <div class="card-body">
+
+                            <h6>Mode</h6>
+
+                            <div class="d-grid gap-2">
+
+                                <button id="selectModeBtn"
+                                        class="btn btn-outline-primary active">
+                                    Select
+                                </button>
+                                <button id="splitHorizontalBtn" class="btn btn-outline-primary">
+                                    Split Horizontal
+                                </button>
+                                <button id="splitVerticalBtn" class="btn btn-outline-primary">
+                                    Split Vertical
+                                </button>
+                                <button id="drawBtn" class="btn btn-outline-success">
+                                    Draw Cell
+                                </button>
+                                <button id="deleteBtn" class="btn btn-outline-danger">
+                                    Delete
+                                </button>
+                                <button id="headerBtn" class="btn btn-outline-warning">
+                                    Header
+                                </button>
+                                <button id="mappingBtn" class="btn btn-outline-success">
+                                    Mapping
+                                </button>
+                            </div>
+                            <hr>
+                            <h6>Selection</h6>
+                            <div id="selectionInfo">
+                                No cell selected
+                            </div>
+                            <hr>
+                            <h6>History</h6>
+                            <div class="d-grid gap-2">
+                                <button id="undoBtn" class="btn btn-outline-secondary">
+                                    Undo
+                                </button>
+                                <button id="redoBtn" class="btn btn-outline-secondary">
+                                    Redo
+                                </button>
+                            </div>
+                        </div>
+                    </div>
                 </div>
 
-                <div class="card-body">
-
-                    <h6>Mode</h6>
-
-                    <div class="d-grid gap-2">
-
-                        <button id="selectModeBtn"
-                                class="btn btn-outline-primary active">
-                            Select
-                        </button>
-                        <button id="splitHorizontalBtn" class="btn btn-outline-primary">
-                            Split Horizontal
-                        </button>
-                        <button id="splitVerticalBtn" class="btn btn-outline-primary">
-                            Split Vertical
-                        </button>
-                        <button id="drawBtn" class="btn btn-outline-success">
-                            Draw Cell
-                        </button>
-                        <button id="deleteBtn" class="btn btn-outline-danger">
-                            Delete
-                        </button>
-                        <button id="headerBtn" class="btn btn-outline-warning">
-                            Header
-                        </button>
-                        <button id="mappingBtn" class="btn btn-outline-success">
-                            Mapping
-                        </button>
-                    </div>
-                    <hr>
-                    <h6>Selection</h6>
-                    <div id="selectionInfo">
-                        No cell selected
-                    </div>
-                    <hr>
-                    <h6>History</h6>
-                    <div class="d-grid gap-2">
-                        <button id="undoBtn" class="btn btn-outline-secondary">
-                            Undo
-                        </button>
-                        <button id="redoBtn" class="btn btn-outline-secondary">
-                            Redo
-                        </button>
+                <!-- template editor -->
+                <div>
+                    <div id="sidePanel">
                     </div>
                 </div>
             </div>
-        </div>
-
-        <!-- template editor -->
-        <div class="col-lg-3">
-            <div id="sidePanel"></div>
         </div>
     </div>
 </div>

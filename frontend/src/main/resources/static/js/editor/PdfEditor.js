@@ -50,6 +50,8 @@ export class PdfEditor {
      * @param cells
      */
     loadResult(result, cells) {
+        this.state.jobId = result.jobId;
+        this.templateDesigner.jobId = result.jobId;
         this.state.cells = cells;
 
         this.image.src = `${BACKEND_URL}${result.imageUrl}`;
@@ -76,6 +78,7 @@ export class PdfEditor {
      */
     setMode(mode) {
         this.state.mode = mode;
+        // TODO: Collapse editor toolbox when in mapping mode, but have small button to open toolbox again.
     }
 
     /**

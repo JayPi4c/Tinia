@@ -160,4 +160,28 @@ export class Toolbox {
         this.setUndoEnabled(undoCount > 0);
         this.setRedoEnabled(redoCount > 0);
     }
+
+    showMappingToolbox() {
+        document.getElementById("editorToolbox")
+            .classList.add(
+            "d-none"
+        );
+
+        document.getElementById("mappingToolbox")
+            .classList.remove(
+            "d-none"
+        );
+    }
+
+    showEditorToolbox() {
+        document.getElementById("mappingToolbox")
+            .classList.add(
+            "d-none"
+        );
+
+        document.getElementById("editorToolbox")
+            .classList.remove(
+            "d-none"
+        );
+    }
 }

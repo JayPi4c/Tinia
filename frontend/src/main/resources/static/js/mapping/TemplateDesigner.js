@@ -9,15 +9,19 @@ import {MappingToolbox} from "./MappingToolbox.js";
  */
 export class TemplateDesigner {
 
-    constructor() {
+    /**
+     * @param {UploadApi} uploadApi
+     */
+    constructor(uploadApi) {
         this.state = new MappingState();
-
+        this.jobId = "";
         this.panel = new MappingPanel("sidePanel");
 
         this.toolbox = new MappingToolbox(this.panel, this.state, {
                 onTargetSelected: field => this.selectBmpField(field),
                 onCustomFieldCreated: name => this.createCustomField(name),
-                onCustomFieldRemoved: id => this.removeCustomField(id)
+                onCustomFieldRemoved: id => this.removeCustomField(id),
+                onContinue: (cells, template) => uploadApi.continueProcessing(this.jobId, cells, template)
             }
         );
 

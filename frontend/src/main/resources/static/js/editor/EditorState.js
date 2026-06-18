@@ -9,6 +9,8 @@ export class EditorState {
 
     constructor() {
 
+        this.jobId = "";
+
         /**
          * Current editor mode.
          *

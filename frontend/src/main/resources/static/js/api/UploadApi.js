@@ -42,4 +42,21 @@ export class UploadApi {
         }
         return response.json();
     }
+
+    async continueProcessing(jobId, cells, template) {
+        const response = await fetch(`${this.backendUrl}/api/v1/upload/jobs/${jobId}/continue`,
+            {
+                method: "POST",
+                headers: {"Content-Type": "application/json"},
+                body: JSON.stringify({
+                    cells, template
+                })
+            }
+        );
+
+        if (!response.ok) {
+            throw new Error(await response.text());
+        }
+    }
+
 }

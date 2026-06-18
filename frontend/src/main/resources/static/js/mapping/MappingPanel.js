@@ -6,11 +6,7 @@ import {BmpFieldList} from "./BmpFields.js";
 export class MappingPanel {
 
     constructor(containerId) {
-
-        this.container =
-            document.getElementById(
-                containerId
-            );
+        this.container = document.getElementById(containerId);
     }
 
     /**
@@ -22,13 +18,9 @@ export class MappingPanel {
 
         this.container.innerHTML = "";
 
-        const wrapper =
-            document.createElement(
-                "div"
-            );
+        const wrapper = document.createElement("div");
 
-        wrapper.className =
-            "card";
+        wrapper.className = "card";
 
         wrapper.innerHTML = `
             <div class="card-body">
@@ -71,10 +63,14 @@ export class MappingPanel {
 
                 <button
                     id="exportTemplateBtn"
-                    class="btn btn-primary w-100">
+                    class="btn btn-primary w-100 mb-1">
                     Export Template
                 </button>
-
+                <button 
+                    id="continueBtn" 
+                    class="btn btn-success w-100 mb-1">
+                    Continue Processing
+                </button>
             </div>
         `;
 
