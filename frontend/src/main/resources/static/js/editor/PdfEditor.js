@@ -2,7 +2,6 @@ import {EditorState} from "./EditorState.js";
 import {HistoryManager} from "./HistoryManager.js";
 import {CellOperations} from "./CellOperations.js";
 import {EditorModes} from "./EditorModes.js";
-import {TemplateDesigner} from "../mapping/TemplateDesigner.js";
 
 import {SvgRenderer} from "../rendering/SvgRenderer.js";
 import {PreviewRenderer} from "../rendering/PreviewRenderer.js";
@@ -22,12 +21,14 @@ export class PdfEditor {
 
     /**
      * @param {Toolbox} toolbox
+     * @param {ProcessingSession} workflowSession
      */
-    constructor(toolbox) {
+    constructor(toolbox, workflowSession) {
         this.state = new EditorState();
 
         this.history = new HistoryManager();
-        this.templateDesigner = new TemplateDesigner();
+        this.workflowSession = workflowSession;
+        this.templateDesigner = null;
 
         this.toolbox = toolbox;
 
@@ -44,6 +45,22 @@ export class PdfEditor {
     }
 
     /**
+     * Wires the dedicated template designer.
+     *
+     * @param {TemplateDesigner} templateDesigner
+     */
+    setTemplateDesigner(templateDesigner) {
+        this.templateDesigner = templateDesigner;
+    }
+
+    /**
+     * Keeps the shared workflow session aligned with the current cells.
+     */
+    syncWorkflowCells() {
+        this.workflowSession?.setCells(this.state.cells);
+    }
+
+    /**
      * Loads backend result.
      *
      * @param result
@@ -51,8 +68,16 @@ export class PdfEditor {
      */
     loadResult(result, cells) {
         this.state.jobId = result.jobId;
-        this.templateDesigner.jobId = result.jobId;
         this.state.cells = cells;
+        this.state.selectedCellId = null;
+        this.state.mode = EditorModes.SELECT;
+        this.history = new HistoryManager();
+        this.workflowSession?.setJobId(result.jobId);
+        this.workflowSession?.setPage(result.page);
+        this.syncWorkflowCells();
+        this.toolbox.setMode(EditorModes.SELECT);
+        this.previewRenderer.clear();
+        this.updateHistoryUi();
 
         this.image.src = `${BACKEND_URL}${result.imageUrl}`;
 
@@ -88,6 +113,7 @@ export class PdfEditor {
         this.state.cells = this.history.undo(
             this.state.cells
         );
+        this.syncWorkflowCells();
 
         this.rerender();
         this.updateHistoryUi();
@@ -100,6 +126,7 @@ export class PdfEditor {
         this.state.cells = this.history.redo(
             this.state.cells
         );
+        this.syncWorkflowCells();
 
         this.rerender();
         this.updateHistoryUi();
@@ -112,7 +139,7 @@ export class PdfEditor {
         this.renderer.renderCells(
             this.state.cells,
             this.state.selectedCellId,
-            this.templateDesigner.getTemplate(),
+            this.templateDesigner?.getTemplate() ?? this.workflowSession?.getTemplate(),
             this.onCellClick.bind(this),
             this.onCellMove.bind(this),
             this.onCellLeave.bind(this)
@@ -154,6 +181,7 @@ export class PdfEditor {
                     this.state.cells,
                     cell.id
                 );
+                this.syncWorkflowCells();
 
                 this.rerender();
                 this.updateHistoryUi();
@@ -161,6 +189,7 @@ export class PdfEditor {
             case EditorModes.SPLIT_VERTICAL:
                 this.history.push(this.state.cells);
                 this.state.cells = CellOperations.splitVertical(this.state.cells, cell, point.x);
+                this.syncWorkflowCells();
                 this.previewRenderer.clear();
 
                 this.rerender();
@@ -169,19 +198,21 @@ export class PdfEditor {
             case EditorModes.SPLIT_HORIZONTAL:
                 this.history.push(this.state.cells);
                 this.state.cells = CellOperations.splitHorizontal(this.state.cells, cell, point.y);
+                this.syncWorkflowCells();
                 this.previewRenderer.clear();
 
                 this.rerender();
                 this.updateHistoryUi();
                 break;
             case EditorModes.MAPPING:
-                this.templateDesigner.assignCell(cell);
+                this.templateDesigner?.assignCell(cell);
 
                 this.rerender();
                 break;
             case EditorModes.HEADER:
                 this.history.push(this.state.cells);
                 this.state.cells = CellOperations.toggleHeader(this.state.cells, cell.id);
+                this.syncWorkflowCells();
 
                 this.rerender();
                 this.updateHistoryUi();
@@ -307,6 +338,7 @@ export class PdfEditor {
             width,
             height
         );
+        this.syncWorkflowCells();
 
         this.previewRenderer.clear();
 

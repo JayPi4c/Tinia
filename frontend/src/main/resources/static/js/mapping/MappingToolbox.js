@@ -15,6 +15,7 @@ export class MappingToolbox {
     initialize() {
         this.registerBmpFieldEvents();
         this.registerCustomFieldEvents();
+        this.registerTemplateMetadataEvents();
         this.registerExportEvent();
         this.registerContinueEvent();
     }
@@ -57,11 +58,30 @@ export class MappingToolbox {
             });
     }
 
+    registerTemplateMetadataEvents() {
+        document.getElementById("templateName")
+            ?.addEventListener("input", event => {
+                this.state.template.templateName = event.target.value;
+            });
+
+        document.getElementById("templateAuthor")
+            ?.addEventListener("input", event => {
+                this.state.template.author = event.target.value;
+            });
+    }
+
+    syncTemplateMetadata() {
+        const templateName = document.getElementById("templateName")?.value ?? "";
+        const templateAuthor = document.getElementById("templateAuthor")?.value ?? "";
+
+        this.state.template.templateName = templateName;
+        this.state.template.author = templateAuthor;
+    }
+
     registerExportEvent() {
         document.getElementById("exportTemplateBtn")
             ?.addEventListener("click", () => {
-                    this.state.template.templateName = document.getElementById("templateName").value;
-                    this.state.template.author = document.getElementById("templateAuthor").value;
+                    this.syncTemplateMetadata();
 
                     TemplateSerializer.download(this.state.template);
                 }
@@ -70,9 +90,14 @@ export class MappingToolbox {
 
     registerContinueEvent() {
         document.getElementById("continueBtn")
-            ?.addEventListener("click", () => {
-                console.log("User wants to continue with the pipeline.");
-                this.callbacks.onContinue?.();
+            ?.addEventListener("click", async () => {
+                try {
+                    this.syncTemplateMetadata();
+
+                    await this.callbacks.onContinue?.();
+                } catch (error) {
+                    alert(error.message);
+                }
             });
     }
 

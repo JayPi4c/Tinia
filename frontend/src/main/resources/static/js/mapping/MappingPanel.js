@@ -85,6 +85,12 @@ export class MappingPanel {
         this.renderCustomFields(
             state
         );
+
+        document.getElementById("templateName")
+            .value = state.template.templateName ?? "";
+
+        document.getElementById("templateAuthor")
+            .value = state.template.author ?? "";
     }
 
     renderBmpFields(state) {

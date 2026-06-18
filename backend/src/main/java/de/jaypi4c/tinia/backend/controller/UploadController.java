@@ -1,6 +1,7 @@
 package de.jaypi4c.tinia.backend.controller;
 
 import de.jaypi4c.tinia.backend.api.UploadApiDelegate;
+import de.jaypi4c.tinia.backend.dto.ContinueTaskDto;
 import de.jaypi4c.tinia.backend.dto.TaskDto;
 import de.jaypi4c.tinia.backend.registry.DocumentRegistry;
 import de.jaypi4c.tinia.backend.registry.SseEmitterRegistry;
@@ -32,7 +33,7 @@ public class UploadController implements UploadApiDelegate {
     private final DocumentRegistry documentRegistry;
 
     @Override
-    public ResponseEntity<TaskDto> uploadPost(MultipartFile file,
+    public ResponseEntity<TaskDto> uploadPlan(MultipartFile file,
                                               Optional<Boolean> processOcr) {
         UUID jobId = sseEmitterRegistry.register();
         boolean ocr = processOcr.orElse(false);
@@ -44,7 +45,7 @@ public class UploadController implements UploadApiDelegate {
     }
 
     @Override
-    public ResponseEntity<Resource> uploadJobsJobIdPagesPageNumberImageGet(UUID jobId, Integer pageNumber) {
+    public ResponseEntity<Resource> getImage(UUID jobId, Integer pageNumber) {
         try {
             BufferedImage image = documentRegistry.renderPage(jobId, pageNumber);
 
@@ -60,6 +61,12 @@ public class UploadController implements UploadApiDelegate {
         } catch (IOException e) {
             log.error("Failed to render image", e);
         }
-        return UploadApiDelegate.super.uploadJobsJobIdPagesPageNumberImageGet(jobId, pageNumber);
+        return UploadApiDelegate.super.getImage(jobId, pageNumber);
+    }
+
+    @Override
+    public ResponseEntity<Void> continueProcessing(UUID jobId, Integer pageNumber, ContinueTaskDto continueTaskDto) {
+        log.info("Got Result: {}", continueTaskDto);
+        return UploadApiDelegate.super.continueProcessing(jobId, pageNumber, continueTaskDto);
     }
 }

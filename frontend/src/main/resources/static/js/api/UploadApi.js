@@ -43,8 +43,8 @@ export class UploadApi {
         return response.json();
     }
 
-    async continueProcessing(jobId, cells, template) {
-        const response = await fetch(`${this.backendUrl}/api/v1/upload/jobs/${jobId}/continue`,
+    async continueProcessing(jobId, page, cells, template) {
+        const response = await fetch(`${this.backendUrl}/api/v1/upload/jobs/${jobId}/pages/${page}/continue`,
             {
                 method: "POST",
                 headers: {"Content-Type": "application/json"},

@@ -4,12 +4,16 @@ import {Toolbox} from "./ui/Toolbox.js";
 import {AlertService} from "./ui/AlertService.js";
 import {PdfEditor} from "./editor/PdfEditor.js";
 import {CellOperations} from "./editor/CellOperations.js";
+import {ProcessingSession} from "./workflow/ProcessingSession.js";
+import {TemplateDesigner} from "./mapping/TemplateDesigner.js";
 
 const alertService = new AlertService();
 const uploadApi = new UploadApi(BACKEND_URL);
 const jobClient = new JobClient(BACKEND_URL);
+const workflowSession = new ProcessingSession();
 
 let editor;
+let templateDesigner;
 
 const toolbox =
     new Toolbox({
@@ -20,7 +24,9 @@ const toolbox =
 
 toolbox.initialize();
 
-editor = new PdfEditor(toolbox);
+editor = new PdfEditor(toolbox, workflowSession);
+templateDesigner = new TemplateDesigner(uploadApi, workflowSession);
+editor.setTemplateDesigner(templateDesigner);
 
 document.getElementById("uploadForm")
     .addEventListener(
@@ -46,7 +52,7 @@ document.getElementById("uploadForm")
 
 function startJob(jobId) {
     jobClient.disconnect();
-    
+
     document.getElementById("uploadForm")
         .classList.add(
         "d-none"
@@ -60,6 +66,7 @@ function startJob(jobId) {
     jobClient.connect(jobId, {
             onResult: result => {
                 const cells = CellOperations.fromBackend(result.cells);
+                templateDesigner.reset();
                 editor.loadResult(result, cells);
 
                 document.getElementById("processingView")

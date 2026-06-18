@@ -10,6 +10,7 @@ servers:
 paths:
   /upload:
     post:
+      operationId: uploadPlan
       summary: Upload a file containing a medication plan
       description:
         tbd
@@ -40,8 +41,36 @@ paths:
         '400':
           description: Invalid input
 
+  /upload/jobs/{jobId}/pages/{pageNumber}/continue:
+    post:
+      operationId: continueProcessing
+      summary: Continue the processing after user validated current findings
+      parameters:
+        - name: jobId
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+        - name: pageNumber
+          in: path
+          required: true
+          schema:
+            type: integer
+            minimum: 0
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ContinueTask'
+      responses:
+        '200':
+          description: "ok"
+
   /upload/jobs/{jobId}/pages/{pageNumber}/image:
     get:
+      operationId: getImage
       summary: Retrieve a rendered page image
       description: Returns the rendered image of a page belonging to a processing job.
       parameters:
@@ -79,3 +108,79 @@ components:
           format: uuid
       required:
         - jobId
+    ContinueTask:
+      type: object
+      properties:
+        cells:
+          type: array
+          items:
+            $ref: '#/components/schemas/Cell'
+        template:
+          $ref: '#/components/schemas/template'
+      required:
+        - cells
+        - template
+    Cell:
+      type: object
+      properties:
+        column:
+          type: integer
+        row:
+          type: integer
+        width:
+          type: integer
+        height:
+          type: integer
+        x:
+          type: integer
+        y:
+          type: integer
+        cellType:
+          type: string
+          enum:
+            - HEADER
+            - DATA
+        id:
+          type: string
+          format: uuid
+      required:
+        - column
+        - row
+        - width
+        - height
+        - x
+        - y
+        - id
+    template:
+      type: object
+      properties:
+        author:
+          type: string
+        bmpMappings:
+          type: array
+          items:
+            type: object
+            properties:
+              bmpField:
+                type: string
+              headerCellIds:
+                type: array
+                items:
+                  type: string
+                  format: uuid
+        createdAt:
+          type: string
+        customFields:
+          type: array
+          items:
+            type: string
+        notes:
+          type: array
+          items:
+            type: string
+        templateName:
+          type: string
+        version:
+          type: string
+      required:
+        - bmpMappings
