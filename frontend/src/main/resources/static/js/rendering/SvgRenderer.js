@@ -35,11 +35,12 @@ export class SvgRenderer {
      *
      * @param {Array} cells
      * @param {string|null} selectedCellId
+     * @param {TemplateDefinition} templateDefinition
      * @param {Function} clickHandler
      * @param {Function} moveHandler
      * @param {Function} leaveHandler
      */
-    renderCells(cells, selectedCellId, clickHandler, moveHandler, leaveHandler) {
+    renderCells(cells, selectedCellId, templateDefinition, clickHandler, moveHandler, leaveHandler) {
         this.clear();
         cells.forEach(cell => {
             const rect = this.createCellRect(cell, selectedCellId);
@@ -57,6 +58,11 @@ export class SvgRenderer {
             );
 
             this.svg.appendChild(rect);
+            const mappedField = templateDefinition?.getMappedField(cell.id);
+
+            if (mappedField) {
+                this.renderMappingLabel(cell, mappedField);
+            }
         });
     }
 
@@ -65,9 +71,10 @@ export class SvgRenderer {
      *
      * @param {Object} cell
      * @param {string|null} selectedCellId
+     * @param {TemplateDefinition} templateDefinition
      * @returns {SVGRectElement}
      */
-    createCellRect(cell, selectedCellId) {
+    createCellRect(cell, selectedCellId, templateDefinition) {
         const rect = document.createElementNS(
             "http://www.w3.org/2000/svg",
             "rect"
@@ -86,9 +93,11 @@ export class SvgRenderer {
             fill = "rgba(25,135,84,0.45)";
         } else if (cell.type === "HEADER") {
             fill = "rgba(255,193,7,0.45)";
-        } else if (cell.mapping) {
+        }
+        if (templateDefinition?.isMapped(cell.id)) {
             fill = "rgba(13,202,240,0.45)";
         }
+
         rect.setAttribute("fill", fill);
 
         rect.style.cursor = "pointer";
@@ -125,5 +134,33 @@ export class SvgRenderer {
      */
     getSvg() {
         return this.svg;
+    }
+
+    /**
+     * Renders a mapping label
+     * inside a header cell.
+     *
+     * @param {Object} cell
+     * @param {string} label
+     */
+    renderMappingLabel(cell, label) {
+
+        const text =
+            document.createElementNS(
+                "http://www.w3.org/2000/svg",
+                "text"
+            );
+
+        text.setAttribute("x", cell.x + 4);
+        text.setAttribute("y", cell.y + 30);
+        text.setAttribute("font-size", "28");
+        text.setAttribute("font-family", "Arial");
+        text.setAttribute("font-weight", "bold");
+        text.setAttribute("fill", "#212529");
+        text.setAttribute("pointer-events", "none");
+
+        text.textContent = label;
+
+        this.svg.appendChild(text);
     }
 }

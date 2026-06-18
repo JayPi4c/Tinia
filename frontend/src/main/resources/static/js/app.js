@@ -13,7 +13,7 @@ let editor;
 
 const toolbox =
     new Toolbox({
-        onModeChange: mode => editor.setMode(mode),
+        onModeChange: mode => editor?.setMode(mode),
         onUndo: () => editor.undo(),
         onRedo: () => editor.redo()
     });
@@ -45,6 +45,8 @@ document.getElementById("uploadForm")
     );
 
 function startJob(jobId) {
+    jobClient.disconnect();
+    
     document.getElementById("uploadForm")
         .classList.add(
         "d-none"

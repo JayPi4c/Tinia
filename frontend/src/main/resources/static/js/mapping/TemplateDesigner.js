@@ -10,42 +10,16 @@ import {MappingToolbox} from "./MappingToolbox.js";
 export class TemplateDesigner {
 
     constructor() {
+        this.state = new MappingState();
 
-        this.state =
-            new MappingState();
+        this.panel = new MappingPanel("sidePanel");
 
-        this.panel =
-            new MappingPanel(
-                "sidePanel"
-            );
-
-        this.toolbox =
-            new MappingToolbox(
-                this.panel,
-
-                this.state,
-
-                {
-
-                    onTargetSelected:
-                        field =>
-                            this.selectBmpField(
-                                field
-                            ),
-
-                    onCustomFieldCreated:
-                        name =>
-                            this.createCustomField(
-                                name
-                            ),
-
-                    onCustomFieldRemoved:
-                        id =>
-                            this.removeCustomField(
-                                id
-                            )
-                }
-            );
+        this.toolbox = new MappingToolbox(this.panel, this.state, {
+                onTargetSelected: field => this.selectBmpField(field),
+                onCustomFieldCreated: name => this.createCustomField(name),
+                onCustomFieldRemoved: id => this.removeCustomField(id)
+            }
+        );
 
         this.toolbox.refresh();
     }
@@ -54,11 +28,7 @@ export class TemplateDesigner {
      * Select BMP target.
      */
     selectBmpField(field) {
-
-        this.state.selectTarget(
-            field
-        );
-
+        this.state.selectTarget(field);
         this.toolbox.refresh();
     }
 
@@ -66,12 +36,10 @@ export class TemplateDesigner {
      * Create custom field.
      */
     createCustomField(name) {
-
-        this.state.template
-            .addCustomField(
-                name,
-                []
-            );
+        this.state.template.addCustomField(
+            name,
+            []
+        );
 
         this.toolbox.refresh();
     }
@@ -80,50 +48,29 @@ export class TemplateDesigner {
      * Remove custom field.
      */
     removeCustomField(id) {
-
-        this.state.template
-            .removeCustomField(
-                id
-            );
-
+        this.state.template.removeCustomField(id);
         this.toolbox.refresh();
     }
 
     /**
-     * Assigns a header cell.
+     * Assigns a header cell
+     * to the currently selected
+     * target field.
      *
-     * @param {Cell} cell
+     * @param {Object} cell
      */
     assignCell(cell) {
-
-        if (
-            !this.state.selectedTarget
-        ) {
-
+        if (!this.state.selectedTarget) {
             return;
         }
 
-        if (
-            cell.type !== "HEADER"
-        ) {
-
-            alert(
-                "Only header cells can be mapped."
-            );
-
+        if (cell.type !== "HEADER") {
+            alert("Only header cells can be mapped.");
             return;
         }
 
-        this.state.template
-            .mapBmpField(
-                this.state.selectedTarget,
-
-                [cell.id]
-            );
-
-        cell.mapping =
-            this.state.selectedTarget;
-
+        this.state.template.removeCellMapping(cell.id);
+        this.state.template.assignBmpField(this.state.selectedTarget, cell.id);
         this.toolbox.refresh();
     }
 
@@ -131,7 +78,6 @@ export class TemplateDesigner {
      * Returns current template.
      */
     getTemplate() {
-
         return this.state.template;
     }
 }

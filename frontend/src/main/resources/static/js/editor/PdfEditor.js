@@ -11,10 +11,11 @@ import {PreviewRenderer} from "../rendering/PreviewRenderer.js";
  * Main PDF editor controller.
  *
  * Coordinates:
- * - state
+ * - editor state
  * - rendering
- * - editing
+ * - editing operations
  * - history
+ * - mapping
  * - toolbox
  */
 export class PdfEditor {
@@ -39,13 +40,14 @@ export class PdfEditor {
         this.previewRenderer = new PreviewRenderer(this.svg);
 
         this.registerSvgHandlers();
+        this.updateHistoryUi();
     }
 
     /**
      * Loads backend result.
      *
-     * @param {Object} result
-     * @param {Array} cells
+     * @param result
+     * @param cells
      */
     loadResult(result, cells) {
         this.state.cells = cells;
@@ -70,14 +72,14 @@ export class PdfEditor {
     /**
      * Sets editor mode.
      *
-     * @param {string} mode
+     * @param mode
      */
     setMode(mode) {
         this.state.mode = mode;
     }
 
     /**
-     * Performs undo.
+     * Undo.
      */
     undo() {
         this.state.cells = this.history.undo(
@@ -89,7 +91,7 @@ export class PdfEditor {
     }
 
     /**
-     * Performs redo.
+     * Redo.
      */
     redo() {
         this.state.cells = this.history.redo(
@@ -101,12 +103,13 @@ export class PdfEditor {
     }
 
     /**
-     * Re-renders editor.
+     * Refresh editor UI.
      */
     rerender() {
         this.renderer.renderCells(
             this.state.cells,
             this.state.selectedCellId,
+            this.templateDesigner.getTemplate(),
             this.onCellClick.bind(this),
             this.onCellMove.bind(this),
             this.onCellLeave.bind(this)
@@ -118,7 +121,7 @@ export class PdfEditor {
     }
 
     /**
-     * Updates undo/redo buttons.
+     * Refresh undo/redo buttons.
      */
     updateHistoryUi() {
         this.toolbox.updateHistoryState(
@@ -128,10 +131,10 @@ export class PdfEditor {
     }
 
     /**
-     * Handles cell click.
+     * Handles cell clicks.
      *
-     * @param {Object} cell
-     * @param {MouseEvent} event
+     * @param cell
+     * @param event
      */
     onCellClick(cell, event) {
         const point = this.renderer.svgMousePoint(event);
@@ -178,15 +181,16 @@ export class PdfEditor {
                 this.state.cells = CellOperations.toggleHeader(this.state.cells, cell.id);
 
                 this.rerender();
+                this.updateHistoryUi();
                 break;
         }
     }
 
     /**
-     * Handles mouse movement over cells.
+     * Split preview.
      *
-     * @param {Object} cell
-     * @param {MouseEvent} event
+     * @param cell
+     * @param event
      */
     onCellMove(cell, event) {
         const point = this.renderer.svgMousePoint(event);
@@ -211,14 +215,14 @@ export class PdfEditor {
     }
 
     /**
-     * Handles leaving a cell.
+     * Hide split preview.
      */
     onCellLeave() {
         this.previewRenderer.removeSplitPreview();
     }
 
     /**
-     * Registers SVG level handlers.
+     * Register SVG handlers.
      */
     registerSvgHandlers() {
         this.svg.addEventListener("mousedown", event =>
@@ -235,7 +239,7 @@ export class PdfEditor {
     }
 
     /**
-     * Starts drawing.
+     * Start drawing.
      */
     onMouseDown(event) {
         if (this.state.mode !== EditorModes.DRAW) {
@@ -249,7 +253,7 @@ export class PdfEditor {
     }
 
     /**
-     * Draw preview.
+     * Draw preview rectangle.
      */
     onMouseMove(event) {
         if (!this.state.drawing) {
@@ -267,7 +271,7 @@ export class PdfEditor {
     }
 
     /**
-     * Finishes drawing.
+     * Finish drawing.
      */
     onMouseUp(event) {
         if (!this.state.drawing) {
